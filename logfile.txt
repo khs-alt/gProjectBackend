@@ -1,0 +1,96 @@
+INFO: 2023/10/18 09:43:42 main.go:22: Logging
+INFO: 2023/10/18 09:43:42 main.go:29: hello
+INFO: 2023/10/19 16:07:46 main.go:26: Logging
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'image_scoring' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'video_scoring' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'tag' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'testcode' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'user' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'user_testcode_info' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'video' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'image' already exists
+INFO: 2023/10/19 16:07:46 initDB.go:142: Error 1050 (42S01): Table 'image_patch' already exists
+INFO: 2023/10/19 16:08:18 main.go:27: Logging
+INFO: 2023/10/19 16:09:09 main.go:27: Logging
+INFO: 2023/10/19 16:10:27 main.go:27: Logging
+INFO: 2023/10/19 16:19:08 main.go:27: Logging
+INFO: 2023/10/20 02:28:15 main.go:27: Logging
+INFO: 2023/10/25 00:17:41 main.go:27: Logging
+INFO: 2023/10/25 00:18:08 main.go:27: Logging
+INFO: 2023/10/25 00:19:41 main.go:27: Logging
+INFO: 2023/10/25 00:25:55 main.go:27: Logging
+INFO: 2023/10/25 00:26:23 main.go:27: Logging
+INFO: 2023/10/25 00:26:25 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:93)
+INFO: 2023/10/25 00:27:04 main.go:27: Logging
+INFO: 2023/10/25 00:27:05 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:94)
+INFO: 2023/10/25 00:28:52 main.go:27: Logging
+INFO: 2023/10/25 00:33:19 main.go:27: Logging
+INFO: 2023/10/25 00:37:52 main.go:27: Logging
+INFO: 2023/10/25 00:38:01 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:38:48 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:39:07 main.go:27: Logging
+INFO: 2023/10/25 00:39:22 main.go:27: Logging
+INFO: 2023/10/25 00:39:26 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:42)
+INFO: 2023/10/25 00:39:31 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:42)
+INFO: 2023/10/25 00:39:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:39:46 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:39:48 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:42)
+INFO: 2023/10/25 00:40:14 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:40:19 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:47:15 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:42)
+INFO: 2023/10/25 00:47:23 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:47:28 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:47:33 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:42)
+INFO: 2023/10/25 00:47:40 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:42)
+INFO: 2023/10/25 00:48:42 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:48:48 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 00:48:56 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:72)
+INFO: 2023/10/25 09:24:06 main.go:27: Logging
+INFO: 2023/10/25 12:40:16 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:49)
+INFO: 2023/10/25 12:40:16 server.go:3217: http: panic serving [::1]:56364: interface conversion: interface {} is nil, not string
+goroutine 22 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1854 +0xbf
+panic({0x12ccb60, 0xc000206d20})
+	/usr/local/go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.GetUserCurrentPage({0x13914b0, 0xc00022aa80}, 0xc000229800)
+	/Users/khs/Desktop/GoogleProjectBackend/app/handler/mainHandler.go:31 +0x455
+net/http.HandlerFunc.ServeHTTP(0xc000229700?, {0x13914b0?, 0xc00022aa80?}, 0xc00006a9e8?)
+	/usr/local/go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc0000000c0, {0x13914b0, 0xc00022aa80}, 0xc0000a4600)
+	/Users/khs/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0x1390788?}, {0x13914b0, 0xc00022aa80}, 0xc0000a4600)
+	/usr/local/go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000943f0, {0x1391738, 0xc0001541b0})
+	/usr/local/go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/10/25 12:45:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 12:47:10 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 12:51:04 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 12:51:20 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 12:55:57 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 12:56:55 main.go:27: Logging
+INFO: 2023/10/25 12:57:02 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 12:57:08 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SighupHandler (userDataHandler.go:38)
+INFO: 2023/10/25 16:57:15 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReqeustLoginHandler (userDataHandler.go:120)
+INFO: 2023/10/25 16:57:15 server.go:3217: http: panic serving [::1]:50750: sql: expected 1 arguments, got 2
+goroutine 34 [running]:
+net/http.(*conn).serve.func1()
+	/usr/local/go/src/net/http/server.go:1854 +0xbf
+panic({0x12c2fa0, 0xc000097a30})
+	/usr/local/go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/sql.IsUserIdExist({0xc00012e000, 0x2}, {0xc00012e004, 0x4})
+	/Users/khs/Desktop/GoogleProjectBackend/sql/insertDB.go:50 +0x32c
+GoogleProjectBackend/app/handler.ReqeustLoginHandler({0x13914d0, 0xc0000f4540}, 0xc00011cb00)
+	/Users/khs/Desktop/GoogleProjectBackend/app/handler/userDataHandler.go:116 +0xec
+net/http.HandlerFunc.ServeHTTP(0xc00011ca00?, {0x13914d0?, 0xc0000f4540?}, 0xc00008f9e8?)
+	/usr/local/go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc0000fc000, {0x13914d0, 0xc0000f4540}, 0xc000222100)
+	/Users/khs/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0x13907a8?}, {0x13914d0, 0xc0000f4540}, 0xc000222100)
+	/usr/local/go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000208090, {0x1391758, 0xc00011e1b0})
+	/usr/local/go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:3089 +0x5ed
