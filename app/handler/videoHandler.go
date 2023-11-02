@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -82,25 +83,23 @@ func ServeArtifactVideosHandler(w http.ResponseWriter, r *http.Request) {
 
 func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 	util.EnableCors(&w)
-	err := r.ParseMultipartForm(50 << 20) //50MB 프론트에서 용량 계산이 가능..?
+	err := r.ParseMultipartForm(500 << 20) //50MB 프론트에서 용량 계산이 가능..?
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	tags := r.MultipartForm.Value["tags"]
 	fmt.Println(tags)
-	var originalVideoName []string
+	var originalVideosName []string
 	var oriVideos []string
+	var originalVideosFileForm []string
 	originalVideos := r.MultipartForm.File["original"]
+	//TODO: 여기 originalVidoeileForm 이거 이름 같은거 두 개 쓰고 있음 수정이 요함
 	for _, originalVideoHeader := range originalVideos {
 		//들어온 비디오를 video+n 이름으로 바꿈
-		s := strings.Split(originalVideoHeader.Filename, ".")
-		if len(s) != 2 {
-			panic("Video split error")
-		}
-		originalVideoName = append(originalVideoName, s[0])
-		lastindex := len(s) - 1
-		fileForm := s[lastindex]
+		originalVideosName = append(originalVideosName, filepath.Base(originalVideoHeader.Filename))
+		originalVidoeFileForm := filepath.Ext(originalVideoHeader.Filename)
+		originalVideosFileForm = append(originalVideosFileForm, originalVidoeFileForm)
 		originalVideoPath := "./originalVideos/"
 		count, err := util.CountFile(originalVideoPath)
 		if err != nil {
@@ -109,7 +108,7 @@ func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		originalVideoName := "originalVideo" + fmt.Sprint(count)
 		oriVideos = append(oriVideos, originalVideoName)
-		originalFilePath := originalVideoPath + originalVideoName + "." + fileForm
+		originalFilePath := originalVideoPath + originalVideoName + originalVidoeFileForm
 
 		originalOutputFile, err := os.Create(originalFilePath)
 		if err != nil {
@@ -130,19 +129,17 @@ func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	var artifactVideoName []string
+	var artifactVideosName []string
 	var artiVideos []string
+	var arfectVideosFileForm []string
 	//artifactVideo란 이름으로 들어온 multiform (비디오)파일들 읽기
 	artifacVideos := r.MultipartForm.File["artifact"]
 	for _, artifactVideoHeader := range artifacVideos {
 		//들어온 비디오를 video+n 이름으로 바꿈
-		s := strings.Split(artifactVideoHeader.Filename, ".")
-		if len(s) != 2 {
-			panic("Video split error")
-		}
-		artifactVideoName = append(artifactVideoName, s[0])
-		lastindex := len(s) - 1
-		fileForm := s[lastindex]
+		artifactVideosName = append(artifactVideosName, filepath.Base(artifactVideoHeader.Filename))
+		arfectVideoFileForm := filepath.Ext(artifactVideoHeader.Filename)
+		arfectVideosFileForm = append(arfectVideosFileForm, arfectVideoFileForm)
+
 		artifactVideoPath := "./artifactVideos/"
 		count, err := util.CountFile(artifactVideoPath)
 		if err != nil {
@@ -151,7 +148,7 @@ func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		artifactVideoName := "artifactVideo" + fmt.Sprint(count)
 		artiVideos = append(artiVideos, artifactVideoName)
-		artifactFilePath := artifactVideoPath + artifactVideoName + "." + fileForm
+		artifactFilePath := artifactVideoPath + artifactVideoName + arfectVideoFileForm
 		artifactOutputFile, err := os.Create(artifactFilePath)
 
 		if err != nil {
@@ -172,11 +169,14 @@ func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unable to write the file", http.StatusInternalServerError)
 		}
 	}
+	//TODO: 파일 포멧 저장 확인
 	tags = strings.Split(tags[0], ",")
 	for i := 0; i < len(oriVideos) && i < len(artiVideos); i++ {
 		for j := 0; j < len(tags); j++ {
 			uuid := util.MakeUUID()
-			err := sql.InsertVideoId(uuid, originalVideoName[i], oriVideos[i], artifactVideoName[i], artiVideos[i], tags[j])
+			originaVideoFPS := util.GetVideoFPS("./originalVideos/" + oriVideos[i] + originalVideosFileForm[i])
+			artifactVideoFPS := util.GetVideoFPS("./artifactVideos/" + artiVideos[i] + arfectVideosFileForm[i])
+			err := sql.InsertVideoId(uuid, originalVideosName[i], oriVideos[i], originaVideoFPS, artifactVideosName[i], artiVideos[i], artifactVideoFPS, tags[j])
 			if err != nil {
 				fmt.Println(err)
 			}

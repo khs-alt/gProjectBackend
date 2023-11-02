@@ -32,6 +32,7 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/serveImage", handler.ServeImage)
 	r.HandleFunc("/getTestcodeWithTag", handler.GetTestCodeListHandler)
 	r.HandleFunc("/getVideoListFromTag", handler.GetVideoListFromTagHandler)
+	r.HandleFunc("/getCSVFile", handler.MakeCSVFromTagHandler)
 
 	return r
 }

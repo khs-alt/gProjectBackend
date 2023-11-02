@@ -22,11 +22,14 @@ func InsertTestCodeId(uuid uuid.UUID, testCode string, tags []string, videoList 
 	return nil
 }
 
-func InsertVideoId(uuid uuid.UUID, originalVideoName string, orgin string, artifactVideoName string, arti string, tag string) error {
+// 비디오 정보를 넣는 sql 함수
+// 주요 파라미터로는 오리지널 비디오 이름, 디고스팅된 비디오 이름, 태그가 있다.
+// TODO: 프레임 정보를 넣어야 함.
+func InsertVideoId(uuid uuid.UUID, originalVideoName string, orgin string, originalVideoFPS float32, artifactVideoName string, arti string, artifactVideoFPS float32, tag string) error {
 	app := SetDB()
 
-	insertQuery := "INSERT INTO video (uuid, original_video_name, original_video, artifact_video_name, artifact_video, tag) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)"
-	_, err := app.DB.Exec(insertQuery, uuid, originalVideoName, orgin, artifactVideoName, arti, tag)
+	insertQuery := "INSERT INTO video (uuid, original_video_name, original_video, original_video_fps, artifact_video_name, artifact_video, artifact_video_fps, tag) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, ?)"
+	_, err := app.DB.Exec(insertQuery, uuid, originalVideoName, orgin, originalVideoFPS, artifactVideoName, arti, artifactVideoFPS, tag)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -35,7 +38,7 @@ func InsertVideoId(uuid uuid.UUID, originalVideoName string, orgin string, artif
 	return nil
 }
 
-func IsUserIdExist(id string, password string) string {
+func IsUserIdExist(id string, password string) bool {
 	app := SetDB()
 
 	var resultID string
@@ -46,15 +49,12 @@ func IsUserIdExist(id string, password string) string {
 	err := app.DB.QueryRow(query, id, password).Scan(&resultID, &resultPassword)
 	fmt.Println(err)
 	if err == sql.ErrNoRows {
-		fmt.Println("No")
-		return "No"
+		return false
 	} else if err != nil {
 		fmt.Print("Login error")
-		fmt.Println(err)
-		return "error"
+		panic(err)
 	} else {
-		fmt.Println("Yes")
-		return "Yes"
+		return true
 	}
 }
 
@@ -70,7 +70,7 @@ func InsertUserIdAndPassword(uuid uuid.UUID, id string, ps string) string {
 
 	if count > 0 {
 		fmt.Println("Id is exist")
-		return "ID is exist"
+		return "No"
 	} else {
 		insertQuery := "INSERT INTO user (uuid, id, password) VALUES(UUID_TO_BIN(?), ?, ?)"
 		_, err = app.DB.Exec(insertQuery, uuid, id, ps)
@@ -78,7 +78,7 @@ func InsertUserIdAndPassword(uuid uuid.UUID, id string, ps string) string {
 			panic(err)
 		}
 		fmt.Println("Insert success")
-		return "signup success"
+		return "Yes"
 	}
 }
 

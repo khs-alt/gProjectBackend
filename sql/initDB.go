@@ -113,7 +113,7 @@ func CreateDBTalbe() {
 		`CREATE TABLE user_testcode_info (
             uuid BINARY(16) PRIMARY KEY,
             user_id VARCHAR(10) NOT NULL,
-            test_code VARCHAR(10) NOT NULL,
+            test_code VARCHAR(255) NOT NULL,
             current_page INT NOT NULL,
 			time DATETIME NOT NULL
         )`,
@@ -121,8 +121,10 @@ func CreateDBTalbe() {
             uuid BINARY(16) PRIMARY KEY,
 			original_video_name VARCHAR(255) NOT NULL,
             original_video VARCHAR(255) NOT NULL,
+			original_video_fps float NOT NULL,
 			artifact_video_name VARCHAR(255) NOT NULL,
             artifact_video VARCHAR(255) NOT NULL,
+			artifact_video_fps float NOT NULL,
             tag VARCHAR(255) NOT NULL
         )`,
 		`CREATE TABLE image (

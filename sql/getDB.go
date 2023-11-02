@@ -7,16 +7,86 @@ import (
 	"github.com/google/uuid"
 )
 
+func GetCurrentUserScore(userId string, videoId int) int {
+	app := SetDB()
+
+	insertQuery := "SELECT user_score FROM video_scoring WHERE user_id = ? AND video_id = ?"
+	var score int
+	err := app.DB.QueryRow(insertQuery, userId, videoId).Scan(&score)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return score
+}
+
+func GetVideoAverageScore(video string) int {
+	app := SetDB()
+	n := len(video)
+	videoId := video[n-1]
+	insertQuery := "SELECT user_score FROM video_scoring WHERE video_id = ?"
+	rows, err := app.DB.Query(insertQuery, videoId)
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+	var scoreList []int
+	for rows.Next() {
+		score := 0
+		if err := rows.Scan(&score); err != nil {
+			log.Fatal(err)
+		}
+		scoreList = append(scoreList, score)
+	}
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+	var sum int
+	//평균 구하기
+	for _, score := range scoreList {
+		sum += score
+	}
+	averageScore := sum / len(scoreList)
+	return averageScore
+}
+
 func GetUserCurrentPageAboutTestCode(userId string, testCode string) int {
 	app := SetDB()
 	maxCurrentPage := 0
 
-	insertQuery := "SELECT current_page FROM user_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1;"
+	insertQuery := "SELECT current_page FROM user_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1"
 	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&maxCurrentPage)
 	if err != nil {
 		fmt.Println(err)
 	}
 	return maxCurrentPage
+}
+
+func GetFPSFromVideo(videoId string) (float32, float32) {
+	app := SetDB()
+
+	query := "SELECT original_video_fps, artifact_video_fps FROM video WHERE original_video = ?"
+	var originalVideoFPS float32
+	var artifactVideoFPS float32
+	err := app.DB.QueryRow(query, videoId).Scan(&originalVideoFPS, &artifactVideoFPS)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return originalVideoFPS, artifactVideoFPS
+}
+
+func GetTestcodeExist(testCode string) bool {
+	app := SetDB()
+
+	query := "SELECT COUNT(*) FROM testcode WHERE test_code = ?"
+	var count int
+	err := app.DB.QueryRow(query, testCode).Scan(&count)
+	if err != nil {
+		panic(err)
+	}
+	if count > 0 {
+		return true
+	}
+	return false
 }
 
 func GetTestCodeCount() (int, error) {
@@ -29,6 +99,7 @@ func GetTestCodeCount() (int, error) {
 	}
 	return count, nil
 }
+
 func GetTestCodeInfo() ([]string, []string) {
 	app := SetDB()
 
@@ -55,6 +126,7 @@ func GetTestCodeInfo() ([]string, []string) {
 	return testCodeList, tagList
 }
 
+// give originalVideos and return real name of original and artifact Videos name
 func GetVideoNameListFromVideoList(videoList []string) ([]string, []string) {
 	app := SetDB()
 
@@ -119,6 +191,7 @@ func GetSameTagVideo(tag string) []string {
 	}
 	return videoDataSlice
 }
+
 func GetTagData() []string {
 	app := SetDB()
 	// Query to fetch data from the table
@@ -212,6 +285,7 @@ func GetTag(testcodeUUID uuid.UUID) (string, error) {
 	return tag, nil
 }
 
+// return original_video
 func GetVideoListFromTag(tag string) ([]string, error) {
 	app := SetDB()
 

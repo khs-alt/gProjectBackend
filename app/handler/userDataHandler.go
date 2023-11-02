@@ -59,9 +59,22 @@ func GetScoringData(w http.ResponseWriter, r *http.Request) {
 			currentPage := data.ImageId
 			sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
 			sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
+			userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
+			response := models.UserCurrentScore{Score: userScore}
+
+			// JSON으로 응답 데이터 마샬링
+			jsonResponse, err := json.Marshal(response)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Content-Type 설정 및 JSON 데이터 전송
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(jsonResponse)
+		} else {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
-	} else {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -97,7 +110,7 @@ func AdminLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// TODO: 어떤 유저의 테스트코드에 따른 비디오 리스트와 현재 페이지를 반환 및 로그인
+// 어떤 유저의 테스트코드에 따른 비디오 리스트와 현재 페이지를 반환 및 로그인
 func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
@@ -113,7 +126,17 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//
-		res := sql.IsUserIdExist(data.ID, data.Password)
+		//IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
+		IsTestcodeExist := sql.GetTestcodeExist(data.TestCode)
+
+		var res string
+		if IsTestcodeExist != true {
+			w.WriteHeader(http.StatusOK)
+			res = "No TestCode"
+		} else {
+			w.WriteHeader(http.StatusOK)
+			res = "Yes"
+		}
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(res))
 	} else {

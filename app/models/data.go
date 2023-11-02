@@ -1,10 +1,18 @@
 package models
 
+type TagData struct {
+	Tag string `json:"tag"`
+}
+
 type RequestData struct {
 	Tags []string `json:"tags"`
 }
 
 // Define a struct to represent the data you want to fetch
+
+type UserCurrentScore struct {
+	Score int `json:"score"`
+}
 
 type UserNewIdAndPassword struct {
 	NewId       string `json:"newId"`
@@ -20,6 +28,15 @@ type UserLoginData struct {
 	ID       string `json:"userID"`
 	Password string `json:"userPassword"`
 	TestCode string `json:"testcode"`
+}
+
+type UserVideoInitInfo struct {
+	CurrentPage           string   `json:"currentPage"`
+	VideoList             []string `json:"videoList"`
+	OriginalVideoNameList []string `json:"originalVideoNameList"`
+	ArtifactVideoNameList []string `json:"artifactVideoNameList"`
+	OriginalVideoFPSList  []string `json:"originalVideoFPSList"`
+	ArtifactVideoFPSList  []string `json:"artifactVideoFPSList"`
 }
 
 type UserScoreData struct {

@@ -33,6 +33,10 @@ func GetTestCodeListHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
+func GetCSVVideoListFromTagHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func GetVideoListFromTagHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	util.EnableCors(&w)
@@ -97,7 +101,8 @@ func GetTestCodeHandler(w http.ResponseWriter, r *http.Request) {
 		//중복된 요소를 제거함
 		videoList = util.RemoveDuplicates(videoList)
 		num, _ := sql.GetTestCodeCount()
-		testcode := "Test" + fmt.Sprint(num)
+
+		testcode := util.GenerateRandomString(8) + fmt.Sprint(num)
 		sql.InsertTestCodeId(uuid, testcode, data.Tags, videoList)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(testcode))

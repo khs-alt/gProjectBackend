@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"GoogleProjectBackend/app/models"
 	"GoogleProjectBackend/sql"
 	"GoogleProjectBackend/util"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -38,29 +40,39 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 		var videoNumList []string
 		var originalVideoNameList []string
 		var artifactVideoNameList []string
+		var originalVideoFPSList []string
+		var artifactVideoFPSList []string
 		videoList := strings.Split(videoCSVList, ",")
 		originalVideoNameList, artifactVideoNameList = sql.GetVideoNameListFromVideoList(videoList)
 		for _, video := range videoList {
 			videoNumList = append(videoNumList, string(video[len(video)-1]))
 		}
+		for _, video := range videoList {
+			originalVideoFPS, artifactVideoFPS := sql.GetFPSFromVideo(video)
+			originalVideoFPSList = append(originalVideoFPSList, strconv.FormatFloat(float64(originalVideoFPS), 'f', 2, 32))
+			artifactVideoFPSList = append(artifactVideoFPSList, strconv.FormatFloat(float64(artifactVideoFPS), 'f', 2, 32))
+		}
+		// videoNumCSVList := util.MakeStringListtoCSV(videoNumList)
+		// originalVideoCSVList := util.MakeStringListtoCSV(originalVideoNameList)
+		// artifactVideoCSVList := util.MakeStringListtoCSV(artifactVideoNameList)
+		// originalVideoFPSCSVList := util.MakeStringListtoCSV(originalVideoFPSList)
+		// artifactVideoFPSCSVList := util.MakeStringListtoCSV(artifactVideoFPSList)
 
-		videoNumCSVList := util.MakeStringListtoCSV(videoNumList)
-		originalVideoCSVList := util.MakeStringListtoCSV(originalVideoNameList)
-		artifactVideoCSVList := util.MakeStringListtoCSV(artifactVideoNameList)
 		if err != nil {
 			log.Println(err)
 		}
-		fmt.Println(currentPage, videoNumCSVList)
-		resData := map[string]string{
-			"currentPage":           currentPage,
-			"videoList":             videoNumCSVList,
-			"originalVideoNameList": originalVideoCSVList,
-			"artifactVideoNameList": artifactVideoCSVList,
-		}
+		//fmt.Println(currentPage, videoNumCSVList)
+		var initData models.UserVideoInitInfo
+		initData.CurrentPage = currentPage
+		initData.VideoList = videoNumList
+		initData.OriginalVideoNameList = originalVideoNameList
+		initData.ArtifactVideoNameList = artifactVideoNameList
+		initData.OriginalVideoFPSList = originalVideoFPSList
+		initData.ArtifactVideoFPSList = artifactVideoFPSList
 
 		// 응답 보내기
 		w.WriteHeader(http.StatusOK)
-		jsonData, err := json.Marshal(resData)
+		jsonData, err := json.Marshal(initData)
 		w.Write(jsonData)
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

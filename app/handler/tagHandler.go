@@ -6,9 +6,58 @@ import (
 	"GoogleProjectBackend/util"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"sort"
 )
+
+// 단일 tag에 대해 svc파일을 만들어서 다운로드
+func MakeCSVFromTagHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
+
+		var data models.TagData
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+
+		// 받은 데이터 출력
+		fmt.Println("Received Data:", data)
+		fmt.Println(data.Tag)
+		tag := data.Tag
+		var scores []int
+
+		videos, err := sql.GetVideoListFromTag(tag)
+		if err != nil {
+			log.Println(err)
+		}
+		for _, video := range videos {
+			score := sql.GetVideoAverageScore(video)
+			scores = append(scores, score)
+		}
+		originalVideoList, artifactVideoList := sql.GetVideoNameListFromVideoList(videos)
+		//csv파일로 저장
+		csvPath, err := util.SaveToCSV(originalVideoList, artifactVideoList, scores, tag)
+		if err != nil {
+			log.Println(err)
+		}
+
+		w.Header().Set("Content-Disposition", "attachment; filename="+csvPath)
+		// Content-Type 헤더를 설정
+		w.Header().Set("Content-Type", "text/csv")
+
+		// 파일 내용을 응답으로 쓰기
+		http.ServeFile(w, r, csvPath)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
 
 func DeletetagHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
@@ -60,7 +109,6 @@ func ReceivedTagHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// 받은 데이터 출력
-		fmt.Println("Received Data:", data)
 		tag := data["tag"].(string)
 		println(tag)
 		// 응답 보내기
