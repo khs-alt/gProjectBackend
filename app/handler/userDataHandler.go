@@ -59,19 +59,19 @@ func GetScoringData(w http.ResponseWriter, r *http.Request) {
 			currentPage := data.ImageId
 			sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
 			sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
-			userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
-			response := models.UserCurrentScore{Score: userScore}
+			//userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
+			// response := models.UserCurrentScore{Score: userScore}
 
-			// JSON으로 응답 데이터 마샬링
-			jsonResponse, err := json.Marshal(response)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
+			// // JSON으로 응답 데이터 마샬링
+			// jsonResponse, err := json.Marshal(response)
+			// if err != nil {
+			// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+			// 	return
+			// }
 
-			// Content-Type 설정 및 JSON 데이터 전송
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(jsonResponse)
+			// // Content-Type 설정 및 JSON 데이터 전송
+			// w.Header().Set("Content-Type", "application/json")
+			// w.Write(jsonResponse)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}

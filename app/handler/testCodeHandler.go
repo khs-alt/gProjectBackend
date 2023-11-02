@@ -100,6 +100,7 @@ func GetTestCodeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//중복된 요소를 제거함
 		videoList = util.RemoveDuplicates(videoList)
+		//TODO: videoList를 sort해야함
 		num, _ := sql.GetTestCodeCount()
 
 		testcode := util.GenerateRandomString(8) + fmt.Sprint(num)
