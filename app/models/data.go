@@ -1,5 +1,9 @@
 package models
 
+type TestCodeData struct {
+	TestCode string `json:"testcode"`
+}
+
 type TagData struct {
 	Tag string `json:"tag"`
 }
@@ -37,6 +41,12 @@ type UserVideoInitInfo struct {
 	ArtifactVideoNameList []string `json:"artifactVideoNameList"`
 	OriginalVideoFPSList  []string `json:"originalVideoFPSList"`
 	ArtifactVideoFPSList  []string `json:"artifactVideoFPSList"`
+}
+
+type UserInfoData struct {
+	CurrentUser string
+	ImageId     int
+	TestCode    string
 }
 
 type UserScoreData struct {

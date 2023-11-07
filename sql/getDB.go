@@ -22,7 +22,9 @@ func GetCurrentUserScore(userId string, videoId int) int {
 func GetVideoAverageScore(video string) int {
 	app := SetDB()
 	n := len(video)
-	videoId := video[n-1]
+	fmt.Println(video)
+	videoId := string(video[n-1])
+	fmt.Println(videoId)
 	insertQuery := "SELECT user_score FROM video_scoring WHERE video_id = ?"
 	rows, err := app.DB.Query(insertQuery, videoId)
 	if err != nil {
@@ -45,6 +47,7 @@ func GetVideoAverageScore(video string) int {
 	for _, score := range scoreList {
 		sum += score
 	}
+	fmt.Println("====================")
 	averageScore := sum / len(scoreList)
 	return averageScore
 }

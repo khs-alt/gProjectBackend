@@ -18,16 +18,13 @@ func ServeOriginalVideosHandler(w http.ResponseWriter, r *http.Request) {
 	// http.ServeFile(w, r, "./videos/video1.mp4")
 	// 비디오 파일을 읽어서 클라이언트로 전송
 	videoID := mux.Vars(r)["id"]
-	fmt.Println("serveVideosHandler : " + r.Method)
-	fmt.Println(videoID)
+
 	if r.Method == http.MethodGet {
 		videoFilePrefix := fmt.Sprintf("./originalVideos/originalVideo%s", videoID)
 		var videoFilePath string
 		var fileExtension string
 		for ext := range models.MimeTypes {
 			tempPath := videoFilePrefix + ext
-			fmt.Print("tempPath : ")
-			fmt.Println(tempPath)
 			if _, err := os.Stat(tempPath); err == nil {
 				videoFilePath = tempPath
 				fileExtension = ext
@@ -53,8 +50,7 @@ func ServeArtifactVideosHandler(w http.ResponseWriter, r *http.Request) {
 	// http.ServeFile(w, r, "./videos/video1.mp4")
 	// 비디오 파일을 읽어서 클라이언트로 전송
 	videoID := mux.Vars(r)["id"]
-	fmt.Println("serveVideosHandler : " + r.Method)
-	fmt.Println(videoID)
+
 	if r.Method == http.MethodGet {
 		videoFilePrefix := fmt.Sprintf("./artifactVideos/artifactVideo%s", videoID)
 		var videoFilePath string

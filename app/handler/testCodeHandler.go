@@ -6,6 +6,7 @@ import (
 	"GoogleProjectBackend/util"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -100,6 +101,7 @@ func GetTestCodeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//중복된 요소를 제거함
 		videoList = util.RemoveDuplicates(videoList)
+		sort.Strings(videoList)
 		//TODO: videoList를 sort해야함
 		num, _ := sql.GetTestCodeCount()
 

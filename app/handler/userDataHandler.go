@@ -39,6 +39,59 @@ func SighupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetUserScore(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
+		var data models.UserInfoData
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+	}
+}
+
+func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
+
+		var data models.UserInfoData
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+		fmt.Println("Received Data:", data)
+		userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
+		var res models.UserCurrentScore
+		res.Score = userScore
+
+		// JSON으로 응답 데이터 마샬링
+		// jsonResponse, err := json.Marshal(res)
+		// if err != nil {
+		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+		// 	return
+		// }
+
+		// Content-Type 설정 및 JSON 데이터 전송
+		//w.Header().Set("Content-Type", "application/json")
+		//w.Write(jsonResponse)
+		// 응답 보내기
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(fmt.Sprint(userScore)))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
 func GetScoringData(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
@@ -55,23 +108,27 @@ func GetScoringData(w http.ResponseWriter, r *http.Request) {
 		}
 		if data.Title == "scoring data" {
 
+			fmt.Print("scoring data part::::")
+
 			uuid := util.MakeUUID()
 			currentPage := data.ImageId
+			fmt.Println(currentPage)
 			sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
 			sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
-			//userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
-			// response := models.UserCurrentScore{Score: userScore}
-
-			// // JSON으로 응답 데이터 마샬링
-			// jsonResponse, err := json.Marshal(response)
+			userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
+			var res models.UserCurrentScore
+			res.Score = userScore
+			fmt.Println(res.Score)
+			// JSON으로 응답 데이터 마샬링
+			//jsonResponse, err := json.Marshal(res)
 			// if err != nil {
 			// 	http.Error(w, err.Error(), http.StatusInternalServerError)
 			// 	return
 			// }
 
-			// // Content-Type 설정 및 JSON 데이터 전송
-			// w.Header().Set("Content-Type", "application/json")
-			// w.Write(jsonResponse)
+			// Content-Type 설정 및 JSON 데이터 전송
+			//w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(fmt.Sprint(userScore)))
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -126,13 +183,16 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//
-		//IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
+		IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
 		IsTestcodeExist := sql.GetTestcodeExist(data.TestCode)
 
 		var res string
 		if IsTestcodeExist != true {
 			w.WriteHeader(http.StatusOK)
 			res = "No TestCode"
+		} else if IsUserIdExist != true {
+			res = "No UserId"
+
 		} else {
 			w.WriteHeader(http.StatusOK)
 			res = "Yes"

@@ -22,7 +22,7 @@ func SaveToCSV(originalVideoList []string, artifactVideoList []string, score []i
 
 	// 데이터 쓰기
 	for i := 0; i < len(originalVideoList); i++ {
-		record := []string{originalVideoList[i], strconv.Itoa(score[i]), artifactVideoList[i]}
+		record := []string{originalVideoList[i], artifactVideoList[i], strconv.Itoa(score[i])}
 		if err := writer.Write(record); err != nil {
 			return "", fmt.Errorf("cannot write to file: %v", err)
 		}

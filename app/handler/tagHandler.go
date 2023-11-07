@@ -6,54 +6,48 @@ import (
 	"GoogleProjectBackend/util"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"path/filepath"
 	"sort"
+	"strings"
 )
 
-// 단일 tag에 대해 svc파일을 만들어서 다운로드
-func MakeCSVFromTagHandler(w http.ResponseWriter, r *http.Request) {
+// TestCode 에 대해 svc파일을 만들어서 다운로드
+func MakeCSVFromTestHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
 	}
 	if r.Method == http.MethodPost {
 		util.EnableCors(&w)
 		body, _ := util.ProcessRequest(w, r)
-
-		var data models.TagData
+		fmt.Println("Here is debug!")
+		var data models.TestCodeData
 		err := json.Unmarshal(body, &data)
 		if err != nil {
 			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
 			return
 		}
 
-		// 받은 데이터 출력
-		fmt.Println("Received Data:", data)
-		fmt.Println(data.Tag)
-		tag := data.Tag
-		var scores []int
-
-		videos, err := sql.GetVideoListFromTag(tag)
-		if err != nil {
-			log.Println(err)
-		}
-		for _, video := range videos {
+		videoCSVList, _ := sql.GetVideoListFromTestCode(data.TestCode)
+		videoList := strings.Split(videoCSVList, ",")
+		originalVideoNameList, artifactVideoNameList := sql.GetVideoNameListFromVideoList(videoList)
+		var scoreList []int
+		for _, video := range videoList {
 			score := sql.GetVideoAverageScore(video)
-			scores = append(scores, score)
+			scoreList = append(scoreList, score)
 		}
-		originalVideoList, artifactVideoList := sql.GetVideoNameListFromVideoList(videos)
-		//csv파일로 저장
-		csvPath, err := util.SaveToCSV(originalVideoList, artifactVideoList, scores, tag)
+		CSVPath, err := util.SaveToCSV(originalVideoNameList, artifactVideoNameList, scoreList, data.TestCode)
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 		}
 
-		w.Header().Set("Content-Disposition", "attachment; filename="+csvPath)
-		// Content-Type 헤더를 설정
+		fileName := filepath.Base(CSVPath)
+
+		w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
 		w.Header().Set("Content-Type", "text/csv")
 
 		// 파일 내용을 응답으로 쓰기
-		http.ServeFile(w, r, csvPath)
+		http.ServeFile(w, r, CSVPath)
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
