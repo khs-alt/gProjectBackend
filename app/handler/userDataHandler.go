@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func SighupHandler(w http.ResponseWriter, r *http.Request) {
+func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
 	}
@@ -71,8 +71,8 @@ func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("Received Data:", data)
 		userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
-		var res models.UserCurrentScore
-		res.Score = userScore
+		// var res models.UserCurrentScore
+		// res.Score = userScore
 
 		// JSON으로 응답 데이터 마샬링
 		// jsonResponse, err := json.Marshal(res)
@@ -85,8 +85,10 @@ func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 		//w.Header().Set("Content-Type", "application/json")
 		//w.Write(jsonResponse)
 		// 응답 보내기
+		fmt.Printf("userScore is %d\n", userScore)
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(fmt.Sprint(userScore)))
+		replyData := fmt.Sprint(userScore)
+		w.Write([]byte(replyData))
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -108,17 +110,14 @@ func GetScoringData(w http.ResponseWriter, r *http.Request) {
 		}
 		if data.Title == "scoring data" {
 
-			fmt.Print("scoring data part::::")
-
 			uuid := util.MakeUUID()
 			currentPage := data.ImageId
-			fmt.Println(currentPage)
+			fmt.Printf("user %s videoId %d score %d\n", data.CurrentUser, data.ImageId, data.Score)
 			sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
 			sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
-			userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
+			userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId+1)
 			var res models.UserCurrentScore
 			res.Score = userScore
-			fmt.Println(res.Score)
 			// JSON으로 응답 데이터 마샬링
 			//jsonResponse, err := json.Marshal(res)
 			// if err != nil {
@@ -128,6 +127,7 @@ func GetScoringData(w http.ResponseWriter, r *http.Request) {
 
 			// Content-Type 설정 및 JSON 데이터 전송
 			//w.Header().Set("Content-Type", "application/json")
+			fmt.Printf("user %s videoId %d currentScore %d\n", data.CurrentUser, data.ImageId, res.Score)
 			w.Write([]byte(fmt.Sprint(userScore)))
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

@@ -125,8 +125,15 @@ func TestInsertUserVideoScoring3(t *testing.T) {
 }
 
 func TestGetUserTestcodeCurrentPage1(t *testing.T) {
-	id := "kim"
-	testCode := "A3"
+	id := "lee"
+	testCode := "2pTIsuT62"
 	currentPage := sql.GetUserCurrentPageAboutTestCode(id, testCode)
 	fmt.Printf("User %s current page is %d\n", id, currentPage)
+}
+
+func TestGetUserScore(t *testing.T) {
+	id := "kim"
+	videoId := 1
+	score := sql.GetCurrentUserScore(id, videoId)
+	fmt.Println(score)
 }

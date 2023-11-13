@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 
@@ -10,11 +11,17 @@ import (
 func GetCurrentUserScore(userId string, videoId int) int {
 	app := SetDB()
 
-	insertQuery := "SELECT user_score FROM video_scoring WHERE user_id = ? AND video_id = ?"
+	insertQuery := "SELECT user_score FROM video_scoring WHERE user_id = ? AND video_id = ? ORDER BY time DESC LIMIT 1"
 	var score int
 	err := app.DB.QueryRow(insertQuery, userId, videoId).Scan(&score)
 	if err != nil {
-		fmt.Println(err)
+		if err == sql.ErrNoRows {
+			// 결과가 없을 때 -1 반환
+			return -1
+		} else {
+			// 다른 오류가 발생한 경우 로그를 출력
+			fmt.Println(err)
+		}
 	}
 	return score
 }

@@ -25,7 +25,8 @@ func GetAppInstance() *App {
 
 func (app *App) InitDB() {
 	app.once.Do(func() {
-		dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
+		// dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
+		dsn := "root:1234@/google_project"
 		db, err := sql.Open("mysql", dsn)
 		if err != nil {
 			log.Println(err)

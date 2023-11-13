@@ -19,7 +19,7 @@ func SetupRouter() *mux.Router {
 	//about Login
 	r.HandleFunc("/login", handler.ReqeustLoginHandler)
 	r.HandleFunc("/admin/login", handler.AdminLoginHandler)
-	r.HandleFunc("/signUp", handler.SighupHandler)
+	r.HandleFunc("/signUp", handler.SignupHandler)
 	//upload Data
 	r.HandleFunc("/upload/video", handler.UploadVideoHandler)
 	r.HandleFunc("/upload/image", handler.UploadImageHandler)

@@ -52,6 +52,11 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 			originalVideoFPSList = append(originalVideoFPSList, strconv.FormatFloat(float64(originalVideoFPS), 'f', 2, 32))
 			artifactVideoFPSList = append(artifactVideoFPSList, strconv.FormatFloat(float64(artifactVideoFPS), 'f', 2, 32))
 		}
+		curPage, err := strconv.Atoi(currentPage)
+		if err != nil {
+			log.Println(err)
+		}
+		userScore := sql.GetCurrentUserScore(id, curPage)
 		// videoNumCSVList := util.MakeStringListtoCSV(videoNumList)
 		// originalVideoCSVList := util.MakeStringListtoCSV(originalVideoNameList)
 		// artifactVideoCSVList := util.MakeStringListtoCSV(artifactVideoNameList)
@@ -69,6 +74,7 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 		initData.ArtifactVideoNameList = artifactVideoNameList
 		initData.OriginalVideoFPSList = originalVideoFPSList
 		initData.ArtifactVideoFPSList = artifactVideoFPSList
+		initData.UserScore = userScore
 
 		// 응답 보내기
 		w.WriteHeader(http.StatusOK)

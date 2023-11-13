@@ -41,6 +41,7 @@ type UserVideoInitInfo struct {
 	ArtifactVideoNameList []string `json:"artifactVideoNameList"`
 	OriginalVideoFPSList  []string `json:"originalVideoFPSList"`
 	ArtifactVideoFPSList  []string `json:"artifactVideoFPSList"`
+	UserScore             int      `json:"userScore"`
 }
 
 type UserInfoData struct {
