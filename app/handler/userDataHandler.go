@@ -54,6 +54,34 @@ func GetUserScore(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+func GetImageScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
+
+		data := struct {
+			CurrentUser string `json:"current_user"`
+			TestCode    int    `json:"testcode"`
+		}{
+			CurrentUser: "",
+			TestCode:    0,
+		}
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+		userScore := sql.GetCurrentUserImageScore(data.CurrentUser, data.TestCode)
+		w.WriteHeader(http.StatusOK)
+		replyData := fmt.Sprint(userScore)
+		w.Write([]byte(replyData))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
 
 func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
@@ -71,17 +99,6 @@ func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("Received Data:", data)
 		userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
-		// var res models.UserCurrentScore
-		// res.Score = userScore
-
-		// JSON으로 응답 데이터 마샬링
-		// jsonResponse, err := json.Marshal(res)
-		// if err != nil {
-		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-		// 	return
-		// }
-
-		// Content-Type 설정 및 JSON 데이터 전송
 		//w.Header().Set("Content-Type", "application/json")
 		//w.Write(jsonResponse)
 		// 응답 보내기
@@ -89,6 +106,44 @@ func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		replyData := fmt.Sprint(userScore)
 		w.Write([]byte(replyData))
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+func GetImageScoreData(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
+
+		var data models.UserImageScoreData
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+		uuid := util.MakeUUID()
+		currentPage := data.ImageId
+		SCVData := util.MakeIntListtoCSV(data.Score)
+		sql.InsertUserImageScoringInfo(uuid, data.CurrentUser, data.ImageId, SCVData)
+		sql.InsertUserImageTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
+		userScore := sql.GetCurrentUserImageScore(data.CurrentUser, data.ImageId+1)
+		userIntScore := util.MakeCSVtoIntList(userScore)
+		sendData := struct {
+			Score []int `json:"score"`
+		}{
+			Score: userIntScore,
+		}
+		finalSendData, err := json.Marshal(sendData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//json으로 만들어야 함.
+		w.Write(finalSendData)
+		w.WriteHeader(http.StatusOK)
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}

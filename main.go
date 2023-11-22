@@ -39,7 +39,6 @@ func Init() {
 
 func main() {
 	InitLogFile()
-	Init()
 	router := app.SetupRouter()
 	log.Fatal(http.ListenAndServe(":8000", router))
 	defer logFile.Close()

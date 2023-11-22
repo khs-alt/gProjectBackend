@@ -2623,3 +2623,282 @@ INFO: 2023/11/09 17:34:37 server.go:3217: http: superfluous response.WriteHeader
 INFO: 2023/11/09 17:34:37 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReqeustLoginHandler (userDataHandler.go:200)
 INFO: 2023/11/09 17:34:38 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
 INFO: 2023/11/09 17:34:42 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 13:57:52 main.go:29: Logging
+INFO: 2023/11/13 15:27:24 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:166)
+INFO: 2023/11/13 15:29:05 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:114)
+INFO: 2023/11/13 15:29:45 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:114)
+INFO: 2023/11/13 15:30:29 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:114)
+INFO: 2023/11/13 15:30:57 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SignupHandler (userDataHandler.go:38)
+INFO: 2023/11/13 15:31:17 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReqeustLoginHandler (userDataHandler.go:203)
+INFO: 2023/11/13 15:31:17 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReqeustLoginHandler (userDataHandler.go:200)
+INFO: 2023/11/13 15:31:18 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:32:45 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:32:50 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:33:02 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:33:03 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:33:10 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:33:21 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:34:19 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:34:26 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:34:28 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:34:41 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:34:46 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:38:22 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:38:33 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:41:49 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:56:22 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:56:27 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:56:31 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:56:32 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:57:05 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:57:13 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SignupHandler (userDataHandler.go:38)
+INFO: 2023/11/13 15:57:25 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReqeustLoginHandler (userDataHandler.go:203)
+INFO: 2023/11/13 15:57:25 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReqeustLoginHandler (userDataHandler.go:200)
+INFO: 2023/11/13 15:57:26 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetUserCurrentPage (mainHandler.go:84)
+INFO: 2023/11/13 15:57:33 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:57:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/13 15:57:47 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetScoreDataFromUser (userDataHandler.go:93)
+INFO: 2023/11/15 19:22:51 main.go:29: Logging
+INFO: 2023/11/15 19:23:09 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:166)
+INFO: 2023/11/15 20:05:06 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:166)
+INFO: 2023/11/15 23:33:17 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:166)
+INFO: 2023/11/20 20:24:39 main.go:29: Logging
+INFO: 2023/11/20 20:25:50 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:166)
+INFO: 2023/11/20 20:30:33 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:147)
+INFO: 2023/11/20 20:30:35 server.go:3217: http: panic serving [::1]:54766: runtime error: index out of range [1] with length 1
+goroutine 39 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x981f60, 0xc0001842b8})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0xa25720, 0xc0001481c0}, 0xc00014cc00)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc00014cb00?, {0xa25720?, 0xc0001481c0?}, 0xc0000739e8?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc0000000c0, {0xa25720, 0xc0001481c0}, 0xc00014c900)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0xa249d0?}, {0xa25720, 0xc0001481c0}, 0xc00014c900)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc00021a240, {0xa259b8, 0xc00016cf30})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/20 20:30:35 server.go:3217: http: panic serving [::1]:54767: runtime error: index out of range [1] with length 1
+goroutine 41 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x981f60, 0xc000184498})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0xa25720, 0xc000148380}, 0xc00014cf00)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc00014ce00?, {0xa25720?, 0xc000148380?}, 0x800?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc0000000c0, {0xa25720, 0xc000148380}, 0xc00014c300)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0xa249d0?}, {0xa25720, 0xc000148380}, 0xc00014c300)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc00021a3f0, {0xa259b8, 0xc00016cf30})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/20 20:30:35 server.go:3217: http: panic serving [::1]:54768: runtime error: index out of range [1] with length 1
+goroutine 10 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x981f60, 0xc000226378})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0xa25720, 0xc00022c540}, 0xc00020ed00)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc00020ec00?, {0xa25720?, 0xc00022c540?}, 0xc00006f9e8?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc0000000c0, {0xa25720, 0xc00022c540}, 0xc00020ea00)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0xa249d0?}, {0xa25720, 0xc00022c540}, 0xc00020ea00)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000160750, {0xa259b8, 0xc00016cf30})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/20 20:30:49 server.go:3217: http: panic serving [::1]:54784: runtime error: index out of range [1] with length 1
+goroutine 43 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x981f60, 0xc0000ae378})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0xa25720, 0xc0000b62a0}, 0xc000098600)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc000098500?, {0xa25720?, 0xc0000b62a0?}, 0xc0000d39e8?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc0000000c0, {0xa25720, 0xc0000b62a0}, 0xc000098300)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0xa249d0?}, {0xa25720, 0xc0000b62a0}, 0xc000098300)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc00021a630, {0xa259b8, 0xc00016cf30})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/20 20:37:49 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:147)
+INFO: 2023/11/20 20:42:51 main.go:29: Logging
+INFO: 2023/11/20 20:43:02 getDB.go:168: Error 1146 (42S02): Table 'google_project.image_testcode' doesn't exist
+INFO: 2023/11/20 20:47:29 main.go:29: Logging
+INFO: 2023/11/20 20:52:21 main.go:29: Logging
+INFO: 2023/11/20 21:09:51 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:166)
+INFO: 2023/11/20 21:57:27 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:147)
+INFO: 2023/11/20 21:58:19 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:147)
+INFO: 2023/11/21 08:51:27 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.DeletetagHandler (tagHandler.go:85)
+INFO: 2023/11/21 08:52:17 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedImageTagHandler (tagHandler.go:175)
+INFO: 2023/11/21 08:52:19 server.go:3217: http: panic serving [::1]:55566: runtime error: index out of range [1] with length 1
+goroutine 146 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x1022f60, 0xc000190408})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0x10c6840, 0xc0001800e0}, 0xc0000d0700)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc0000d0600?, {0x10c6840?, 0xc0001800e0?}, 0xc00006f9e8?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc00009e000, {0x10c6840, 0xc0001800e0}, 0xc0000d0400)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0x10c5af0?}, {0x10c6840, 0xc0001800e0}, 0xc0000d0400)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0002fc240, {0x10c6ad8, 0xc00009de00})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/21 08:52:19 server.go:3217: http: panic serving [::1]:55561: runtime error: index out of range [1] with length 1
+goroutine 132 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x1022f60, 0xc0000164b0})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0x10c6840, 0xc00015a000}, 0xc0000e4400)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc0000e4300?, {0x10c6840?, 0xc00015a000?}, 0xc0000739e8?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc00009e000, {0x10c6840, 0xc00015a000}, 0xc0000e4100)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0x10c5af0?}, {0x10c6840, 0xc00015a000}, 0xc0000e4100)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000188090, {0x10c6ad8, 0xc00009de00})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/21 08:52:19 server.go:3217: http: panic serving [::1]:55601: runtime error: index out of range [1] with length 1
+goroutine 163 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x1022f60, 0xc00008c2b8})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0x10c6840, 0xc00028c000}, 0xc0000fe400)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc0000fe200?, {0x10c6840?, 0xc00028c000?}, 0xc0002879e8?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc00009e000, {0x10c6840, 0xc00028c000}, 0xc0000fe000)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0x10c5af0?}, {0x10c6840, 0xc00028c000}, 0xc0000fe000)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc0000ee1b0, {0x10c6ad8, 0xc00009de00})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/21 08:52:29 server.go:3217: http: panic serving [::1]:55607: runtime error: index out of range [1] with length 1
+goroutine 149 [running]:
+net/http.(*conn).serve.func1()
+	C:/Program Files/Go/src/net/http/server.go:1854 +0xbf
+panic({0x1022f60, 0xc000190768})
+	C:/Program Files/Go/src/runtime/panic.go:890 +0x263
+GoogleProjectBackend/app/handler.UploadImageHandler({0x10c6840, 0xc000180380}, 0xc0000d0b00)
+	C:/googleProject/backend/googleProjectBackend/app/handler/imageHandler.go:143 +0xf55
+net/http.HandlerFunc.ServeHTTP(0xc0000d0a00?, {0x10c6840?, 0xc000180380?}, 0x800?)
+	C:/Program Files/Go/src/net/http/server.go:2122 +0x2f
+github.com/gorilla/mux.(*Router).ServeHTTP(0xc00009e000, {0x10c6840, 0xc000180380}, 0xc0000d0800)
+	C:/Users/aa/go/pkg/mod/github.com/gorilla/mux@v1.8.0/mux.go:210 +0x1cf
+net/http.serverHandler.ServeHTTP({0x10c5af0?}, {0x10c6840, 0xc000180380}, 0xc0000d0800)
+	C:/Program Files/Go/src/net/http/server.go:2936 +0x316
+net/http.(*conn).serve(0xc000188360, {0x10c6ad8, 0xc00009de00})
+	C:/Program Files/Go/src/net/http/server.go:1995 +0x612
+created by net/http.(*Server).Serve
+	C:/Program Files/Go/src/net/http/server.go:3089 +0x5ed
+INFO: 2023/11/21 08:55:51 main.go:29: Logging
+INFO: 2023/11/21 08:56:43 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedImageTagHandler (tagHandler.go:175)
+INFO: 2023/11/21 08:57:13 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedImageTagHandler (tagHandler.go:175)
+INFO: 2023/11/21 08:57:41 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.ReceivedTagHandler (tagHandler.go:147)
+INFO: 2023/11/21 13:35:27 main.go:29: Logging
+INFO: 2023/11/21 14:46:55 main.go:29: Logging
+INFO: 2023/11/22 20:55:37 main.go:29: Logging
+INFO: 2023/11/22 21:07:05 main.go:29: Logging
+INFO: 2023/11/22 21:07:39 main.go:29: Logging
+INFO: 2023/11/22 21:09:53 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:09:59 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:21:02 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:23:30 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:23:54 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:24:04 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:29:11 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.SignupHandler (userDataHandler.go:38)
+INFO: 2023/11/22 21:29:21 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.AdminLoginHandler (userDataHandler.go:203)
+INFO: 2023/11/22 21:34:29 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:35:02 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:130)
+INFO: 2023/11/22 21:36:26 main.go:29: Logging
+INFO: 2023/11/22 21:36:40 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:132)
+INFO: 2023/11/22 21:37:35 main.go:29: Logging
+INFO: 2023/11/22 21:38:51 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:38:51 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:38:53 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:02 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:39:02 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:08 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:39:08 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:09 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:12 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:14 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:39:14 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:19 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:23 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:39:23 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:39:31 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:39:31 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:59:24 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 21:59:24 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 21:59:27 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:02:18 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:02:18 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:02:24 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:02:24 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:02:38 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:02:38 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:03:49 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:03:49 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:04:10 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:04:19 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:04:19 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:04:25 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:04:25 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:09:59 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:09:59 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:10:05 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:10:05 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:10:10 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:10:13 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:10:13 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:12:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:12:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:12:40 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:12:41 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:12:54 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:12:54 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:12:55 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:13:29 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:13:29 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:14:57 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:14:57 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:15:00 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:22:15 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:22:15 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:22:30 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:22:30 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:22:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:22:39 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:22:44 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:22:44 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)
+INFO: 2023/11/22 22:22:54 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:131)
+INFO: 2023/11/22 22:22:54 server.go:3217: http: superfluous response.WriteHeader call from GoogleProjectBackend/app/handler.GetImageScoreData (userDataHandler.go:129)

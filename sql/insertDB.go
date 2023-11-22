@@ -22,6 +22,20 @@ func InsertTestCodeId(uuid uuid.UUID, testCode string, tags []string, videoList 
 	return nil
 }
 
+func InsertImageTestCodeId(uuid uuid.UUID, testCode string, tags []string, imageList []string) error {
+	app := SetDB()
+	tagsCSV := util.MakeStringListtoCSV(tags)
+	imageCSV := util.MakeStringListtoCSV(imageList)
+	insertQuery := "INSERT INTO image_testcode (uuid, test_code, tags, image_list) VALUES (UUID_TO_BIN(?),?,?,?)"
+	_, err := app.DB.Exec(insertQuery, uuid, testCode, tagsCSV, imageCSV)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	fmt.Println("Tag Id insert")
+	return nil
+}
+
 // 비디오 정보를 넣는 sql 함수
 // 주요 파라미터로는 오리지널 비디오 이름, 디고스팅된 비디오 이름, 태그가 있다.
 // TODO: 프레임 정보를 넣어야 함.
@@ -35,6 +49,19 @@ func InsertVideoId(uuid uuid.UUID, originalVideoName string, orgin string, origi
 		return err
 	}
 	fmt.Println("Video Id insert")
+	return nil
+}
+
+func InsertImageId(uuid uuid.UUID, artifactImageName string, arti string, originalImageName string, orgin string, tag string) error {
+	app := SetDB()
+
+	insertQuery := "INSERT INTO image (uuid, artifact_image_name, artifact_image, original_image_name, original_image, tag) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)"
+	_, err := app.DB.Exec(insertQuery, uuid, artifactImageName, arti, originalImageName, orgin, tag)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	fmt.Println("Image Id insert")
 	return nil
 }
 
@@ -93,6 +120,26 @@ func InsertUserTestInfo(uuid uuid.UUID, userId string, testCode string, currentP
 	fmt.Println("TestCode info inserted")
 }
 
+func InsertUserImageTestInfo(uuid uuid.UUID, userId string, testCode string, currentPage int) {
+	app := SetDB()
+
+	insertQuert := "INSERT INTO user_image_testcode_info (uuid, user_id, test_code, current_page, time) VALUES (UUID_TO_BIN(?), ?, ?, ?, NOW())"
+	_, err := app.DB.Exec(insertQuert, uuid, userId, testCode, currentPage)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("TestCode info inserted")
+}
+
+func InsertUserImageScoringInfo(uuid uuid.UUID, userId string, imageId int, patchScore string) {
+	app := SetDB()
+	insertQuery := "INSERT INTO image_scoring (uuid, user_id, image_id, patch_score, time) VALUES (UUID_TO_BIN(?), ?, ?, ?, NOW())"
+	_, err := app.DB.Exec(insertQuery, uuid, userId, imageId, patchScore)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
 func InsertUserVideoScoringInfo(uuid uuid.UUID, userId string, videoId int, userScore int) {
 	app := SetDB()
 
@@ -107,6 +154,18 @@ func InsertTagData(uuid uuid.UUID, tag string) {
 	app := SetDB()
 
 	insertQuery := "INSERT INTO tag (uuid, tag) VALUES (UUID_TO_BIN(?),?)"
+	_, err := app.DB.Exec(insertQuery, uuid, tag)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("INSERT SUCCESS")
+	}
+}
+
+func InsertImageTagData(uuid uuid.UUID, tag string) {
+	app := SetDB()
+
+	insertQuery := "INSERT INTO image_tag (uuid, tag) VALUES (UUID_TO_BIN(?),?)"
 	_, err := app.DB.Exec(insertQuery, uuid, tag)
 	if err != nil {
 		fmt.Println(err)

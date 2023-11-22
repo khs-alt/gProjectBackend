@@ -85,7 +85,7 @@ func CreateDBTalbe() {
             uuid BINARY(16) PRIMARY KEY,
             user_id VARCHAR(10) NOT NULL,
             image_id INT NOT NULL,
-            user_check_is_artifact BOOL NOT NULL,
+            patch_score VARCHAR(100) NOT NULL,
             time DATETIME NOT NULL
         )`,
 		`CREATE TABLE video_scoring (
@@ -99,11 +99,21 @@ func CreateDBTalbe() {
             uuid BINARY(16) PRIMARY KEY,
             tag VARCHAR(255) NOT NULL
         )`,
+		`CREATE TABLE image_tag (
+            uuid BINARY(16) PRIMARY KEY,
+            tag VARCHAR(255) NOT NULL
+        )`,
 		`CREATE TABLE testcode (
             uuid BINARY(16) PRIMARY KEY,
             test_code VARCHAR(255) NOT NULL,
 			tags VARCHAR(1000) NOT NULL,
             video_list VARCHAR(4000) NOT NULL
+        )`,
+		`CREATE TABLE image_testcode (
+            uuid BINARY(16) PRIMARY KEY,
+            test_code VARCHAR(255) NOT NULL,
+			tags VARCHAR(1000) NOT NULL,
+            image_list VARCHAR(4000) NOT NULL
         )`,
 		`CREATE TABLE user (
             uuid BINARY(16),
@@ -112,6 +122,13 @@ func CreateDBTalbe() {
             PRIMARY KEY (uuid, id)
         )`,
 		`CREATE TABLE user_testcode_info (
+            uuid BINARY(16) PRIMARY KEY,
+            user_id VARCHAR(10) NOT NULL,
+            test_code VARCHAR(255) NOT NULL,
+            current_page INT NOT NULL,
+			time DATETIME NOT NULL
+        )`,
+		`CREATE TABLE user_image_testcode_info (
             uuid BINARY(16) PRIMARY KEY,
             user_id VARCHAR(10) NOT NULL,
             test_code VARCHAR(255) NOT NULL,
@@ -131,7 +148,9 @@ func CreateDBTalbe() {
 		`CREATE TABLE image (
             uuid BINARY(16) PRIMARY KEY,
             original_image_name VARCHAR(255) NOT NULL,
+			original_image VARCHAR(255) NOT NULL,
             artifact_image_name VARCHAR(255) NOT NULL,
+			artifact_image VARCHAR(255) NOT NULL,
             tag VARCHAR(255) NOT NULL
         )`,
 		`CREATE TABLE image_patch (

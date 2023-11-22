@@ -50,6 +50,13 @@ type UserInfoData struct {
 	TestCode    string
 }
 
+type UserImageScoreData struct {
+	CurrentUser string `json:"current_user"`
+	ImageId     int    `json:"image_id"`
+	TestCode    string `json:"test_code"`
+	Score       []int  `json:"score"`
+}
+
 type UserScoreData struct {
 	Title       string
 	CurrentUser string

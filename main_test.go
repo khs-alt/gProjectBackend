@@ -132,8 +132,10 @@ func TestGetUserTestcodeCurrentPage1(t *testing.T) {
 }
 
 func TestGetUserScore(t *testing.T) {
-	id := "kim"
-	videoId := 1
-	score := sql.GetCurrentUserScore(id, videoId)
-	fmt.Println(score)
+	sql.DeleteDBTablbe()
+	sql.CreateDBTalbe()
+	util.DeleteAllFilesInFolder("originalVideos")
+	util.DeleteAllFilesInFolder("artifactVideos")
+	util.DeleteAllFilesInFolder("originalImages")
+	util.DeleteAllFilesInFolder("artifactImages")
 }

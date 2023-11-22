@@ -37,6 +37,27 @@ func MakeNumber(s []string) []int {
 	}
 	return newArray
 }
+func MakeCSVtoIntList(s string) []int {
+	// 입력 문자열을 쉼표로 분할하여 문자열 슬라이스로 변환
+	stringList := strings.Split(s, ",")
+
+	// 결과로 반환할 정수 목록 슬라이
+	var intList []int
+
+	// 문자열 슬라이스를 정수 슬라이스로 변환
+	for _, str := range stringList {
+		// 문자열을 정수로 변환
+		num, err := strconv.Atoi(str)
+		if err != nil {
+			fmt.Println(err)
+		}
+		// 정수 슬라이스에 추가
+		intList = append(intList, num)
+	}
+
+	return intList
+}
+
 func MakeIntListtoCSV(numArray []int) string {
 	s := ""
 	for _, num := range numArray {

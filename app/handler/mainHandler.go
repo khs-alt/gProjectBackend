@@ -16,6 +16,42 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello this is main Page!!!!")
 }
 
+func GetUserCurrentImagePage(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
+
+		var data map[string]interface{}
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+		id := data["userID"].(string)
+		testCode := data["testcode"].(string)
+		fmt.Println(id, testCode)
+		currentPage := fmt.Sprint(sql.GetUserCurrentImagePageAboutTestCode(id, testCode))
+		imageCSVList, err := sql.GetImageListFromTestCode(testCode)
+		imageList := util.MakeCSVToStringList(imageCSVList)
+
+		data1 := struct {
+			CurrentPage string   `json:"current_page"`
+			ImageList   []string `json:"image_list"`
+		}{
+			CurrentPage: currentPage,
+			ImageList:   imageList,
+		}
+		w.WriteHeader(http.StatusOK)
+		jsonData, err := json.Marshal(data1)
+		w.Write(jsonData)
+	} else {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
 func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
@@ -62,11 +98,8 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 		// artifactVideoCSVList := util.MakeStringListtoCSV(artifactVideoNameList)
 		// originalVideoFPSCSVList := util.MakeStringListtoCSV(originalVideoFPSList)
 		// artifactVideoFPSCSVList := util.MakeStringListtoCSV(artifactVideoFPSList)
-
-		if err != nil {
-			log.Println(err)
-		}
 		//fmt.Println(currentPage, videoNumCSVList)
+
 		var initData models.UserVideoInitInfo
 		initData.CurrentPage = currentPage
 		initData.VideoList = videoNumList
