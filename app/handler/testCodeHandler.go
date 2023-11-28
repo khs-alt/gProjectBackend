@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"sort"
 
 	"github.com/google/uuid"
 )
@@ -99,7 +98,7 @@ func GetImageListFromTagHandler(w http.ResponseWriter, r *http.Request) {
 			imageList = append(imageList, iamge)
 		}
 	}
-	imageList = util.RemoveDuplicates(imageList) //중복된 비디오 리스트 제거
+	imageList = util.RemoveDuplicates(imageList) //중복된 이미지 리스트 제거
 	originalIamge, _ := sql.GetImageNameListFromVideoList(imageList)
 	fmt.Println(originalIamge)
 	jsonData, err := json.Marshal(originalIamge)
@@ -150,7 +149,7 @@ func GetTestCodeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//중복된 요소를 제거함
 		videoList = util.RemoveDuplicates(videoList)
-		sort.Strings(videoList)
+		//sort.Strings(videoList)
 		//TODO: videoList를 sort해야함
 		num, _ := sql.GetTestCodeCount()
 
@@ -199,7 +198,7 @@ func GetImageTestCodeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//중복된 요소를 제거함
 		imageList = util.RemoveDuplicates(imageList)
-		sort.Strings(imageList)
+		//sort.Strings(imageList)
 		//TODO: videoList를 sort해야함
 		num, _ := sql.GetTestCodeCount()
 

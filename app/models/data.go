@@ -29,9 +29,10 @@ type UserIdAndPassword struct {
 }
 
 type UserLoginData struct {
-	ID       string `json:"userID"`
-	Password string `json:"userPassword"`
-	TestCode string `json:"testcode"`
+	CurrentMode string `json:"current_mode"`
+	ID          string `json:"user_id"`
+	Password    string `json:"user_password"`
+	TestCode    string `json:"test_code"`
 }
 
 type UserVideoInitInfo struct {

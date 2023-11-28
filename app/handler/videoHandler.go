@@ -79,7 +79,7 @@ func ServeArtifactVideosHandler(w http.ResponseWriter, r *http.Request) {
 
 func UploadVideoHandler(w http.ResponseWriter, r *http.Request) {
 	util.EnableCors(&w)
-	err := r.ParseMultipartForm(500 << 20) //50MB 프론트에서 용량 계산이 가능..?
+	err := r.ParseMultipartForm(2000 << 20) //500MB 프론트에서 용량 계산이 가능..?
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

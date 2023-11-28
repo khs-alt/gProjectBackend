@@ -58,10 +58,13 @@ func DeleteDBTablbe() {
 	tables := []string{
 		"image_scoring",
 		"video_scoring",
+		"image_tag",
 		"tag",
 		"testcode",
+		"image_testcode",
 		"user",
 		"user_testcode_info",
+		"user_image_testcode_info",
 		"video",
 		"image",
 		"image_patch",
@@ -90,7 +93,7 @@ func CreateDBTalbe() {
         )`,
 		`CREATE TABLE video_scoring (
             uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
+            user_id VARCHAR(20) NOT NULL,
             video_id INT NOT NULL,
             user_score INT NOT NULL,
             time DATETIME NOT NULL
@@ -151,6 +154,8 @@ func CreateDBTalbe() {
 			original_image VARCHAR(255) NOT NULL,
             artifact_image_name VARCHAR(255) NOT NULL,
 			artifact_image VARCHAR(255) NOT NULL,
+			diff_image_name VARCHAR(255) NOT NULL,
+			diff_image VARCHAR(255) NOT NULL,
             tag VARCHAR(255) NOT NULL
         )`,
 		`CREATE TABLE image_patch (

@@ -52,11 +52,11 @@ func InsertVideoId(uuid uuid.UUID, originalVideoName string, orgin string, origi
 	return nil
 }
 
-func InsertImageId(uuid uuid.UUID, artifactImageName string, arti string, originalImageName string, orgin string, tag string) error {
+func InsertImageId(uuid uuid.UUID, originalImageName string, orgin string, artifactImageName string, arti string, diffImageName string, diff string, tag string) error {
 	app := SetDB()
 
-	insertQuery := "INSERT INTO image (uuid, artifact_image_name, artifact_image, original_image_name, original_image, tag) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)"
-	_, err := app.DB.Exec(insertQuery, uuid, artifactImageName, arti, originalImageName, orgin, tag)
+	insertQuery := "INSERT INTO image (uuid, original_image_name, original_image, artifact_image_name, artifact_image, diff_image_name, diff_image, tag) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ? ,?)"
+	_, err := app.DB.Exec(insertQuery, uuid, originalImageName, orgin, artifactImageName, arti, diffImageName, diff, tag)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -117,7 +117,6 @@ func InsertUserTestInfo(uuid uuid.UUID, userId string, testCode string, currentP
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("TestCode info inserted")
 }
 
 func InsertUserImageTestInfo(uuid uuid.UUID, userId string, testCode string, currentPage int) {
@@ -128,7 +127,6 @@ func InsertUserImageTestInfo(uuid uuid.UUID, userId string, testCode string, cur
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("TestCode info inserted")
 }
 
 func InsertUserImageScoringInfo(uuid uuid.UUID, userId string, imageId int, patchScore string) {

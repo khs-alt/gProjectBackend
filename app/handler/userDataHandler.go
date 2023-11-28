@@ -54,6 +54,7 @@ func GetUserScore(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
 func GetImageScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
@@ -61,23 +62,32 @@ func GetImageScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		util.EnableCors(&w)
 		body, _ := util.ProcessRequest(w, r)
-
+		//axios로 front에서 받을 데이터
 		data := struct {
 			CurrentUser string `json:"current_user"`
-			TestCode    int    `json:"testcode"`
+			ImageID     int    `json:"image_id"`
 		}{
 			CurrentUser: "",
-			TestCode:    0,
+			ImageID:     0,
 		}
 		err := json.Unmarshal(body, &data)
 		if err != nil {
 			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
 			return
 		}
-		userScore := sql.GetCurrentUserImageScore(data.CurrentUser, data.TestCode)
-		w.WriteHeader(http.StatusOK)
-		replyData := fmt.Sprint(userScore)
-		w.Write([]byte(replyData))
+		userScore := sql.GetCurrentUserImageScore(data.CurrentUser, data.ImageID)
+		userIntScore := util.MakeCSVtoIntList(userScore)
+		replyData := struct {
+			Patch []int `json:"patch"`
+		}{
+			Patch: userIntScore,
+		}
+		jsonData, err := json.Marshal(replyData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write(jsonData)
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -110,6 +120,7 @@ func GetScoreDataFromUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
+
 func GetImageScoreData(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		util.EnableCorsResponse(&w)
@@ -127,22 +138,23 @@ func GetImageScoreData(w http.ResponseWriter, r *http.Request) {
 		uuid := util.MakeUUID()
 		currentPage := data.ImageId
 		SCVData := util.MakeIntListtoCSV(data.Score)
-		sql.InsertUserImageScoringInfo(uuid, data.CurrentUser, data.ImageId, SCVData)
-		sql.InsertUserImageTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
-		userScore := sql.GetCurrentUserImageScore(data.CurrentUser, data.ImageId+1)
-		userIntScore := util.MakeCSVtoIntList(userScore)
-		sendData := struct {
-			Score []int `json:"score"`
-		}{
-			Score: userIntScore,
-		}
-		finalSendData, err := json.Marshal(sendData)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		//json으로 만들어야 함.
-		w.Write(finalSendData)
+		go sql.InsertUserImageScoringInfo(uuid, data.CurrentUser, data.ImageId, SCVData)
+		go sql.InsertUserImageTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
+		// userScore := sql.GetCurrentUserImageScore(data.CurrentUser, data.ImageId+1)
+		// userIntScore := util.MakeCSVtoIntList(userScore)
+		// sendData := struct {
+		// 	Score []int `json:"score"`
+		// }{
+		// 	Score: userIntScore,
+		// }
+		// finalSendData, err := json.Marshal(sendData)
+		// if err != nil {
+		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+		// 	return
+		// }
+		// //json으로 만들어야 함.
+		// w.Write(finalSendData)
+		w.Write([]byte("Success"))
 		w.WriteHeader(http.StatusOK)
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -239,7 +251,13 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//
 		IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
-		IsTestcodeExist := sql.GetTestcodeExist(data.TestCode)
+		var IsTestcodeExist bool
+		if data.CurrentMode == "Scoring" {
+			IsTestcodeExist = sql.GetTestcodeExist(data.TestCode)
+		}
+		if data.CurrentMode == "Labeling" {
+			IsTestcodeExist = sql.GetImageTestcodeExist(data.TestCode)
+		}
 
 		var res string
 		if IsTestcodeExist != true {

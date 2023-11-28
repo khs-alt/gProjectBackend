@@ -33,12 +33,12 @@ func GetUserCurrentImagePage(w http.ResponseWriter, r *http.Request) {
 		id := data["userID"].(string)
 		testCode := data["testcode"].(string)
 		fmt.Println(id, testCode)
-		currentPage := fmt.Sprint(sql.GetUserCurrentImagePageAboutTestCode(id, testCode))
+		currentPage := sql.GetUserCurrentImagePageAboutTestCode(id, testCode)
 		imageCSVList, err := sql.GetImageListFromTestCode(testCode)
 		imageList := util.MakeCSVToStringList(imageCSVList)
 
 		data1 := struct {
-			CurrentPage string   `json:"current_page"`
+			CurrentPage int      `json:"current_page"`
 			ImageList   []string `json:"image_list"`
 		}{
 			CurrentPage: currentPage,

@@ -138,4 +138,5 @@ func TestGetUserScore(t *testing.T) {
 	util.DeleteAllFilesInFolder("artifactVideos")
 	util.DeleteAllFilesInFolder("originalImages")
 	util.DeleteAllFilesInFolder("artifactImages")
+	util.DeleteAllFilesInFolder("diffImages")
 }

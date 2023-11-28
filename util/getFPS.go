@@ -28,7 +28,7 @@ func GetVideoFPS(videoPath string) float32 {
 	// ffprobe로 정보를 가져옵니다.
 	data, err := ffprobe.ProbeURL(ctx, videoPath)
 	if err != nil {
-		log.Fatalf("Error probing video: %v", err)
+		log.Println("Error probing video: %v", err)
 	}
 
 	// 비디오 스트림에서 프레임 속도를 찾습니다.

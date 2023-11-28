@@ -129,6 +129,21 @@ func GetTestcodeExist(testCode string) bool {
 	return false
 }
 
+func GetImageTestcodeExist(testCode string) bool {
+	app := SetDB()
+
+	query := "SELECT COUNT(*) FROM image_testcode WHERE test_code = ?"
+	var count int
+	err := app.DB.QueryRow(query, testCode).Scan(&count)
+	if err != nil {
+		panic(err)
+	}
+	if count > 0 {
+		return true
+	}
+	return false
+}
+
 func GetTestCodeCount() (int, error) {
 	app := SetDB()
 
@@ -257,7 +272,7 @@ func GetVideoListFromTestCode(testCode string) (string, error) {
 func GetImageListFromTestCode(testCode string) (string, error) {
 	app := SetDB()
 
-	query := "SELECT image_list FROM iamge_testcode WHERE test_code = ?"
+	query := "SELECT image_list FROM image_testcode WHERE test_code = ?"
 	var videoIdList string
 	err := app.DB.QueryRow(query, testCode).Scan(&videoIdList)
 	if err != nil {
