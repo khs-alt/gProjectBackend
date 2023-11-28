@@ -40,10 +40,10 @@ func Init() {
 
 func main() {
 	InitLogFile()
-	certPath := "localhost.pem"    // 인증서 파일 경로
-	keyPath := "localhost-key.pem" // 개인 키 파일 경로
+	// certPath := "localhost.pem"    // 인증서 파일 경로
+	// keyPath := "localhost-key.pem" // 개인 키 파일 경로
 	router := app.SetupRouter()
-	log.Fatal(http.ListenAndServeTLS(":8443", certPath, keyPath, router))
+	log.Fatal(http.ListenAndServe(":8000", router))
 	defer logFile.Close()
 	fmt.Println("hello world")
 
