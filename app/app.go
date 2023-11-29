@@ -21,43 +21,43 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
 
 	//about Login
-	r.HandleFunc("/login", handler.ReqeustLoginHandler)
+	r.HandleFunc("/label/api/login", handler.ReqeustLoginHandler)
 
-	r.HandleFunc("/admin/login", handler.AdminLoginHandler)
-	r.HandleFunc("/signUp", handler.SignupHandler)
+	r.HandleFunc("/label/api/admin/login", handler.AdminLoginHandler)
+	r.HandleFunc("/label/api/signUp", handler.SignupHandler)
 	//upload Data
-	r.HandleFunc("/upload/video", handler.UploadVideoHandler)
-	r.HandleFunc("/upload/image", handler.UploadImageHandler)
+	r.HandleFunc("/label/api/upload/video", handler.UploadVideoHandler)
+	r.HandleFunc("/label/api/upload/image", handler.UploadImageHandler)
 	//about tag
-	r.HandleFunc("/addTag", handler.ReceivedTagHandler)
-	r.HandleFunc("/addImageTag", handler.ReceivedImageTagHandler)
+	r.HandleFunc("/label/api/addTag", handler.ReceivedTagHandler)
+	r.HandleFunc("/label/api/addImageTag", handler.ReceivedImageTagHandler)
 
-	r.HandleFunc("/getTag", handler.GetTagHandler)
-	r.HandleFunc("/getImageTag", handler.GetImageTagHandler)
+	r.HandleFunc("/label/api/getTag", handler.GetTagHandler)
+	r.HandleFunc("/label/api/getImageTag", handler.GetImageTagHandler)
 
-	r.HandleFunc("/deleteTag", handler.DeletetagHandler)
-	r.HandleFunc("/deleteImageTag", handler.DeleteImagetagHandler)
+	r.HandleFunc("/label/api/deleteTag", handler.DeletetagHandler)
+	r.HandleFunc("/label/api/deleteImageTag", handler.DeleteImagetagHandler)
 
-	r.HandleFunc("/generateTestcode", handler.GetTestCodeHandler)
-	r.HandleFunc("/generateImageTestcode", handler.GetImageTestCodeHandler)
+	r.HandleFunc("/label/api/generateTestcode", handler.GetTestCodeHandler)
+	r.HandleFunc("/label/api/generateImageTestcode", handler.GetImageTestCodeHandler)
 
-	r.HandleFunc("/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
-	r.HandleFunc("/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
+	r.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
+	r.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
 
-	r.HandleFunc("/serveImage", handler.ServeImage)
+	r.HandleFunc("/label/api/serveImage", handler.ServeImage)
 
-	r.HandleFunc("/getTestcodeWithTag", handler.GetTestCodeListHandler)
-	r.HandleFunc("/getImageTestcodeWithTag", handler.GetImageTestCodeListHandler)
+	r.HandleFunc("/label/api/getTestcodeWithTag", handler.GetTestCodeListHandler)
+	r.HandleFunc("/label/api/getImageTestcodeWithTag", handler.GetImageTestCodeListHandler)
 
-	r.HandleFunc("/getVideoListFromTag", handler.GetVideoListFromTagHandler)
-	r.HandleFunc("/getImageListFromTag", handler.GetImageListFromTagHandler)
+	r.HandleFunc("/label/api/getVideoListFromTag", handler.GetVideoListFromTagHandler)
+	r.HandleFunc("/label/api/getImageListFromTag", handler.GetImageListFromTagHandler)
 
-	r.HandleFunc("/getCSVFile", handler.MakeCSVFromTestHandler)
+	r.HandleFunc("/label/api/getCSVFile", handler.MakeCSVFromTestHandler)
 
-	r.HandleFunc("/getUserScore", handler.GetScoreDataFromUser)
-	r.HandleFunc("/getUserImageScore", handler.GetImageScoreDataFromUser)
+	r.HandleFunc("/label/api/getUserScore", handler.GetScoreDataFromUser)
+	r.HandleFunc("/label/api/getUserImageScore", handler.GetImageScoreDataFromUser)
 	//r.HandleFunc("/getUserImageScore", handler.GetScoreImageDataFromUser)
-	r.HandleFunc("/imageNameList", handler.GetImageNameListHandler)
+	r.HandleFunc("/label/api/imageNameList", handler.GetImageNameListHandler)
 
 	//labeling
 
