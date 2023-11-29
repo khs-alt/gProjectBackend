@@ -10,15 +10,15 @@ func SetupRouter() *mux.Router {
 	//gorilla mux easy for routing
 	r := mux.NewRouter()
 	r.HandleFunc("/", handler.MainHandler)
-	r.HandleFunc("/postdata", handler.GetScoringData)
-	r.HandleFunc("/postimagedata", handler.GetImageScoreData)
+	r.HandleFunc("/label/api/postdata", handler.GetScoringData)
+	r.HandleFunc("/label/api/postimagedata", handler.GetImageScoreData)
 
 	// 마지막으로 들어온 '/' 뒤의 값이 1-50사이라면 각 URL에 맞게 주소 부여
-	r.HandleFunc("/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
-	r.HandleFunc("/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
-	r.HandleFunc("/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
-	r.HandleFunc("/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
-	r.HandleFunc("/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
+	r.HandleFunc("/label/api/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
+	r.HandleFunc("/label/api/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
+	r.HandleFunc("/label/api/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
+	r.HandleFunc("/label/api/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
+	r.HandleFunc("/label/api/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
 
 	//about Login
 	r.HandleFunc("/label/api/login", handler.ReqeustLoginHandler)
