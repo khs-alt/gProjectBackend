@@ -251,24 +251,23 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		//
 		IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
-		var IsTestcodeExist bool
-		if data.CurrentMode == "Scoring" {
-			IsTestcodeExist = sql.GetTestcodeExist(data.TestCode)
-		}
-		if data.CurrentMode == "Labeling" {
-			IsTestcodeExist = sql.GetImageTestcodeExist(data.TestCode)
-		}
+
+		IsVideoTestcodeExist := sql.GetTestcodeExist(data.TestCode)
+
+		IsImageTestcodeExist := sql.GetImageTestcodeExist(data.TestCode)
 
 		var res string
-		if IsTestcodeExist != true {
-			w.WriteHeader(http.StatusOK)
+		if IsVideoTestcodeExist == true {
+			res = "scoring"
+		}
+		if IsImageTestcodeExist == true {
+			res = "labeling"
+		}
+		if IsVideoTestcodeExist == false && IsImageTestcodeExist == false {
 			res = "No TestCode"
-		} else if IsUserIdExist != true {
-			res = "No UserId"
-
-		} else {
-			w.WriteHeader(http.StatusOK)
-			res = "Yes"
+		}
+		if IsUserIdExist == false {
+			res = "Wrong ID or Password"
 		}
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(res))
