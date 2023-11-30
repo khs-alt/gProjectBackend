@@ -17,11 +17,11 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/label/api/postimagedata", handler.GetImageScoreData)
 
 	// 마지막으로 들어온 '/' 뒤의 값이 1-50사이라면 각 URL에 맞게 주소 부여
-	r.HandleFunc("/label/api/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
-	r.HandleFunc("/label/api/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
-	r.HandleFunc("/label/api/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
-	r.HandleFunc("/label/api/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
-	r.HandleFunc("/label/api/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
+	authRoutes.HandleFunc("/label/api/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
+	authRoutes.HandleFunc("/label/api/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
+	authRoutes.HandleFunc("/label/api/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
+	authRoutes.HandleFunc("/label/api/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
+	authRoutes.HandleFunc("/label/api/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
 
 	//about Login
 	r.HandleFunc("/label/api/login", handler.ReqeustLoginHandler)
