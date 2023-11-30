@@ -56,8 +56,11 @@ func SetupRouter() *mux.Router {
 
 	r.HandleFunc("/label/api/getUserScore", handler.GetScoreDataFromUser)
 	r.HandleFunc("/label/api/getUserImageScore", handler.GetImageScoreDataFromUser)
-	//r.HandleFunc("/getUserImageScore", handler.GetScoreImageDataFromUser)
+
 	r.HandleFunc("/label/api/imageNameList", handler.GetImageNameListHandler)
+
+	// r.HandleFunc("", handler.exportImageDataHandler)
+	// r.HandleFunc("", handler.exportVideoDataHandler)
 
 	//labeling
 
