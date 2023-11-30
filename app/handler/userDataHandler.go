@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 )
 
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
@@ -259,9 +260,21 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(IsUserIdExist, IsVideoTestcodeExist, IsImageTestcodeExist)
 		var res string
 		if IsVideoTestcodeExist == true {
+			session, _ := util.Store.Get(r, "survaySession")
+			session.Values["authenticated"] = "true"
+			session.Options = &sessions.Options{
+				MaxAge: 30, // 초 단위
+			}
+			session.Save(r, w)
 			res = "scoring"
 		}
 		if IsImageTestcodeExist == true {
+			session, _ := util.Store.Get(r, "survaySession")
+			session.Values["authenticated"] = "true"
+			session.Options = &sessions.Options{
+				MaxAge: 30, // 초 단위
+			}
+			session.Save(r, w)
 			res = "labeling"
 		}
 		if IsVideoTestcodeExist == false && IsImageTestcodeExist == false {

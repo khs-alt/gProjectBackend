@@ -9,6 +9,9 @@ import (
 func SetupRouter() *mux.Router {
 	//gorilla mux easy for routing
 	r := mux.NewRouter()
+	authRoutes := r.PathPrefix("/label/api").Subrouter()
+	authRoutes.Use(handler.SessionAuthMiddleware)
+
 	r.HandleFunc("/", handler.MainHandler)
 	r.HandleFunc("/label/api/postdata", handler.GetScoringData)
 	r.HandleFunc("/label/api/postimagedata", handler.GetImageScoreData)
@@ -41,8 +44,8 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/label/api/generateTestcode", handler.GetTestCodeHandler)
 	r.HandleFunc("/label/api/generateImageTestcode", handler.GetImageTestCodeHandler)
 
-	r.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
-	r.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
+	authRoutes.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
+	authRoutes.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
 
 	r.HandleFunc("/label/api/serveImage", handler.ServeImage)
 
