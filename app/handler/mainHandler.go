@@ -64,8 +64,10 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		userId := session.Values["authenticated"]
+
+		if session.IsNew || userId != "true" {
+			http.Error(w, "Forbidden", http.StatusForbidden)
 			return
 		}
 		util.EnableCors(&w)
