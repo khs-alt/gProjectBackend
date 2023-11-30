@@ -65,8 +65,9 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 		}
 
 		userId := session.Values["authenticated"]
-
+		fmt.Println(session.IsNew, userId)
 		if session.IsNew || userId != "true" {
+			fmt.Println("=============")
 			http.Error(w, "Forbidden", http.StatusForbidden)
 			return
 		}
