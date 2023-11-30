@@ -15,8 +15,10 @@ func SessionAuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		userId := session.Values["authenticated"]
+
+		if session.IsNew || userId != "true" {
+			http.Error(w, "Forbidden", http.StatusForbidden)
 			return
 		}
 
