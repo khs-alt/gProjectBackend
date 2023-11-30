@@ -47,10 +47,10 @@ func SetupRouter() *mux.Router {
 	authRoutes.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
 	authRoutes.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
 
-	r.HandleFunc("/label/api/serveImage", handler.ServeImage)
+	authRoutes.HandleFunc("/label/api/serveImage", handler.ServeImage)
 
-	r.HandleFunc("/label/api/getTestcodeWithTag", handler.GetTestCodeListHandler)
-	r.HandleFunc("/label/api/getImageTestcodeWithTag", handler.GetImageTestCodeListHandler)
+	authRoutes.HandleFunc("/label/api/getTestcodeWithTag", handler.GetTestCodeListHandler)
+	authRoutes.HandleFunc("/label/api/getImageTestcodeWithTag", handler.GetImageTestCodeListHandler)
 
 	r.HandleFunc("/label/api/getVideoListFromTag", handler.GetVideoListFromTagHandler)
 	r.HandleFunc("/label/api/getImageListFromTag", handler.GetImageListFromTagHandler)
