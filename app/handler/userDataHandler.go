@@ -180,8 +180,8 @@ func GetScoringData(w http.ResponseWriter, r *http.Request) {
 			uuid := util.MakeUUID()
 			currentPage := data.ImageId
 			fmt.Printf("user %s videoId %d score %d\n", data.CurrentUser, data.ImageId, data.Score)
-			sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
-			sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
+			go sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
+			go sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
 			userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId+1)
 			var res models.UserCurrentScore
 			res.Score = userScore
