@@ -57,11 +57,22 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 		util.EnableCorsResponse(&w)
 	}
 	if r.Method == http.MethodPost {
+		fmt.Println("SessionAuthMiddleware")
+		session, err := util.Store.Get(r, "survaySession")
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
 		util.EnableCors(&w)
 		body, _ := util.ProcessRequest(w, r)
 
 		var data map[string]interface{}
-		err := json.Unmarshal(body, &data)
+		err = json.Unmarshal(body, &data)
 		if err != nil {
 			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
 			return
