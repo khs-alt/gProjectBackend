@@ -250,6 +250,7 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//
+		fmt.Println(data)
 		IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
 
 		IsVideoTestcodeExist := sql.GetTestcodeExist(data.TestCode)
