@@ -81,7 +81,8 @@ func GetUserCurrentPage(w http.ResponseWriter, r *http.Request) {
 		videoList := strings.Split(videoCSVList, ",")
 		originalVideoNameList, artifactVideoNameList = sql.GetVideoNameListFromVideoList(videoList)
 		for _, video := range videoList {
-			videoNumList = append(videoNumList, string(video[len(video)-1]))
+			num := strings.TrimLeft(video, "originalVideo")
+			videoNumList = append(videoNumList, num)
 		}
 		for _, video := range videoList {
 			originalVideoFPS, artifactVideoFPS := sql.GetFPSFromVideo(video)
