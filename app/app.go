@@ -11,17 +11,16 @@ func SetupRouter() *mux.Router {
 	r := mux.NewRouter()
 	authRoutes := r.PathPrefix("/label/api").Subrouter()
 	authRoutes.Use(handler.SessionAuthMiddleware)
-
 	r.HandleFunc("/", handler.MainHandler)
 	r.HandleFunc("/label/api/postdata", handler.GetScoringData)
 	r.HandleFunc("/label/api/postimagedata", handler.GetImageScoreData)
 
 	// 마지막으로 들어온 '/' 뒤의 값이 1-50사이라면 각 URL에 맞게 주소 부여
-	authRoutes.HandleFunc("/label/api/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
-	authRoutes.HandleFunc("/label/api/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
-	authRoutes.HandleFunc("/label/api/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
-	authRoutes.HandleFunc("/label/api/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
-	authRoutes.HandleFunc("/label/api/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
+	r.HandleFunc("/label/api/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
+	r.HandleFunc("/label/api/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
+	r.HandleFunc("/label/api/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
+	r.HandleFunc("/label/api/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
+	r.HandleFunc("/label/api/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
 
 	//about Login
 	r.HandleFunc("/label/api/login", handler.ReqeustLoginHandler)
@@ -44,16 +43,16 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/label/api/generateTestcode", handler.GetTestCodeHandler)
 	r.HandleFunc("/label/api/generateImageTestcode", handler.GetImageTestCodeHandler)
 
-	authRoutes.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
-	authRoutes.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
+	r.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
+	r.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
 
-	authRoutes.HandleFunc("/label/api/serveImage", handler.ServeImage)
+	r.HandleFunc("/label/api/serveImage", handler.ServeImage)
 
 	r.HandleFunc("/label/api/getTestcodeWithTag", handler.GetTestCodeListHandler)
 	r.HandleFunc("/label/api/getImageTestcodeWithTag", handler.GetImageTestCodeListHandler)
 
-	authRoutes.HandleFunc("/label/api/getVideoListFromTag", handler.GetVideoListFromTagHandler)
-	authRoutes.HandleFunc("/label/api/getImageListFromTag", handler.GetImageListFromTagHandler)
+	r.HandleFunc("/label/api/getVideoListFromTag", handler.GetVideoListFromTagHandler)
+	r.HandleFunc("/label/api/getImageListFromTag", handler.GetImageListFromTagHandler)
 
 	r.HandleFunc("/label/api/getCSVFile", handler.MakeCSVFromTestHandler)
 
