@@ -255,7 +255,7 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		IsVideoTestcodeExist := sql.GetTestcodeExist(data.TestCode)
 
 		IsImageTestcodeExist := sql.GetImageTestcodeExist(data.TestCode)
-
+		fmt.Println(IsUserIdExist, IsVideoTestcodeExist, IsImageTestcodeExist)
 		var res string
 		if IsVideoTestcodeExist == true {
 			res = "scoring"
