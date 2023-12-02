@@ -140,3 +140,11 @@ func TestGetUserScore(t *testing.T) {
 	util.DeleteAllFilesInFolder("artifactImages")
 	util.DeleteAllFilesInFolder("diffImages")
 }
+
+func TestResetImageData(t *testing.T) {
+	sql.DeleteImageDBTablbe()
+	sql.CreateImageDBTalbe()
+	util.DeleteAllFilesInFolder("originalImages")
+	util.DeleteAllFilesInFolder("artifactImages")
+	util.DeleteAllFilesInFolder("diffImages")
+}

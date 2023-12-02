@@ -51,6 +51,29 @@ func SetDB() *App {
 	return app
 }
 
+func DeleteImageDBTablbe() {
+	app := SetDB()
+
+	// 테이블 삭제
+	tables := []string{
+		"image_scoring",
+		"image_tag",
+		"image_testcode",
+		"image",
+		"image_patch",
+		"user_image_testcode_info",
+	}
+	for _, table := range tables {
+		dropTableSQL := "DROP TABLE IF EXISTS " + table
+		_, err := app.DB.Exec(dropTableSQL)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("테이블 %s 삭제 완료\n", table)
+	}
+
+}
+
 func DeleteDBTablbe() {
 	app := SetDB()
 
@@ -147,6 +170,62 @@ func CreateDBTalbe() {
             artifact_video VARCHAR(255) NOT NULL,
 			artifact_video_fps float NOT NULL,
             tag VARCHAR(255) NOT NULL
+        )`,
+		`CREATE TABLE image (
+            uuid BINARY(16) PRIMARY KEY,
+            original_image_name VARCHAR(255) NOT NULL,
+			original_image VARCHAR(255) NOT NULL,
+            artifact_image_name VARCHAR(255) NOT NULL,
+			artifact_image VARCHAR(255) NOT NULL,
+			diff_image_name VARCHAR(255) NOT NULL,
+			diff_image VARCHAR(255) NOT NULL,
+            tag VARCHAR(255) NOT NULL
+        )`,
+		`CREATE TABLE image_patch (
+            uuid BINARY(16),
+            image_uuid BINARY(16),
+            patch_id INT NOT NULL,
+            auto_check_is_artifact BOOL NOT NULL,
+            PRIMARY KEY (uuid, image_uuid)
+        )`,
+	}
+	for _, createTableSQL := range createTables {
+		_, err := app.DB.Exec(createTableSQL)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	fmt.Println("테이블 생성 완료")
+}
+
+func CreateImageDBTalbe() {
+	app := SetDB()
+
+	createTables := []string{
+		`CREATE TABLE image_scoring (
+            uuid BINARY(16) PRIMARY KEY,
+            user_id VARCHAR(10) NOT NULL,
+            image_id INT NOT NULL,
+            patch_score VARCHAR(100) NOT NULL,
+            time DATETIME NOT NULL
+        )`,
+		`CREATE TABLE image_tag (
+            uuid BINARY(16) PRIMARY KEY,
+            tag VARCHAR(255) NOT NULL
+        )`,
+		`CREATE TABLE image_testcode (
+            uuid BINARY(16) PRIMARY KEY,
+            test_code VARCHAR(255) NOT NULL,
+			tags VARCHAR(1000) NOT NULL,
+            image_list VARCHAR(4000) NOT NULL
+        )`,
+		`CREATE TABLE user_image_testcode_info (
+            uuid BINARY(16) PRIMARY KEY,
+            user_id VARCHAR(10) NOT NULL,
+            test_code VARCHAR(255) NOT NULL,
+            current_page INT NOT NULL,
+			time DATETIME NOT NULL
         )`,
 		`CREATE TABLE image (
             uuid BINARY(16) PRIMARY KEY,
