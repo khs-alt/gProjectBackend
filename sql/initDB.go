@@ -162,19 +162,21 @@ func CreateDBTalbe() {
 			time DATETIME NOT NULL
         )`,
 		`CREATE TABLE video (
-            uuid BINARY(16) PRIMARY KEY,
-			video_index INT AUTO_INCREMENT NOT NULL,
+			uuid BINARY(16) PRIMARY KEY,
+			video_index INT AUTO_INCREMENT,
 			original_video_name VARCHAR(255) NOT NULL,
-            original_video VARCHAR(255) NOT NULL,
-			original_video_fps float NOT NULL,
+			original_video VARCHAR(255) NOT NULL,
+			original_video_fps FLOAT NOT NULL,
 			artifact_video_name VARCHAR(255) NOT NULL,
-            artifact_video VARCHAR(255) NOT NULL,
-			artifact_video_fps float NOT NULL,
-            tag VARCHAR(255) NOT NULL
-        )`,
+			artifact_video VARCHAR(255) NOT NULL,
+			artifact_video_fps FLOAT NOT NULL,
+			tag VARCHAR(255) NOT NULL,
+			PRIMARY KEY (video_index)
+		);
+		`,
 		`CREATE TABLE image (
             uuid BINARY(16) PRIMARY KEY,
-			image_index INT AUTO_INCREMENT NOT NULL,
+			image_index INT AUTO_INCREMENT,
             original_image_name VARCHAR(255) NOT NULL,
 			original_image VARCHAR(255) NOT NULL,
             artifact_image_name VARCHAR(255) NOT NULL,
@@ -182,6 +184,7 @@ func CreateDBTalbe() {
 			diff_image_name VARCHAR(255) NOT NULL,
 			diff_image VARCHAR(255) NOT NULL,
             tag VARCHAR(255) NOT NULL
+			PRIMARY KEY (image_index)
         )`,
 	}
 	for _, createTableSQL := range createTables {
