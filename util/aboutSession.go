@@ -1,6 +1,8 @@
 package util
 
 import (
+	"net/http"
+
 	"github.com/gorilla/sessions"
 )
 
@@ -10,3 +12,8 @@ var (
 
 	Store = sessions.NewCookieStore(key)
 )
+
+func makeSession(r *http.Request) *sessions.Session {
+	session, _ := Store.Get(nil, "session-name")
+	return session
+}

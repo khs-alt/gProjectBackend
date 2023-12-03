@@ -16,9 +16,9 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/label/api/postimagedata", handler.GetImageScoreData)
 
 	// 마지막으로 들어온 '/' 뒤의 값이 1-50사이라면 각 URL에 맞게 주소 부여
-	r.HandleFunc("/label/api/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
+	authRoutes.HandleFunc("/postvideo/original/{id:[0-9]+}", handler.ServeOriginalVideosHandler)
 	r.HandleFunc("/label/api/postvideo/artifact/{id:[0-9]+}", handler.ServeArtifactVideosHandler)
-	r.HandleFunc("/label/api/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
+	authRoutes.HandleFunc("/postimage/original/{id:[0-9]+}", handler.ServeOriginalImagesHandler)
 	r.HandleFunc("/label/api/postimage/artifact/{id:[0-9]+}", handler.ServeArtifactImagesHandler)
 	r.HandleFunc("/label/api/postimage/difference/{id:[0-9]+}", handler.ServeDiffImagesHandler)
 
@@ -43,8 +43,8 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/label/api/generateTestcode", handler.GetTestCodeHandler)
 	r.HandleFunc("/label/api/generateImageTestcode", handler.GetImageTestCodeHandler)
 
-	authRoutes.HandleFunc("/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
-	authRoutes.HandleFunc("/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
+	r.HandleFunc("/label/api/getVideoIndexCurrentPage", handler.GetUserCurrentPage)
+	r.HandleFunc("/label/api/getImageIndexCurrentPage", handler.GetUserCurrentImagePage)
 
 	r.HandleFunc("/label/api/serveImage", handler.ServeImage)
 

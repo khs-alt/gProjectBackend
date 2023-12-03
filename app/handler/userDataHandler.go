@@ -260,19 +260,21 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(IsUserIdExist, IsVideoTestcodeExist, IsImageTestcodeExist)
 		var res string
 		if IsVideoTestcodeExist == true {
+
 			session, _ := util.Store.Get(r, "survaySession")
 			session.Values["authenticated"] = "true"
 			session.Options = &sessions.Options{
-				MaxAge: 30, // 초 단위
+				MaxAge: 1800, // 초 단위
 			}
 			session.Save(r, w)
 			res = "scoring"
 		}
 		if IsImageTestcodeExist == true {
+
 			session, _ := util.Store.Get(r, "survaySession")
 			session.Values["authenticated"] = "true"
 			session.Options = &sessions.Options{
-				MaxAge: 30, // 초 단위
+				MaxAge: 1800, // 초 단위
 			}
 			session.Save(r, w)
 			res = "labeling"

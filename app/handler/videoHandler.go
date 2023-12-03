@@ -12,11 +12,17 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 )
 
 func ServeOriginalVideosHandler(w http.ResponseWriter, r *http.Request) {
 	// http.ServeFile(w, r, "./videos/video1.mp4")
 	// 비디오 파일을 읽어서 클라이언트로 전송
+	session, _ := util.Store.Get(r, "survaySession")
+	session.Options = &sessions.Options{
+		MaxAge: 1800, // 초 단위
+	}
+	session.Save(r, w)
 	videoID := mux.Vars(r)["id"]
 
 	if r.Method == http.MethodGet {
