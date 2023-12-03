@@ -133,13 +133,13 @@ func CreateDBTalbe() {
             uuid BINARY(16) PRIMARY KEY,
             test_code VARCHAR(255) NOT NULL,
 			tags VARCHAR(1000) NOT NULL,
-            video_list VARCHAR(40000) NOT NULL
+            video_list TEXT NOT NULL
         )`,
 		`CREATE TABLE image_testcode (
             uuid BINARY(16) PRIMARY KEY,
             test_code VARCHAR(255) NOT NULL,
 			tags VARCHAR(1000) NOT NULL,
-            image_list VARCHAR(40000) NOT NULL
+            image_list TEXT NOT NULL
         )`,
 		`CREATE TABLE user (
             uuid BINARY(16),
