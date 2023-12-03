@@ -170,7 +170,7 @@ func CreateDBTalbe() {
 			artifact_video_name VARCHAR(255) NOT NULL,
 			artifact_video VARCHAR(255) NOT NULL,
 			artifact_video_fps FLOAT NOT NULL,
-			tag VARCHAR(255) NOT NULL,
+			tag VARCHAR(255) NOT NULL
 		);
 		`,
 		`CREATE TABLE image (
