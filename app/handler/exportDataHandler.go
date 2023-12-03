@@ -24,7 +24,7 @@ func ExportImageDataHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		testcode := data["testcode"].(string)
-		rows, err := sql.ExportImageData()
+		rows, err := sql.ExportImageData(testcode)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
