@@ -5,20 +5,19 @@ import (
 	"fmt"
 )
 
-func ExportVideoData(testcode string) string {
+func ExportImageData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
 	fmt.Println(testcode)
-	var data string
-	insertQuery := "SELECT image_list FROM image_testcode WHERE test_code = ?"
-	err := app.DB.QueryRow(insertQuery).Scan(&data)
+	rows, err := app.DB.Query("SELECT * FROM image_scoring")
 	if err != nil {
 		panic(err)
 	}
+	defer rows.Close()
 
-	return data
+	return rows, err
 }
 
-func ExportImageData(testcode string) (*sql.Rows, error) {
+func ExportVideoData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
 	fmt.Println(testcode)
 	rows, err := app.DB.Query("SELECT * FROM video_scoring")

@@ -51,7 +51,7 @@ func ExportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		testcode := data["testcode"].(string)
-		rows := sql.ExportVideoData(testcode)
+		rows, err := sql.ExportVideoData(testcode)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -59,6 +59,6 @@ func ExportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-type", "text/csv")
 		w.Header().Set("Content-Disposition", "attachment; filename=userVideoData.csv")
 
-		w.Write([]byte(rows))
+		w.Write(w, rows)
 	}
 }
