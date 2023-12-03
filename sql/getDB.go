@@ -91,14 +91,14 @@ func GetUserCurrentImagePageAboutTestCode(userId string, testCode string) int {
 
 func GetUserCurrentPageAboutTestCode(userId string, testCode string) int {
 	app := SetDB()
-	maxCurrentPage := 0
+	currentPage := 0
 
 	insertQuery := "SELECT current_page FROM user_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1"
-	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&maxCurrentPage)
+	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&currentPage)
 	if err != nil {
 		fmt.Println(err)
 	}
-	return maxCurrentPage
+	return currentPage
 }
 
 func GetFPSFromVideo(videoId string) (float32, float32) {
@@ -445,7 +445,7 @@ func GetVideoListFromTag(tag string) ([]string, error) {
 	app := SetDB()
 
 	// Query to fetch data from the table
-	query := "SELECT original_video FROM video WHERE tag = ?"
+	query := "SELECT original_video FROM video WHERE tag = ? ORDER BY video_index"
 	rows, err := app.DB.Query(query, tag)
 	if err != nil {
 		log.Println(err)
@@ -475,7 +475,7 @@ func GetImageListFromTag(tag string) ([]string, error) {
 	app := SetDB()
 
 	// Query to fetch data from the table
-	query := "SELECT original_image FROM image WHERE tag = ?"
+	query := "SELECT original_image FROM image WHERE tag = ? ORDER BY image_index"
 	rows, err := app.DB.Query(query, tag)
 	if err != nil {
 		log.Println(err)

@@ -148,3 +148,7 @@ func TestResetImageData(t *testing.T) {
 	util.DeleteAllFilesInFolder("artifactImages")
 	util.DeleteAllFilesInFolder("diffImages")
 }
+
+func TestChangeImageDBSize(t *testing.T) {
+
+}
