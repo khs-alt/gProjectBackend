@@ -150,5 +150,5 @@ func TestResetImageData(t *testing.T) {
 }
 
 func TestChangeImageDBSize(t *testing.T) {
-
+	sql.ExportVideoData("hello")
 }
