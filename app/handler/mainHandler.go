@@ -22,7 +22,7 @@ func GetUserCurrentImagePage(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Method == http.MethodPost {
 		fmt.Println("SessionAuthMiddleware")
-		session, err := util.Store.Get(r, "survaySession")
+		session, err := util.Store.Get(r, "surveySession")
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
@@ -107,7 +107,7 @@ func GetUserCurrentPageInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Method == http.MethodPost {
 		fmt.Println("SessionAuthMiddleware")
-		session, err := util.Store.Get(r, "survaySession")
+		session, err := util.Store.Get(r, "surveySession")
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return

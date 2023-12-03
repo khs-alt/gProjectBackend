@@ -9,7 +9,7 @@ import (
 func SessionAuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("SessionAuthMiddleware")
-		session, err := util.Store.Get(r, "survaySession")
+		session, err := util.Store.Get(r, "surveySession")
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return

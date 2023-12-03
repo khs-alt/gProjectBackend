@@ -18,7 +18,7 @@ import (
 func ServeOriginalVideosHandler(w http.ResponseWriter, r *http.Request) {
 	// http.ServeFile(w, r, "./videos/video1.mp4")
 	// 비디오 파일을 읽어서 클라이언트로 전송
-	session, _ := util.Store.Get(r, "survaySession")
+	session, _ := util.Store.Get(r, "surveySession")
 	session.Options = &sessions.Options{
 		MaxAge: 1800, // 초 단위
 	}

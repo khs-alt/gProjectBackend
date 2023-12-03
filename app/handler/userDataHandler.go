@@ -255,14 +255,13 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
 
 		IsVideoTestcodeExist := sql.GetTestcodeExist(data.TestCode)
-
+		var currentPage string
 		IsImageTestcodeExist := sql.GetImageTestcodeExist(data.TestCode)
 		fmt.Println(IsUserIdExist, IsVideoTestcodeExist, IsImageTestcodeExist)
-		currentPage := fmt.Sprint(sql.GetUserCurrentPageAboutTestCode(data.ID, data.TestCode))
 		var res string
 		if IsVideoTestcodeExist == true {
-
-			session, _ := util.Store.Get(r, "survaySession")
+			currentPage = fmt.Sprint(sql.GetUserCurrentPageAboutTestCode(data.ID, data.TestCode))
+			session, _ := util.Store.Get(r, "surveySession")
 			session.Values["authenticated"] = "true"
 			session.Options = &sessions.Options{
 				MaxAge: 1800, // 초 단위
@@ -271,8 +270,8 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 			res = "scoring"
 		}
 		if IsImageTestcodeExist == true {
-
-			session, _ := util.Store.Get(r, "survaySession")
+			currentPage = fmt.Sprint(sql.GetUserCurrentImagePageAboutTestCode(data.ID, data.TestCode))
+			session, _ := util.Store.Get(r, "surveySession")
 			session.Values["authenticated"] = "true"
 			session.Options = &sessions.Options{
 				MaxAge: 1800, // 초 단위

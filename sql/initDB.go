@@ -107,6 +107,12 @@ func CreateDBTalbe() {
 	app := SetDB()
 
 	createTables := []string{
+		`CREATE TABLE user_last_page (
+			uuid BINARY(16) PRIMARY KEY,
+			user_id VARCHAR(10) NOT NULL,
+			last_page INT NOT NULL,
+			tast_code VARCHAR(255) NOT NULL,
+		)`,
 		`CREATE TABLE image_scoring (
             uuid BINARY(16) PRIMARY KEY,
             user_id VARCHAR(10) NOT NULL,
