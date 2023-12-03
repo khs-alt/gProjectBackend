@@ -79,8 +79,8 @@ func DeleteDBTablbe() {
 
 	// 테이블 삭제
 	tables := []string{
-		"image_scoring",
-		"video_scoring",
+		//"image_scoring",
+		//"video_scoring",
 		"image_tag",
 		"tag",
 		//"testcode",
