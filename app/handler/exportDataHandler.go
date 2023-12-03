@@ -59,6 +59,6 @@ func ExportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-type", "text/csv")
 		w.Header().Set("Content-Disposition", "attachment; filename=userVideoData.csv")
 
-		w.Write(w, rows)
+		sqltocsv.Write(w, rows)
 	}
 }
