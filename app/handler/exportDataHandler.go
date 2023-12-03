@@ -30,7 +30,7 @@ func ExportImageDataHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-type", "text/csv")
-		w.Header().Set("Content-Disposition", "attachment; filename=\"userImageData.csv\"")
+		w.Header().Set("Content-Disposition", "attachment; filename=userImageData.csv")
 
 		sqltocsv.Write(w, rows)
 	}
@@ -57,7 +57,7 @@ func ExportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-type", "text/csv")
-		w.Header().Set("Content-Disposition", "attachment; filename=\"userVideoData.csv\"")
+		w.Header().Set("Content-Disposition", "attachment; filename=userVideoData.csv")
 
 		sqltocsv.Write(w, rows)
 	}
