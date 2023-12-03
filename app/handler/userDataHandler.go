@@ -258,6 +258,7 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		IsImageTestcodeExist := sql.GetImageTestcodeExist(data.TestCode)
 		fmt.Println(IsUserIdExist, IsVideoTestcodeExist, IsImageTestcodeExist)
+		currentPage := fmt.Sprint(sql.GetUserCurrentPageAboutTestCode(data.ID, data.TestCode))
 		var res string
 		if IsVideoTestcodeExist == true {
 
@@ -285,8 +286,21 @@ func ReqeustLoginHandler(w http.ResponseWriter, r *http.Request) {
 		if IsUserIdExist == false {
 			res = "Wrong ID or Password"
 		}
+
+		resData := struct {
+			Path     string `json:"path"`
+			LastPage string `json:"lastPage"`
+		}{
+			Path:     res,
+			LastPage: currentPage,
+		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(res))
+		jsonData, err := json.Marshal(resData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write(jsonData)
 	} else {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
