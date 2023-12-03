@@ -2,9 +2,9 @@ package sql
 
 import "database/sql"
 
-func ExportImageData() (*sql.Rows, error) {
+func ExportImageData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
-	rows, err := app.DB.Query("SELECT * FROM image_scoring")
+	rows, err := app.DB.Query("SELECT * FROM image_scoring WHERE test_code = ?", testcode)
 	if err != nil {
 		panic(err)
 	}
@@ -13,9 +13,9 @@ func ExportImageData() (*sql.Rows, error) {
 	return rows, err
 }
 
-func ExportVideoData() (*sql.Rows, error) {
+func ExportVideoData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
-	rows, err := app.DB.Query("SELECT * FROM video_scoring")
+	rows, err := app.DB.Query("SELECT * FROM video_scoring WHERE test_code = ?", testcode)
 	if err != nil {
 		panic(err)
 	}

@@ -3,15 +3,27 @@ package handler
 import (
 	"GoogleProjectBackend/sql"
 	"GoogleProjectBackend/util"
+	"encoding/json"
 	"net/http"
 
 	"github.com/joho/sqltocsv"
 )
 
 func ExportImageDataHandler(w http.ResponseWriter, r *http.Request) {
-	util.EnableCors(&w)
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
 
+		var data map[string]interface{}
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+		testcode := data["testcode"].(string)
 		rows, err := sql.ExportImageData()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -25,10 +37,21 @@ func ExportImageDataHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
-	util.EnableCors(&w)
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodOptions {
+		util.EnableCorsResponse(&w)
+	}
+	if r.Method == http.MethodPost {
+		util.EnableCors(&w)
+		body, _ := util.ProcessRequest(w, r)
 
-		rows, err := sql.ExportVideoData()
+		var data map[string]interface{}
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+			return
+		}
+		testcode := data["testcode"].(string)
+		rows, err := sql.ExportVideoData(testcode)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
