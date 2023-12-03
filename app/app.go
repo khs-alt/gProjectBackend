@@ -63,6 +63,9 @@ func SetupRouter() *mux.Router {
 
 	r.HandleFunc("/label/api/imageNameList", handler.GetImageNameListHandler)
 
+	r.HandleFunc("label/api/getCSVFile", handler.ExportVideoDataHandler)
+	r.HandleFunc("label/api/getImageCSVFile", handler.ExportImageDataHandler)
+
 	// r.HandleFunc("", handler.exportImageDataHandler)
 	// r.HandleFunc("", handler.exportVideoDataHandler)
 

@@ -8,7 +8,7 @@ import (
 	"github.com/joho/sqltocsv"
 )
 
-func exportImageDataHandler(w http.ResponseWriter, r *http.Request) {
+func ExportImageDataHandler(w http.ResponseWriter, r *http.Request) {
 	util.EnableCors(&w)
 	if r.Method == http.MethodGet {
 
@@ -24,7 +24,7 @@ func exportImageDataHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func exportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
+func ExportVideoDataHandler(w http.ResponseWriter, r *http.Request) {
 	util.EnableCors(&w)
 	if r.Method == http.MethodGet {
 
