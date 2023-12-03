@@ -56,7 +56,7 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/label/api/getVideoListFromTag", handler.GetVideoListFromTagHandler)
 	r.HandleFunc("/label/api/getImageListFromTag", handler.GetImageListFromTagHandler)
 
-	r.HandleFunc("/label/api/getCSVFile", handler.MakeCSVFromTestHandler)
+	//r.HandleFunc("/label/api/getCSVFile", handler.MakeCSVFromTestHandler)
 
 	r.HandleFunc("/label/api/getUserScore", handler.GetScoreDataFromUser)
 	r.HandleFunc("/label/api/getUserImageScore", handler.GetImageScoreDataFromUser)
