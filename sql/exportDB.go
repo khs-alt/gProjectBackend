@@ -20,6 +20,11 @@ func ExportImageData(testcode string) (*sql.Rows, error) {
 		fmt.Println(err)
 	}
 
+	rows, err = app.DB.Query("SELECT * FROM image_scoring")
+	if err != nil {
+		panic(err)
+	}
+
 	return rows, err
 }
 
@@ -35,6 +40,11 @@ func ExportVideoData(testcode string) (*sql.Rows, error) {
 	err = sqltocsv.WriteFile("./video_user_scoring.csv", rows)
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	rows, err = app.DB.Query("SELECT * FROM video_scoring")
+	if err != nil {
+		panic(err)
 	}
 
 	return rows, err
