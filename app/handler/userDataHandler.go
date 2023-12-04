@@ -222,7 +222,7 @@ func AdminLoginHandler(w http.ResponseWriter, r *http.Request) {
 		id := data["adminId"].(string)
 		password := data["adminPassword"].(string)
 		res := ""
-		if id == "admin" && password == "admin" {
+		if id == "admin" && password == "c404b!pipi" {
 			res = "yes"
 		} else {
 			res = "no"
