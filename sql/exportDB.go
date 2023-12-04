@@ -10,7 +10,7 @@ import (
 func ExportImageData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
 	fmt.Println(testcode)
-	rows, err := app.DB.Query("SELECT * FROM image_scoring")
+	rows, err := app.DB.Query("SELECT user_id, image_id, patch_score, time FROM image_scoring ORDER BY time")
 	if err != nil {
 		panic(err)
 	}
@@ -20,7 +20,7 @@ func ExportImageData(testcode string) (*sql.Rows, error) {
 		fmt.Println(err)
 	}
 
-	rows, err = app.DB.Query("SELECT * FROM image_scoring")
+	rows, err = app.DB.Query("SELECT user_id, image_id, patch_score, time FROM image_scoring ORDER BY time")
 	if err != nil {
 		panic(err)
 	}
@@ -31,8 +31,8 @@ func ExportImageData(testcode string) (*sql.Rows, error) {
 func ExportVideoData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
 	fmt.Println(testcode)
-	fmt.Println("=====================================")
-	rows, err := app.DB.Query("SELECT * FROM video_scoring")
+
+	rows, err := app.DB.Query("SELECT user_id, video_id, user_score, time FROM video_scoring ORDER BY time")
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +42,7 @@ func ExportVideoData(testcode string) (*sql.Rows, error) {
 		fmt.Println(err)
 	}
 
-	rows, err = app.DB.Query("SELECT * FROM video_scoring")
+	rows, err = app.DB.Query("SELECT user_id, video_id, user_score, time FROM video_scoring ORDER BY time")
 	if err != nil {
 		panic(err)
 	}
