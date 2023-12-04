@@ -120,13 +120,13 @@ func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	//artifactImage란 이름으로 들어온 multiform (비디오)파일들 읽기
+	//artifactImage란 이름으로 들어온 multiform (이미지)파일들 읽기
 	var artifactImagesName []string
 	var artiImages []string
 	var arfectImagesFileForm []string
 	artifacImages := r.MultipartForm.File["artifact"]
 	for _, artifactImageHeader := range artifacImages {
-		//들어온 비디오를 video+n 이름으로 바꿈
+		//들어온 이미지를 video+n 이름으로 바꿈
 		artifactImagesName = append(artifactImagesName, filepath.Base(artifactImageHeader.Filename))
 		artifactImageFileForm := filepath.Ext(artifactImageHeader.Filename)
 		arfectImagesFileForm = append(arfectImagesFileForm, artifactImageFileForm)

@@ -14,7 +14,11 @@ func ExportImageData(testcode string) (*sql.Rows, error) {
 	if err != nil {
 		panic(err)
 	}
-	defer rows.Close()
+
+	err = sqltocsv.WriteFile("./image_user_labeling.csv", rows)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	return rows, err
 }
@@ -27,11 +31,11 @@ func ExportVideoData(testcode string) (*sql.Rows, error) {
 	if err != nil {
 		panic(err)
 	}
-	err = sqltocsv.WriteFile("./test.csv", rows)
+
+	err = sqltocsv.WriteFile("./video_user_scoring.csv", rows)
 	if err != nil {
 		fmt.Println(err)
 	}
-	defer rows.Close()
 
 	return rows, err
 }
