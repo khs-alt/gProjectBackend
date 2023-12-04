@@ -166,7 +166,7 @@ func GetUserCurrentPageInfo(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(currentPage, videoNumCSVList)
 
 		var initData models.UserVideoInitInfo
-		initData.CurrentPage = currentPage
+		initData.CurrentPage = fmt.Sprint(currentPage)
 		initData.VideoList = videoNumList
 		initData.OriginalVideoNameList = originalVideoNameList
 		initData.ArtifactVideoNameList = artifactVideoNameList
