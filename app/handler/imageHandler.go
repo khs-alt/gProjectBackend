@@ -88,6 +88,7 @@ func GetImageNameListHandler(c *gin.Context) {
 		id := strings.TrimLeft(image, "originalImage")
 		num, _ := strconv.Atoi(id)
 		indexList = append(indexList, num)
+		fmt.Println(num)
 	}
 
 	imageOriginalList, imageArtifactList := sql.GetImageNameListFromVideoList(imageList)
