@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -68,6 +69,7 @@ func MakeIntListtoCSV(numArray []int) string {
 }
 
 func MakeStringListtoCSV(str []string) string {
+	sort.Strings(str)
 	s := ""
 	for _, word := range str {
 		s = s + word + ","
@@ -77,9 +79,12 @@ func MakeStringListtoCSV(str []string) string {
 }
 
 func MakeCSVToStringList(s string) []string {
+
 	// 입력 문자열을 쉼표로 분할하여 문자열 슬라이스로 변환
 	stringList := strings.Split(s, ",")
 
+	//doing sort
+	sort.Strings(stringList)
 	// 결과로 반환할 정수 목록 슬라이
 	return stringList
 }

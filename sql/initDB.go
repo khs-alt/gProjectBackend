@@ -25,8 +25,8 @@ func GetAppInstance() *App {
 
 func (app *App) InitDB() {
 	app.once.Do(func() {
-		dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
-		//dsn := "root:1234@/google_project"
+		//dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
+		dsn := "root:1234@/google_project"
 		db, err := sql.Open("mysql", dsn)
 		if err != nil {
 			log.Println(err)
@@ -74,131 +74,143 @@ func DeleteImageDBTablbe() {
 
 }
 
-func DeleteDBTablbe() {
+func DeleteDBTable() {
 	app := SetDB()
 
 	// 테이블 삭제
 	tables := []string{
-		//"image_scoring",
-		//"video_scoring",
+		"video_tag",
 		"image_tag",
-		"tag",
-		//"testcode",
-		"image_testcode",
-		//"user",
-		// "user_testcode_info",
-		// "user_image_testcode_info",
+		"user_testcode_info",
+		"image_scoring",
+		"video_scoring",
+		"user",
 		"video",
 		"image",
-		"image_patch",
+		"video_testcode",
+		"image_testcode",
+		"video_tag_link",
+		"image_tag_link",
 	}
 	for _, table := range tables {
+		app.DB.Exec("SET FOREIGN_KEY_CHECKS = 0")
 		dropTableSQL := "DROP TABLE IF EXISTS " + table
 		_, err := app.DB.Exec(dropTableSQL)
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("테이블 %s 삭제 완료\n", table)
+		app.DB.Exec("SET FOREIGN_KEY_CHECKS = 1")
 	}
 
 }
 
-func CreateDBTalbe() {
+func CreateDBTable() {
 	app := SetDB()
 
 	createTables := []string{
-		`CREATE TABLE user_last_page (
-			uuid BINARY(16) PRIMARY KEY,
-			user_id VARCHAR(10) NOT NULL,
-			last_page INT NOT NULL,
-			tast_code VARCHAR(255) NOT NULL,
-		)`,
-		`CREATE TABLE image_scoring (
-            uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
-            image_id INT NOT NULL,
-            patch_score VARCHAR(100) NOT NULL,
-            time DATETIME NOT NULL
+		`CREATE TABLE video (
+            uuid binary(16)  NOT NULL,
+            original_video_name varchar(255),
+            artifact_video_name varchar(255),
+            diff_video_name varchar(255),
+            video_frame float NOT NULL,
+            video_index INT AUTO_INCREMENT PRIMARY KEY,
+            width int,
+            height int
         )`,
-		`CREATE TABLE video_scoring (
-            uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
-            video_id INT NOT NULL,
-            user_score INT NOT NULL,
-            time DATETIME NOT NULL
-        )`,
-		`CREATE TABLE tag (
-            uuid BINARY(16) PRIMARY KEY,
-            tag VARCHAR(255) NOT NULL
+		`CREATE TABLE video_tag (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            tag varchar(255) NOT NULL
         )`,
 		`CREATE TABLE image_tag (
-            uuid BINARY(16) PRIMARY KEY,
-            tag VARCHAR(255) NOT NULL
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            tag varchar(255) NOT NULL
         )`,
-		`CREATE TABLE testcode (
-            uuid BINARY(16) PRIMARY KEY,
-            test_code VARCHAR(255) NOT NULL,
-			tags VARCHAR(1000) NOT NULL,
-            video_list TEXT NOT NULL
-        )`,
-		`CREATE TABLE image_testcode (
-            uuid BINARY(16) PRIMARY KEY,
-            test_code VARCHAR(255) NOT NULL,
-			tags VARCHAR(1000) NOT NULL,
-            image_list TEXT NOT NULL
+		`CREATE TABLE image (
+            uuid binary(16) UNIQUE NOT NULL,
+            image_name varchar(255),
+            original_image_name varchar(255),
+            artifact_image_name varchar(255),
+			diff_image_name varchar(255),
+			image_index INT AUTO_INCREMENT PRIMARY KEY,
+            width int,
+            height int
         )`,
 		`CREATE TABLE user (
-            uuid BINARY(16),
-            id VARCHAR(10),
-            password VARCHAR(10) NOT NULL,
-            PRIMARY KEY (uuid, id)
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            user_name varchar(255) NOT NULL,
+            user_password varchar(255) NOT NULL
         )`,
 		`CREATE TABLE user_testcode_info (
-            uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
-            test_code VARCHAR(255) NOT NULL,
-            current_page INT NOT NULL,
-			time DATETIME NOT NULL
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            user_uuid binary(16) NOT NULL,
+            test_code varchar(255) NOT NULL,
+            last_page int NOT NULL,
+            time datetime,
+            is_video boolean NOT NULL
         )`,
-		`CREATE TABLE user_image_testcode_info (
-            uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
-            test_code VARCHAR(255) NOT NULL,
-            current_page INT NOT NULL,
-			time DATETIME NOT NULL
+		`CREATE TABLE video_testcode (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            video_tag varchar(255) NOT NULL,
+            video_testcode varchar(255) NOT NULL,
+            description varchar(1000)
         )`,
-		`CREATE TABLE video (
-			uuid BINARY(16) ,
-			video_index INT AUTO_INCREMENT PRIMARY KEY,
-			original_video_name VARCHAR(255) NOT NULL,
-			original_video VARCHAR(255) NOT NULL,
-			original_video_fps FLOAT NOT NULL,
-			artifact_video_name VARCHAR(255) NOT NULL,
-			artifact_video VARCHAR(255) NOT NULL,
-			artifact_video_fps FLOAT NOT NULL,
-			tag VARCHAR(255) NOT NULL
-		);
-		`,
-		`CREATE TABLE image (
-            uuid BINARY(16) ,
-			image_index INT AUTO_INCREMENT PRIMARY KEY,
-            original_image_name VARCHAR(255) NOT NULL,
-			original_image VARCHAR(255) NOT NULL,
-            artifact_image_name VARCHAR(255) NOT NULL,
-			artifact_image VARCHAR(255) NOT NULL,
-			diff_image_name VARCHAR(255) NOT NULL,
-			diff_image VARCHAR(255) NOT NULL,
-            tag VARCHAR(255) NOT NULL
+		`CREATE TABLE video_scoring (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            user_uuid binary(16) NOT NULL,
+            video_uuid binary(16) NOT NULL,
+            user_score VARCHAR(1000) NOT NULL,
+            video_testcode varchar(255) NOT NULL,
+            time datetime
         )`,
+		`CREATE TABLE image_scoring (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            user_uuid binary(16),
+            image_uuid binary(16),
+            patch_score varchar(1000) NOT NULL,
+            image_testcode varchar(255) NOT NULL,
+            time datetime
+        )`,
+		`CREATE TABLE image_testcode (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            image_tag varchar(255) NOT NULL,
+            image_testcode varchar(255) NOT NULL,
+            description varchar(1000)
+        )`,
+		`CREATE TABLE video_tag_link (
+            video_uuid binary(16) NOT NULL,
+            tag_uuid binary(16) NOT NULL,
+            PRIMARY KEY (video_uuid, tag_uuid)
+        )`,
+		`CREATE TABLE image_tag_link (
+            image_uuid binary(16) NOT NULL,
+            tag_uuid binary(16) NOT NULL,
+            PRIMARY KEY (image_uuid, tag_uuid)
+        )`,
+		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
+		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES video_tag (uuid)`,
+		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,
+		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES image_tag (uuid)`,
+		// `ALTER TABLE user_testcode_info ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
+		// `ALTER TABLE video_scoring ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
+		// `ALTER TABLE video_scoring ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
+		// `ALTER TABLE video_scoring ADD FOREIGN KEY (video_testcode) REFERENCES video_testcode (video_testcode)`,
+		// `ALTER TABLE image_scoring ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
+		// `ALTER TABLE image_scoring ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,
+		// `ALTER TABLE image_scoring ADD FOREIGN KEY (image_testcode) REFERENCES image_testcode (image_testcode)`,
+		// `ALTER TABLE video_testcode ADD FOREIGN KEY (video_tag) REFERENCES video_tag (tag)`,
+		// `ALTER TABLE image_testcode ADD FOREIGN KEY (image_tag) REFERENCES image_tag (tag)`,
 	}
+
 	for _, createTableSQL := range createTables {
 		_, err := app.DB.Exec(createTableSQL)
 		if err != nil {
-			log.Println(err)
+			log.Println("Error creating table: ", err)
 		}
 	}
 
-	fmt.Println("테이블 생성 완료")
+	fmt.Println("All tables created successfully")
 }
 
 func CreateImageDBTalbe() {

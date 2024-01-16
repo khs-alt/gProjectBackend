@@ -7,7 +7,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
+	"sort"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,14 +67,15 @@ func ServeArtifactVideosHandler(c *gin.Context) {
 
 }
 
+//done
+
 func UploadVideoHandler(c *gin.Context) {
 	err := c.Request.ParseMultipartForm(5000 << 20)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	tags, _ := c.GetPostFormArray("tags")
-
+	tagCSV, _ := c.GetPostForm("tags")
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.String(http.StatusBadRequest, "get form err: %s", err.Error())
@@ -85,17 +87,54 @@ func UploadVideoHandler(c *gin.Context) {
 	artifactVideos := form.File["artifact"]
 	artifactVideosName, artiVideos, arfectVideosFileForm := util.UploadVideo(c, artifactVideos, "artifact")
 
-	tags = strings.Split(tags[0], ",")
+	differentVideos := form.File["diff"]
+	diffVideosName, _, _ := util.UploadVideo(c, differentVideos, "diff")
+	tags := util.MakeCSVToStringList(tagCSV)
+	sort.Strings(tags)
+
+	//tags = strings.Split(tags[0], ",")
 	for i := 0; i < len(oriVideos) && i < len(artiVideos); i++ {
-		for j := 0; j < len(tags); j++ {
-			uuid := util.MakeUUID()
-			originaVideoFPS := util.GetVideoFPS("./originalVideos/" + oriVideos[i] + originalVideosFileForm[i])
-			artifactVideoFPS := util.GetVideoFPS("./artifactVideos/" + artiVideos[i] + arfectVideosFileForm[i])
-			err := sql.InsertVideoId(uuid, originalVideosName[i], oriVideos[i], originaVideoFPS, artifactVideosName[i], artiVideos[i], artifactVideoFPS, tags[j])
+		uuid := util.MakeUUID()
+		originaVideoFPS := util.GetVideoFPS("./originalVideos/" + oriVideos[i] + originalVideosFileForm[i])
+		artifactVideoFPS := util.GetVideoFPS("./artifactVideos/" + artiVideos[i] + arfectVideosFileForm[i])
+		if originaVideoFPS != artifactVideoFPS {
+			fmt.Printf("%s와 %s의 비디오 프레임이 다릅니다 \n", originalVideosName[i], artifactVideosName[i])
+		}
+		width, height, err := util.GetFileDimensions("./originalVideos/" + oriVideos[i] + originalVideosFileForm[i])
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = sql.InsertVideo(uuid, originalVideosName[i], artifactVideosName[i], diffVideosName[i], originaVideoFPS, width, height)
+		if err != nil {
+			fmt.Println(err)
+		}
+		for _, tag := range tags {
+			err = sql.InsertVideoTagLink(uuid, tag)
 			if err != nil {
 				fmt.Println(err)
 			}
 		}
+
 	}
 	c.String(http.StatusOK, "비디오가 성공적으로 업로드되었습니다.")
+}
+
+func PostVideoFrameTimeHandler(c *gin.Context) {
+	var data models.VideoFrameTimeData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	videoIndex := strconv.Itoa(data.VideoIndex)
+	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
+	videoCurrentTime := data.VideoCurrentTime
+	fmt.Println("videoCurrentTime: " + videoCurrentTime)
+	outputImage := fmt.Sprintf("./selectedFrame/selectedFrame%s_%s.png", videoIndex, videoCurrentTime)
+	err := util.ExtractFrame(videoFilePath, videoCurrentTime, outputImage)
+	if err != nil {
+		fmt.Println("error: ", err)
+		return
+	}
+
+	c.String(http.StatusOK, "Success insert frame time")
 }

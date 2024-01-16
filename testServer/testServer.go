@@ -29,7 +29,6 @@ func main() {
 	}
 
 	wg.Wait()
-	fmt.Println("===================================")
 	slices.Sort(result)
 	fmt.Println(result)
 }

@@ -4,32 +4,170 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/google/uuid"
 )
 
-func GetCurrentUserScore(userId string, videoId int) int {
+func GetUserScoreFromVideo(userId string, videoIndex string, videoTestcode string) int {
 	app := SetDB()
-
-	insertQuery := "SELECT user_score FROM video_scoring WHERE user_id = ? AND video_id = ? ORDER BY time DESC LIMIT 1"
-	var score int
-	err := app.DB.QueryRow(insertQuery, userId, videoId).Scan(&score)
+	insertQuery := `
+					SELECT
+						vs.user_score
+					FROM
+						video_scoring vs
+					JOIN
+						user u ON u.uuid = vs.user_uuid
+					JOIN
+						video v ON vs.video_uuid = v.uuid
+					WHERE
+						u.user_name = ? AND v.video_index = ? AND vs.video_testcode = ?
+					ORDER BY 
+						time DESC
+					LIMIT 1
+					`
+	var userScore int
+	err := app.DB.QueryRow(insertQuery, userId, videoIndex, videoTestcode).Scan(&userScore)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// 결과가 없을 때 -1 반환
+			fmt.Println("GetUserScoreFromVideo no rows in result set")
 			return -1
 		} else {
 			// 다른 오류가 발생한 경우 로그를 출력
-			fmt.Println(err)
+			log.Println("GetUserScoreFromVideo is error: ", err)
 		}
 	}
-	return score
+	return userScore
+}
+
+// return videoIndex, score
+func GetCurrentUserScore(userId string, videoTestCode string) (int, int) {
+	app := SetDB()
+	var userUUID uuid.UUID
+	userUUIDQuery := "SELECT BIN_TO_UUID(uuid) FROM user WHERE user_name = ?"
+	err := app.DB.QueryRow(userUUIDQuery, userId).Scan(&userUUID)
+	if err != nil {
+		log.Printf("Error finding user_uuid: %v\n", err)
+	}
+
+	insertQuery := `
+					SELECT						
+						COALESCE(user_score, -1) AS user_score, BIN_TO_UUID(video_uuid) AS video_uuid
+					FROM
+						video_scoring
+					WHERE
+						BIN_TO_UUID(user_uuid) = ? AND video_testcode =  ?
+					ORDER BY
+						time DESC
+					LIMIT 1
+					`
+	var score int
+	var videoUUID uuid.UUID
+	err = app.DB.QueryRow(insertQuery, userUUID, videoTestCode).Scan(&score, &videoUUID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// 결과가 없을 때 -1 반환
+			fmt.Println("GetCurrentUserScore: no rows in result set")
+			return 1, -1
+		} else {
+			// 다른 오류가 발생한 경우 로그를 출력
+			log.Println("GetCurrentUserScore: is error: ", err)
+		}
+	}
+	var videoIndex int
+	videoIndexQuery := `
+					SELECT
+						video_index
+					FROM
+						video
+					WHERE
+						BIN_TO_UUID(uuid) = ?
+					`
+	err = app.DB.QueryRow(videoIndexQuery, videoUUID).Scan(&videoIndex)
+	if err != nil {
+		log.Println("GetCurrentUserScore is error: ", err)
+	}
+
+	return videoIndex, score
+}
+
+func GetCurrentUserScoreList(userId string, videoIndexList []string) []int {
+	app := SetDB()
+	var userUUID uuid.UUID
+	userUUIDQuery := "SELECT BIN_TO_UUID(uuid) FROM user WHERE user_name = ?"
+	err := app.DB.QueryRow(userUUIDQuery, userId).Scan(&userUUID)
+	if err != nil {
+		log.Printf("Error finding user_uuid: %v\n", err)
+	}
+
+	videoUUIDQuery := `
+					SELECT
+						BIN_TO_UUID(uuid)
+					FROM
+						video
+					WHERE
+						video_index = ?
+					`
+	var videoUUID uuid.UUID
+	var videoUUIDList []uuid.UUID
+	for i := 0; i < len(videoIndexList); i++ {
+		err = app.DB.QueryRow(videoUUIDQuery, videoIndexList[i]).Scan(&videoUUID)
+		if err != nil {
+			log.Println("GetCurrentUserScore is error: ", err)
+		}
+		videoUUIDList = append(videoUUIDList, videoUUID)
+	}
+	scoreListQuery := `
+					SELECT
+						user_score
+					FROM
+						video_scoring
+					WHERE
+						BIN_TO_UUID(user_uuid) = ? AND BIN_TO_UUID(video_uuid) =  ?
+					ORDER BY
+						time DESC
+					LIMIT 1
+					`
+	var scoreList []int
+	var score int
+	for i := 0; i < len(videoUUIDList); i++ {
+		err = app.DB.QueryRow(scoreListQuery, userUUID, videoUUIDList[i]).Scan(&score)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				// 결과가 없을 때 -1 반환
+				fmt.Println("no rows in result set")
+				scoreList = append(scoreList, -1)
+				continue
+			} else {
+				// 다른 오류가 발생한 경우 로그를 출력
+				log.Println("GetCurrentUserScore is error: ", err)
+			}
+		}
+		scoreList = append(scoreList, score)
+	}
+
+	return scoreList
 }
 
 func GetCurrentUserImageScore(userId string, imageId int) string {
 	app := SetDB()
 
-	insertQuery := "SELECT patch_score FROM image_scoring WHERE user_id = ? AND image_id = ? ORDER BY time DESC LIMIT 1"
+	insertQuery := `				
+				SELECT	
+				iscore.patch_score
+				FROM	
+					image_scoring AS iscore
+				JOIN
+					user AS u ON u.uuid = iscore.user_uuid
+				JOIN
+					image AS i ON iscore.image_uuid = i.uuid
+				WHERE
+					u.user_name = ? AND i.image_index = ?
+				ORDER BY
+					iscore.time DESC
+				LIMIT 1				
+			`
 	var score string
 	err := app.DB.QueryRow(insertQuery, userId, imageId).Scan(&score)
 	if err != nil {
@@ -38,7 +176,7 @@ func GetCurrentUserImageScore(userId string, imageId int) string {
 			return "-1"
 		} else {
 			// 다른 오류가 발생한 경우 로그를 출력
-			fmt.Println(err)
+			fmt.Println("GetCurrentUserImageScore error: ", err)
 		}
 	}
 	return score
@@ -77,29 +215,48 @@ func GetVideoAverageScore(video string) int {
 	return averageScore
 }
 
+// TODO:
 func GetUserCurrentImagePageAboutTestCode(userId string, testCode string) int {
 	app := SetDB()
 	maxCurrentPage := 0
 
-	insertQuery := "SELECT current_page FROM user_image_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1"
+	insertQuery := `
+				SELECT 
+					uti.last_page
+				FROM 
+					user_testcode_info uti
+				JOIN 
+					user u ON u.uuid = uti.user_uuid 
+				WHERE 
+					u.user_name = ? AND uti.test_code = ? AND uti.is_video = 0
+				ORDER BY 
+					time DESC 
+				LIMIT 1
+	`
 	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&maxCurrentPage)
-	if err != nil {
-		fmt.Println(err)
+	if err == sql.ErrNoRows {
+		// 결과가 없을 때 1 반환
+		log.Println("GetUserCurrentPageAboutTestCode no rows in result set")
+		return 1
+	} else {
+		// 다른 오류가 발생한 경우 로그를 출력
+		log.Println("GetUserCurrentPageAboutTestCode is error: ", err)
 	}
 	return maxCurrentPage
 }
 
-func GetUserCurrentPageAboutTestCode(userId string, testCode string) int {
-	app := SetDB()
-	currentPage := 0
+// TODO:
+// func GetUserCurrentPageAboutTestCode(userId string, testCode string) int {
+// 	app := SetDB()
+// 	currentPage := 0
 
-	insertQuery := "SELECT current_page FROM user_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1"
-	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&currentPage)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return currentPage
-}
+// 	insertQuery := "SELECT current_page FROM user_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1"
+// 	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&currentPage)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	return currentPage
+// }
 
 func GetFPSFromVideo(videoId string) (float32, float32) {
 	app := SetDB()
@@ -114,62 +271,60 @@ func GetFPSFromVideo(videoId string) (float32, float32) {
 	return originalVideoFPS, artifactVideoFPS
 }
 
-func GetTestcodeExist(testCode string) bool {
+// done
+func GetVideoTestcodeExist(testCode string) (bool, error) {
 	app := SetDB()
 
-	query := "SELECT COUNT(*) FROM testcode WHERE test_code = ?"
-	var count int
-	err := app.DB.QueryRow(query, testCode).Scan(&count)
+	query := "SELECT EXISTS (SELECT * FROM video_testcode WHERE video_testcode = ?)"
+	var exist bool
+	err := app.DB.QueryRow(query, testCode).Scan(&exist)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return false, err
 	}
-	if count > 0 {
-		return true
-	}
-	return false
+	return exist, nil
 }
 
-func GetImageTestcodeExist(testCode string) bool {
+// done
+func GetImageTestcodeExist(testCode string) (bool, error) {
 	app := SetDB()
 
-	query := "SELECT COUNT(*) FROM image_testcode WHERE test_code = ?"
-	var count int
-	err := app.DB.QueryRow(query, testCode).Scan(&count)
+	query := "SELECT EXISTS (SELECT * FROM image_testcode WHERE image_testcode = ?)"
+	var exist bool
+	err := app.DB.QueryRow(query, testCode).Scan(&exist)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return false, err
 	}
-	if count > 0 {
-		return true
-	}
-	return false
+	return exist, nil
 }
 
-func GetTestCodeCount() (int, error) {
-	app := SetDB()
+// func GetTestCodeCount() (int, error) {
+// 	app := SetDB()
 
-	var count int
-	err := app.DB.QueryRow("SELECT COUNT(*) FROM testcode").Scan(&count)
-	if err != nil {
-		panic(err)
-	}
-	return count, nil
-}
+// 	var count int
+// 	err := app.DB.QueryRow("SELECT COUNT(*) FROM testcode").Scan(&count)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	return count, nil
+// }
 
-func GetImageTestCodeCount() (int, error) {
-	app := SetDB()
+// func GetImageTestCodeCount() (int, error) {
+// 	app := SetDB()
 
-	var count int
-	err := app.DB.QueryRow("SELECT COUNT(*) FROM image_testcode").Scan(&count)
-	if err != nil {
-		panic(err)
-	}
-	return count, nil
-}
+// 	var count int
+// 	err := app.DB.QueryRow("SELECT COUNT(*) FROM image_testcode").Scan(&count)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	return count, nil
+// }
 
 func GetTestCodeInfo() ([]string, []string) {
 	app := SetDB()
 
-	insertQuery := "SELECT test_code, tags FROM testcode"
+	insertQuery := "SELECT video_testcode, video_tag FROM video_testcode"
 	rows, err := app.DB.Query(insertQuery)
 	if err != nil {
 		log.Fatal(err)
@@ -195,7 +350,7 @@ func GetTestCodeInfo() ([]string, []string) {
 func GetImageTestCodeInfo() ([]string, []string) {
 	app := SetDB()
 
-	insertQuery := "SELECT test_code, tags FROM image_testcode"
+	insertQuery := "SELECT image_testcode, image_tag FROM image_testcode"
 	rows, err := app.DB.Query(insertQuery)
 	if err != nil {
 		log.Fatal(err)
@@ -244,12 +399,12 @@ func GetImageNameListFromVideoList(videoList []string) ([]string, []string) {
 	var originalImageNameList []string
 	var artifactimageNameList []string
 	for _, videoNum := range videoList {
-		query := "SELECT original_image_name, artifact_image_name FROM image WHERE original_image = ?"
+		query := "SELECT original_image_name, artifact_image_name FROM image WHERE image_index = ?"
 		var originalImageName string
 		var artifactImageName string
 		err := app.DB.QueryRow(query, videoNum).Scan(&originalImageName, &artifactImageName)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("GetImageNameListFromVideoList ", err)
 		}
 		originalImageNameList = append(originalImageNameList, originalImageName)
 		artifactimageNameList = append(artifactimageNameList, artifactImageName)
@@ -257,26 +412,106 @@ func GetImageNameListFromVideoList(videoList []string) ([]string, []string) {
 	return originalImageNameList, artifactimageNameList
 }
 
-func GetVideoListFromTestCode(testCode string) (string, error) {
+func GetVideoListInfoFromTestCode(testCode string) ([]string, []string, []string, []string, error) {
 	app := SetDB()
 
-	query := "SELECT video_list FROM testcode WHERE test_code = ?"
-	var videoIdList string
-	err := app.DB.QueryRow(query, testCode).Scan(&videoIdList)
+	qeury := `SELECT v.video_index, v.original_video_name, v.artifact_video_name, v.video_frame
+	FROM	
+		video v
+	JOIN
+		video_testcode vt ON v.video_tag = vt.video_tag
+	WHERE
+		vt.video_testcode = ?`
+	var videoList, originalVideoNameList, arfectVideosNameList, videoFrameList []string
+	err := app.DB.QueryRow(qeury, testCode).Scan(&videoList, &originalVideoNameList, &arfectVideosNameList, &videoFrameList)
 	if err != nil {
-		return "", err
+		return nil, nil, nil, nil, err
 	}
-	return videoIdList, nil
+	return videoList, originalVideoNameList, arfectVideosNameList, videoFrameList, nil
+
 }
 
-func GetImageListFromTestCode(testCode string) (string, error) {
+// done
+func GetVideoListFromTestCode(testCode string) ([]string, []string, []string, []string, error) {
 	app := SetDB()
 
-	query := "SELECT image_list FROM image_testcode WHERE test_code = ?"
-	var videoIdList string
-	err := app.DB.QueryRow(query, testCode).Scan(&videoIdList)
+	query := `
+	SELECT DISTINCT
+		v.original_video_name, v.artifact_video_name, v.video_frame, v.video_index
+	FROM
+    	video_testcode vt
+	JOIN
+    	video_tag t ON vt.video_tag = t.tag
+	JOIN
+    	video_tag_link vtl ON t.uuid = vtl.tag_uuid
+	JOIN
+    	video v ON vtl.video_uuid = v.uuid
+	WHERE
+    	vt.video_testcode = ?
+	`
+	rows, err := app.DB.Query(query, testCode)
 	if err != nil {
-		return "", err
+		log.Println(err)
+		return nil, nil, nil, nil, err
+	}
+	defer rows.Close()
+
+	var originalVideoNameList, arfectVideosNameList, videoFrameList, indexList []string
+	var originalVideoName, arfectVideosName, videoFrame, index string
+	for rows.Next() {
+		err := rows.Scan(&originalVideoName, &arfectVideosName, &videoFrame, &index)
+		if err != nil {
+			log.Println(err)
+			return nil, nil, nil, nil, err
+		}
+		originalVideoNameList = append(originalVideoNameList, originalVideoName)
+		arfectVideosNameList = append(arfectVideosNameList, arfectVideosName)
+		videoFrameList = append(videoFrameList, videoFrame)
+		indexList = append(indexList, index)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+		return nil, nil, nil, nil, err
+	}
+	return originalVideoNameList, arfectVideosNameList, videoFrameList, indexList, nil
+}
+
+func GetImageListFromTestCode(testCode string) ([]string, error) {
+	app := SetDB()
+
+	query := `
+			SELECT DISTINCT
+				i.image_index
+			FROM
+				image i
+			JOIN
+				image_tag_link itl ON i.uuid = itl.image_uuid
+			JOIN
+				image_tag it ON itl.tag_uuid = it.uuid
+			JOIN
+				image_testcode itc ON it.tag = itc.image_tag
+			WHERE
+				itc.image_testcode = ?
+			`
+	var videoIdList []string
+	raw, err := app.DB.Query(query, testCode)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer raw.Close()
+
+	for raw.Next() {
+		var videoId string
+		if err := raw.Scan(&videoId); err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		videoIdList = append(videoIdList, videoId)
+	}
+	if err := raw.Err(); err != nil {
+		log.Println(err)
+		return nil, err
 	}
 	return videoIdList, nil
 }
@@ -309,16 +544,16 @@ func GetSameTagVideo(tag string) []string {
 	}
 
 	// Now, you can use the tagDataSlice in your Go code
-	for _, data := range videoDataSlice {
-		fmt.Println("Tag:", data)
-	}
+	// for _, data := range videoDataSlice {
+	// 	fmt.Println("Tag:", data)
+	// }
 	return videoDataSlice
 }
 
-func GetTagData() []string {
+func GetVideoTag() []string {
 	app := SetDB()
 	// Query to fetch data from the table
-	rows, err := app.DB.Query("SELECT tag FROM tag")
+	rows, err := app.DB.Query("SELECT tag FROM video_tag")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -340,14 +575,9 @@ func GetTagData() []string {
 	if err := rows.Err(); err != nil {
 		log.Fatal(err)
 	}
-
-	// Now, you can use the tagDataSlice in your Go code
-	for _, data := range tags {
-		fmt.Println("Tag:", data)
-	}
 	return tags
 }
-func GetImageTagData() []string {
+func GetImageTag() []string {
 	app := SetDB()
 	// Query to fetch data from the table
 	rows, err := app.DB.Query("SELECT tag FROM image_tag")
@@ -371,11 +601,6 @@ func GetImageTagData() []string {
 	// Check for errors from iterating over rows
 	if err := rows.Err(); err != nil {
 		log.Fatal(err)
-	}
-
-	// Now, you can use the tagDataSlice in your Go code
-	for _, data := range tags {
-		fmt.Println("Tag:", data)
 	}
 	return tags
 }
@@ -441,12 +666,25 @@ func GetTag(testcodeUUID uuid.UUID) (string, error) {
 }
 
 // return original_video
-func GetVideoListFromTag(tag string) ([]string, error) {
+func GetVideoListFromTag(tags []string) ([]string, error) {
 	app := SetDB()
 
+	new_tags := `"` + strings.Join(tags, `","`) + `"`
+	fmt.Println(new_tags)
 	// Query to fetch data from the table
-	query := "SELECT original_video FROM video WHERE tag = ? ORDER BY video_index"
-	rows, err := app.DB.Query(query, tag)
+	query := fmt.Sprintf(`
+			SELECT DISTINCT
+    			v.original_video_name
+			FROM
+    			video v
+			JOIN
+    			video_tag_link vtl ON v.uuid = vtl.video_uuid
+			JOIN
+    			video_tag vt ON vtl.tag_uuid = vt.uuid
+			WHERE
+    			vt.tag IN (%s)
+			`, new_tags)
+	rows, err := app.DB.Query(query)
 	if err != nil {
 		log.Println(err)
 	}
@@ -459,24 +697,39 @@ func GetVideoListFromTag(tag string) ([]string, error) {
 	for rows.Next() {
 		video := ""
 		if err := rows.Scan(&video); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		videoList = append(videoList, video)
 	}
 
 	// Check for errors from iterating over rows
 	if err := rows.Err(); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	return videoList, nil
 }
 
-func GetImageListFromTag(tag string) ([]string, error) {
+// TODO: Here has a problem maybe
+func GetImageListFromTag(tags []string) ([]string, error) {
 	app := SetDB()
 
 	// Query to fetch data from the table
-	query := "SELECT original_image FROM image WHERE tag = ? ORDER BY image_index"
-	rows, err := app.DB.Query(query, tag)
+	new_tags := `"` + strings.Join(tags, `","`) + `"`
+	fmt.Println(new_tags)
+	// Query to fetch data from the table
+	query := fmt.Sprintf(`
+			SELECT DISTINCT
+    			i.original_image_name
+			FROM
+				image i
+			JOIN
+    			image_tag_link itl ON i.uuid = itl.image_uuid
+			JOIN
+    			image_tag it ON itl.tag_uuid = it.uuid
+			WHERE
+    			it.tag IN (%s)
+			`, new_tags)
+	rows, err := app.DB.Query(query)
 	if err != nil {
 		log.Println(err)
 	}
@@ -499,4 +752,48 @@ func GetImageListFromTag(tag string) ([]string, error) {
 		log.Fatal(err)
 	}
 	return imageList, nil
+}
+
+func GetUserScoringList(user string, testCode string) []int {
+	app := SetDB()
+	// query := `SELECT
+	// 			user_score
+	// 		  FROM
+	// 		  	video_scoring
+	// 		  JOIN
+	// 		  	user ON video_scoring.user_uuid = user.uuid
+	// 		  WHERE
+	// 		  	user.user_name = ? AND video_scoring.video_testcode = ?`
+	query := `
+	SELECT 
+    	IFNULL(vs.user_score, -1) AS user_score 
+	FROM 
+    	video v 
+	JOIN 
+    	video_testcode vtc ON v.tag = vtc.video_tag 
+	LEFT JOIN 
+    	video_scoring vs ON BIN_TO_UUID(v.uuid) = BIN_TO_UUID(vs.video_uuid) AND BIN_TO_UUID(vs.user_uuid) = (SELECT BIN_TO_UUID(uuid) FROM user WHERE user_name = ?) 
+	WHERE 
+    	vtc.video_testcode = ?;
+`
+	rows, err := app.DB.Query(query, user, testCode)
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+
+	// Slice to store the retrieved data
+	var userScoringList []int
+
+	for rows.Next() {
+		score := 0
+		if err := rows.Scan(&score); err != nil {
+			log.Println(err)
+		}
+		userScoringList = append(userScoringList, score)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+	}
+	return userScoringList
 }

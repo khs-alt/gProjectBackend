@@ -9,13 +9,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UploadImage(c *gin.Context, images []*multipart.FileHeader, imageType string) ([]string, []string) {
-	var ImagesName, Images, VideosFileForm []string
+func UploadImage(c *gin.Context, images []*multipart.FileHeader, imageType string) ([]string, []string, []string) {
+	var ImagesName, Images, ImagesFileForm []string
 	for _, ImageHeader := range images {
 		//들어온 이미지를 video+n 이름으로 바꿈
 		ImagesName = append(ImagesName, filepath.Base(ImageHeader.Filename))
 		ImageFileForm := filepath.Ext(ImageHeader.Filename)
-		VideosFileForm = append(VideosFileForm, ImageFileForm)
+		ImagesFileForm = append(ImagesFileForm, ImageFileForm)
 
 		ImagePath := "./" + imageType + "Images/"
 		count, err := CountFile(ImagePath)
@@ -23,7 +23,7 @@ func UploadImage(c *gin.Context, images []*multipart.FileHeader, imageType strin
 			fmt.Print("CountFile error : ")
 			fmt.Println(err)
 		}
-		ImageName := imageType + "Image" + fmt.Sprint(count)
+		ImageName := imageType + "Image" + fmt.Sprint(count+1)
 		Images = append(Images, ImageName)
 		FilePath := ImagePath + ImageName + ImageFileForm
 		if err := c.SaveUploadedFile(ImageHeader, FilePath); err != nil {
@@ -31,5 +31,5 @@ func UploadImage(c *gin.Context, images []*multipart.FileHeader, imageType strin
 			continue
 		}
 	}
-	return ImagesName, Images
+	return ImagesName, Images, ImagesFileForm
 }

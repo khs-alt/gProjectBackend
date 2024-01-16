@@ -2,27 +2,28 @@ package sql
 
 import (
 	"database/sql"
-	"fmt"
-
-	"github.com/joho/sqltocsv"
+	"log"
 )
 
 func ExportImageData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
-	fmt.Println(testcode)
-	rows, err := app.DB.Query("SELECT user_id, image_id, patch_score, time FROM image_scoring ORDER BY time")
+	insertQuery := `
+				SELECT
+					u.user_name, i.original_image_name, i.width, i.height, ims.patch_score, ims.image_testcode, ims.time
+				FROM
+					image_scoring AS ims
+				JOIN
+					user AS u ON u.uuid = ims.user_uuid
+				JOIN
+					image AS i ON i.uuid = ims.image_uuid
+				WHERE
+					ims.image_testcode = ?
+				ORDER BY ims.time
+				`
+	rows, err := app.DB.Query(insertQuery, testcode)
 	if err != nil {
-		panic(err)
-	}
-
-	err = sqltocsv.WriteFile("./image_user_labeling.csv", rows)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	rows, err = app.DB.Query("SELECT user_id, image_id, patch_score, time FROM image_scoring ORDER BY time")
-	if err != nil {
-		panic(err)
+		log.Println("ExportImageData error", err)
+		return nil, err
 	}
 
 	return rows, err
@@ -30,21 +31,23 @@ func ExportImageData(testcode string) (*sql.Rows, error) {
 
 func ExportVideoData(testcode string) (*sql.Rows, error) {
 	app := SetDB()
-	fmt.Println(testcode)
-
-	rows, err := app.DB.Query("SELECT user_id, video_id, user_score, time FROM video_scoring ORDER BY time")
+	insertQuery := `
+				SELECT 
+					u.user_name, v.original_video_name, vs.user_score, vs.video_testcode, vs.time
+				FROM 
+					video_scoring AS vs
+				JOIN 
+					user AS u ON u.uuid = vs.user_uuid
+				JOIN 
+					video AS v ON v.uuid = vs.video_uuid
+				WHERE 
+					vs.video_testcode = ?
+				ORDER BY vs.time
+	`
+	rows, err := app.DB.Query(insertQuery, testcode)
 	if err != nil {
-		panic(err)
-	}
-
-	err = sqltocsv.WriteFile("./video_user_scoring.csv", rows)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	rows, err = app.DB.Query("SELECT user_id, video_id, user_score, time FROM video_scoring ORDER BY time")
-	if err != nil {
-		panic(err)
+		log.Println("ExportVideoData error", err)
+		return nil, err
 	}
 
 	return rows, err

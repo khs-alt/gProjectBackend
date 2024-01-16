@@ -5,12 +5,15 @@ import (
 	"backend/sql"
 	"backend/util"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
+// login handler
+// done
 func SignupHandler(c *gin.Context) {
 	var data models.UserNewIdAndPassword
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -37,46 +40,59 @@ func GetImageScoreDataFromUser(c *gin.Context) {
 	})
 }
 
-func GetScoreDataFromUser(c *gin.Context) {
-	var data models.UserInfoData
-	if err := c.ShouldBindJSON(&data); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
-	replyData := fmt.Sprint(userScore)
-	c.String(http.StatusOK, replyData)
+// func GetScoreDataFromUser(c *gin.Context) {
+// 	var data models.UserInfoData
+// 	if err := c.ShouldBindJSON(&data); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+// 	userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
+// 	replyData := fmt.Sprint(userScore)
+// 	c.String(http.StatusOK, replyData)
+// }
+
+func GetUserScoringListHandler(c *gin.Context) {
+	currentUser := c.Query("userID")
+	testCode := c.Query("testcode")
+	_, _, _, videoIndex, _ := sql.GetVideoListFromTestCode(testCode)
+	fmt.Println("=======================================")
+	fmt.Println(videoIndex)
+	sql.GetCurrentUserScoreList(currentUser, videoIndex)
+	//TODO: videoIndex를 이용해서 userScoringList를 만들어서 보내주기
+	c.JSON(http.StatusOK, gin.H{
+		"userScoringList": videoIndex,
+	})
 }
 
 func GetImageScoreData(c *gin.Context) {
 	var data models.UserImageScoreData
 	if err := c.ShouldBindJSON(&data); err != nil {
+		fmt.Println("GetImageScoreData error ", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	uuid := util.MakeUUID()
 	currentPage := data.ImageId
 	SCVData := util.MakeIntListtoCSV(data.Score)
-	go sql.InsertUserImageScoringInfo(uuid, data.CurrentUser, data.ImageId, SCVData)
-	go sql.InsertUserImageTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
+	isVideo := false
+	go sql.InsertUserImageScoringInfo(data.CurrentUser, data.ImageId, data.TestCode, SCVData)
+	go sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage, isVideo)
 	c.String(http.StatusOK, "Success insert user image score data")
 }
 
-func GetScoringData(c *gin.Context) {
+func GetVideoScoringData(c *gin.Context) {
 	var data models.UserScoreData
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	uuid := util.MakeUUID()
-	currentPage := data.ImageId
-	go sql.InsertUserVideoScoringInfo(uuid, data.CurrentUser, data.ImageId, data.Score)
-	go sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, currentPage)
-	userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId+1)
-	var res models.UserCurrentScore
-	res.Score = userScore
-	c.String(http.StatusOK, "Success insert user score data")
+	isVideo := true
+	go sql.InsertUserVideoScoringInfo(data.CurrentUser, data.ImageId, data.TestCode, data.Score)
+	go sql.InsertUserTestInfo(uuid, data.CurrentUser, data.TestCode, data.ImageId, isVideo)
+	_, userScore := sql.GetCurrentUserScore(data.CurrentUser, data.TestCode)
+
+	c.JSON(http.StatusOK, userScore)
 }
 
 func AdminLoginHandler(c *gin.Context) {
@@ -96,32 +112,65 @@ func AdminLoginHandler(c *gin.Context) {
 	c.String(http.StatusOK, res)
 }
 
-func ReqeustLoginHandler(c *gin.Context) {
+// done
+func RequestLoginHandler(c *gin.Context) {
 	var data models.UserLoginData
 	if err := c.ShouldBindJSON(&data); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		return
+	}
+	//check login process
+	if !sql.IsUserIdExist(data.ID, data.Password) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid ID or Password"})
 		return
 	}
 
-	IsUserIdExist := sql.IsUserIdExist(data.ID, data.Password)
-	IsVideoTestcodeExist := sql.GetTestcodeExist(data.TestCode)
-	var currentPage string
-	IsImageTestcodeExist := sql.GetImageTestcodeExist(data.TestCode)
-	var res string
-	if IsVideoTestcodeExist == true {
-		res = "scoring"
+	isVideoTestcodeExist, err := sql.GetVideoTestcodeExist(data.TestCode)
+	if err != nil {
+		log.Println("GetVideoTestcodeExist error")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 	}
-	if IsImageTestcodeExist == true {
-		res = "labeling"
+
+	if isVideoTestcodeExist {
+		var userIndex int
+		userIndex, _ = sql.GetCurrentUserScore(data.ID, data.TestCode)
+		c.JSON(http.StatusOK, gin.H{
+			"path":     "scoring",
+			"lastPage": userIndex,
+		})
+		return
 	}
-	if IsVideoTestcodeExist == false && IsImageTestcodeExist == false {
-		res = "No TestCode"
+
+	isImageTestcodeExist, err := sql.GetImageTestcodeExist(data.TestCode)
+	if err != nil {
+		log.Println("GetImageTestcodeExist error")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 	}
-	if IsUserIdExist == false {
-		res = "Wrong ID or Password"
+
+	if isImageTestcodeExist {
+		userIndex := sql.GetUserCurrentImagePageAboutTestCode(data.ID, data.TestCode)
+		c.JSON(http.StatusOK, gin.H{
+			"path":     "labeling",
+			"lastPage": userIndex,
+		})
+		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"path":     res,
-		"lastPage": currentPage,
+		"path": "No Testcode",
 	})
 }
+
+// func GetUserScoringListHandler(c *gin.Context) {
+// 	var data models.UserScoringListData
+// 	if err := c.ShouldBindJSON(&data); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	userScoringList := sql.GetUserScoringList(data.CurrentUser, data.TestCode)
+
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"userScoringList": userScoringList,
+// 	})
+// }

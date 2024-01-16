@@ -88,3 +88,13 @@ var MimeTypes = map[string]string{
 	".webm":  "video/webm",
 	".mp4":   "video/mp4",
 }
+
+type VideoFrameTimeData struct {
+	VideoIndex       int    `json:"videoIndex"`
+	VideoCurrentTime string `json:"videoCurrentTime"`
+}
+
+type UserScoringListData struct {
+	CurrentUser string `json:"userID"`
+	TestCode    string `json:"Testcode"`
+}

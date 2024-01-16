@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"backend/app/models"
 	"backend/sql"
 	"backend/util"
 	"log"
@@ -10,12 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RequestData struct {
-	Tags []string `json:"tags"`
-}
-
-func DeletetagHandler(c *gin.Context) {
-	var data RequestData
+// d
+func DeleteVideotagHandler(c *gin.Context) {
+	var data models.RequestData
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -31,8 +29,9 @@ func DeletetagHandler(c *gin.Context) {
 	c.String(http.StatusOK, "Success delete tag")
 }
 
+// d
 func DeleteImagetagHandler(c *gin.Context) {
-	var data RequestData
+	var data models.RequestData
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -48,7 +47,8 @@ func DeleteImagetagHandler(c *gin.Context) {
 	c.String(http.StatusOK, "Success delete tag")
 }
 
-func ReceivedTagHandler(c *gin.Context) {
+// d
+func ReceivedVideoTagHandler(c *gin.Context) {
 	var data map[string]interface{}
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -56,10 +56,11 @@ func ReceivedTagHandler(c *gin.Context) {
 	}
 	tag := data["tag"].(string)
 	uuid := util.MakeUUID()
-	sql.InsertTagData(uuid, tag)
+	sql.InsertVideoTag(uuid, tag)
 	c.String(http.StatusOK, "Success insert tag")
 }
 
+// d
 func ReceivedImageTagHandler(c *gin.Context) {
 	var data map[string]interface{}
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -67,24 +68,20 @@ func ReceivedImageTagHandler(c *gin.Context) {
 		return
 	}
 	tag := data["tag"].(string)
-	// 응답 보내기
 	uuid := util.MakeUUID()
-	sql.InsertImageTagData(uuid, tag)
+	sql.InsertImageTag(uuid, tag)
 	c.String(http.StatusOK, "Success insert image tag")
 }
 
 // TODO:테그를 삭제할 경우 response로 보내주는 값이 없는 것으로 예상됨.
 // db에서 tag 데이터를 가져와서 json으로 변환 후 리스트 형태로 반환
-func GetTagHandler(c *gin.Context) {
-	tagDataList := sql.GetTagData()
-	c.JSON(http.StatusOK, gin.H{
-		"testcode_list": tagDataList,
-	})
+// d
+func GetVideoTagHandler(c *gin.Context) {
+	tagDataList := sql.GetVideoTag()
+	c.JSON(http.StatusOK, tagDataList)
 }
 
 func GetImageTagHandler(c *gin.Context) {
-	tagDataList := sql.GetImageTagData()
-	c.JSON(http.StatusOK, gin.H{
-		"image_testcode_list": tagDataList,
-	})
+	tagDataList := sql.GetImageTag()
+	c.JSON(http.StatusOK, tagDataList)
 }

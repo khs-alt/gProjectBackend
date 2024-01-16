@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -51,20 +52,30 @@ func UploadImageHandler(c *gin.Context) {
 		return
 	}
 	originalImages := form.File["original"]
-	originalImagesName, oriImages := util.UploadImage(c, originalImages, "original")
+	originalImagesName, oriImages, originalImageFileForm := util.UploadImage(c, originalImages, "original")
 
 	artifactImages := form.File["artifact"]
-	artifactImagesName, artiImages := util.UploadImage(c, artifactImages, "artifact")
+	artifactImagesName, artiImages, _ := util.UploadImage(c, artifactImages, "artifact")
 
 	diffImages := form.File["diff"]
-	diffImagesName, diffImgs := util.UploadImage(c, diffImages, "diff")
+	diffImagesName, diffImgs, _ := util.UploadImage(c, diffImages, "diff")
 
 	// 모든 이미지 처리 후
 	tags = strings.Split(tags[0], ",")
-	for i := 0; i < len(oriImages) && i < len(artiImages); i++ {
+	sort.Strings(tags)
+	for i := 0; i < len(oriImages) && i < len(artiImages) && i < len(diffImgs); i++ {
+		uuid := util.MakeUUID()
+		width, height, err := util.GetFileDimensions("./originalImages/" + oriImages[i] + originalImageFileForm[i])
+		if err != nil {
+			log.Println(err)
+		}
+		if err := sql.InsertImage(uuid, originalImagesName[i], artifactImagesName[i], diffImagesName[i], width, height); err != nil {
+			log.Println(err)
+		}
 		for _, tag := range tags {
-			uuid := util.MakeUUID()
-			if err := sql.InsertImageId(uuid, originalImagesName[i], oriImages[i], artifactImagesName[i], artiImages[i], diffImagesName[i], diffImgs[i], tag); err != nil {
+
+			err = sql.InsertImageTagLink(uuid, tag)
+			if err != nil {
 				log.Println(err)
 			}
 		}
@@ -80,9 +91,8 @@ func GetImageNameListHandler(c *gin.Context) {
 		return
 	}
 	testcode := data["testcode"].(string)
-	imageOriginalCSVList, _ := sql.GetImageListFromTestCode(testcode)
+	imageList, _ := sql.GetImageListFromTestCode(testcode)
 
-	imageList := util.MakeCSVToStringList(imageOriginalCSVList)
 	var indexList []int
 	for _, image := range imageList {
 		id := strings.TrimLeft(image, "originalImage")
@@ -91,9 +101,11 @@ func GetImageNameListHandler(c *gin.Context) {
 	}
 
 	imageOriginalList, imageArtifactList := sql.GetImageNameListFromVideoList(imageList)
+	fmt.Println("imageOriginalList: ", imageOriginalList)
+	fmt.Println("imageArtifactList: ", imageArtifactList)
 	c.JSON(http.StatusOK, gin.H{
-		"ImageList":         imageList,
-		"ImageOriginalList": imageOriginalList,
-		"ImageArtifactList": imageArtifactList,
+		"image_list":    imageList,
+		"original_list": imageOriginalList,
+		"artifact_list": imageArtifactList,
 	})
 }

@@ -1,43 +1,47 @@
 package handler
 
 import (
+	"backend/app/models"
 	"backend/sql"
 	"backend/util"
-	"fmt"
 	"net/http"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
+// done
 func GetTestCodeListHandler(c *gin.Context) {
-	testCodeList, tagsList := sql.GetTestCodeInfo()
+	testCodeList, tagList := sql.GetTestCodeInfo()
+	newTestCodeList, newtagList := util.MakeNewTestCodeTagList(testCodeList, tagList)
 	c.JSON(http.StatusOK, gin.H{
-		"testcode": testCodeList,
-		"tags":     tagsList,
+		"testcode": newTestCodeList,
+		"tags":     newtagList,
 	})
 }
 
+// done
 func GetImageTestCodeListHandler(c *gin.Context) {
-	testCodeList, tagsList := sql.GetImageTestCodeInfo()
+	testCodeList, tagList := sql.GetImageTestCodeInfo()
+	newTestCodeList, newtagList := util.MakeNewTestCodeTagList(testCodeList, tagList)
 	c.JSON(http.StatusOK, gin.H{
-		"testcode": testCodeList,
-		"tags":     tagsList,
+		"testcode": newTestCodeList,
+		"tags":     newtagList,
 	})
 }
 
 // you have to use join or sql
 func GetVideoListFromTagHandler(c *gin.Context) {
+	// 이 함수는 제대로 []string으로 들어옴
 	tags := c.QueryArray("tag[]")
-	var videoList []string
-	for _, tag := range tags {
-		videos, _ := sql.GetVideoListFromTag(tag)
-		for _, video := range videos {
-			videoList = append(videoList, video)
-		}
+	sort.Strings(tags)
+
+	originalVideo, err := sql.GetVideoListFromTag(tags)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	videoList = util.RemoveDuplicates(videoList)
-	originalVideo, _ := sql.GetVideoNameListFromVideoList(videoList)
 	c.JSON(http.StatusOK, gin.H{
 		"original_video_list": originalVideo,
 	})
@@ -46,62 +50,67 @@ func GetVideoListFromTagHandler(c *gin.Context) {
 // use join
 func GetImageListFromTagHandler(c *gin.Context) {
 	tags := c.QueryArray("tag[]")
-	var videoList []string
-	for _, tag := range tags {
-		videos, _ := sql.GetImageListFromTag(tag)
-		for _, video := range videos {
-			videoList = append(videoList, video)
-		}
+	sort.Strings(tags)
+
+	originalIamge, err := sql.GetImageListFromTag(tags)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	videoList = util.RemoveDuplicates(videoList)
-	originalIamge, _ := sql.GetImageNameListFromVideoList(videoList)
+
 	c.JSON(http.StatusOK, gin.H{
 		"original_image_list": originalIamge,
 	})
 
 }
 
-// use join
-func GetTestCodeHandler(c *gin.Context) {
-	var data RequestData
+// use join it can't
+// TODO: description is not used
+// done
+func GetVideoTestCodeHandler(c *gin.Context) {
+	var data models.RequestData
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	uuid, _ := uuid.NewUUID()
-	var videoList []string
-	for _, tag := range data.Tags {
-		videos, _ := sql.GetVideoListFromTag(tag)
-		for _, video := range videos {
-			videoList = append(videoList, video)
-		}
-	}
-	videoList = util.RemoveDuplicates(videoList)
-	num, _ := sql.GetTestCodeCount()
 
-	testcode := util.GenerateRandomString(8) + fmt.Sprint(num)
-	sql.InsertTestCodeId(uuid, testcode, data.Tags, videoList)
-	c.String(http.StatusOK, "Success insert testcode")
+	testcode := util.GenerateRandomString(8)
+	description := ""
+	for _, tag := range data.Tags {
+		uuid, _ := uuid.NewUUID()
+		sql.InsertVideoTestCode(uuid, tag, testcode, description)
+		c.String(http.StatusOK, "Success insert testcode")
+	}
 }
 
+// TODO: description is not used
+// done
 func GetImageTestCodeHandler(c *gin.Context) {
-	var data RequestData
+	var data models.RequestData
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	uuid, _ := uuid.NewUUID()
-	var imageList []string
+	testcode := util.GenerateRandomString(8)
+	description := ""
 	for _, tag := range data.Tags {
-		images, _ := sql.GetImageListFromTag(tag)
-		for _, image := range images {
-			imageList = append(imageList, image)
-		}
+		uuid, _ := uuid.NewUUID()
+		sql.InsertImageTestCode(uuid, tag, testcode, description)
+		c.String(http.StatusOK, "Success insert testcode")
 	}
-	imageList = util.RemoveDuplicates(imageList)
-	num, _ := sql.GetImageTestCodeCount()
+}
 
-	testcode := util.GenerateRandomString(8) + fmt.Sprint(num)
-	sql.InsertImageTestCodeId(uuid, testcode, data.Tags, imageList)
-	c.String(http.StatusOK, "Success insert testcode")
+func GetVideoListFromTestCodeHandler(c *gin.Context) {
+	testCode := c.Query("testcode")
+	videoList, originalVideoNameList, arfectVideosNameList, videoFrameList, err := sql.GetVideoListInfoFromTestCode(testCode)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"video_list":          videoList,
+		"original_video_list": originalVideoNameList,
+		"artifact_video_list": arfectVideosNameList,
+		"video_frame_list":    videoFrameList,
+	})
 }
