@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -57,10 +58,14 @@ func GetUserScoringListHandler(c *gin.Context) {
 	_, _, _, videoIndex, _ := sql.GetVideoListFromTestCode(testCode)
 	fmt.Println("=======================================")
 	fmt.Println(videoIndex)
-	sql.GetCurrentUserScoreList(currentUser, videoIndex)
+	userScoreList := sql.GetCurrentUserScoreList(currentUser, videoIndex)
 	//TODO: videoIndex를 이용해서 userScoringList를 만들어서 보내주기
-	fmt.Println("videoIndex", videoIndex)
-	randVideoIndex := util.ShuffleList(currentUser, videoIndex)
+	fmt.Println("videoIndex", userScoreList)
+	userStringList := make([]string, len(userScoreList))
+	for i, val := range userScoreList {
+		userStringList[i] = strconv.Itoa(val)
+	}
+	randVideoIndex := util.ShuffleList(currentUser, userStringList)
 	c.JSON(http.StatusOK, gin.H{
 		"userScoringList": randVideoIndex,
 	})
