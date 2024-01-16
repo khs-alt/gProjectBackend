@@ -59,8 +59,9 @@ func GetUserScoringListHandler(c *gin.Context) {
 	fmt.Println(videoIndex)
 	sql.GetCurrentUserScoreList(currentUser, videoIndex)
 	//TODO: videoIndex를 이용해서 userScoringList를 만들어서 보내주기
+	randVideoIndex := util.ShuffleList(currentUser, videoIndex)
 	c.JSON(http.StatusOK, gin.H{
-		"userScoringList": videoIndex,
+		"userScoringList": randVideoIndex,
 	})
 }
 
