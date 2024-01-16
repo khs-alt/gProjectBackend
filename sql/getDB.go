@@ -1,9 +1,11 @@
 package sql
 
 import (
+	"backend/util"
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
@@ -69,7 +71,10 @@ func GetCurrentUserScore(userId string, videoTestCode string) (int, int) {
 		if err == sql.ErrNoRows {
 			// 결과가 없을 때 -1 반환
 			fmt.Println("GetCurrentUserScore: no rows in result set")
-			return 1, -1
+			_, _, _, indexList, _ := GetVideoListFromTestCode(videoTestCode)
+			randIndexList := util.ShuffleList(userId, indexList)
+			num, _ := strconv.Atoi(randIndexList[0])
+			return num, -1
 		} else {
 			// 다른 오류가 발생한 경우 로그를 출력
 			log.Println("GetCurrentUserScore: is error: ", err)

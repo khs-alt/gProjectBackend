@@ -41,17 +41,6 @@ func GetImageScoreDataFromUser(c *gin.Context) {
 	})
 }
 
-// func GetScoreDataFromUser(c *gin.Context) {
-// 	var data models.UserInfoData
-// 	if err := c.ShouldBindJSON(&data); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	userScore := sql.GetCurrentUserScore(data.CurrentUser, data.ImageId)
-// 	replyData := fmt.Sprint(userScore)
-// 	c.String(http.StatusOK, replyData)
-// }
-
 func GetUserScoringListHandler(c *gin.Context) {
 	currentUser := c.Query("userID")
 	testCode := c.Query("testcode")
