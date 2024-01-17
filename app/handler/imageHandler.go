@@ -109,10 +109,12 @@ func GetImageNameListHandler(c *gin.Context) {
 	var imageOriginalList1 []string
 	var imageArtifactList1 []string
 	for _, image := range randImageOriginalList {
-		imageOriginalList1 = append(imageOriginalList1, util.RemoveSpecificPart(image))
+		s := util.RemoveSpecificPart(image)
+		imageOriginalList1 = append(imageOriginalList1, s)
 	}
 	for _, image := range randImageArtifactList {
-		imageArtifactList1 = append(imageArtifactList1, util.RemoveSpecificPart(image))
+		s := util.RemoveSpecificPart(image)
+		imageArtifactList1 = append(imageArtifactList1, s)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
