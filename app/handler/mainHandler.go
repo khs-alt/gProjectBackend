@@ -77,20 +77,30 @@ func GetUserCurrentPageInfo(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
-	//videoIndex, userScore := sql.GetCurrentUserScore(data.ID, data.TestCode)
+
 	userScore := sql.GetUserScoreFromVideo(data.ID, data.CurrentPage, data.TestCode)
-	//fmt.Println("videoIndex: ", videoIndex)
+
 	fmt.Println("userScore: ", userScore)
 	fmt.Println("videoList: ", indexList)
 	randIndexList := util.ShuffleList(data.ID, indexList)
 	randOrigianlVideoNameList := util.ShuffleList(data.ID, originalVideoNameList)
 	randArtifactVideoNameList := util.ShuffleList(data.ID, artifactVideoNameList)
+	var originalVideoList []string
+	var artifactVideoList []string
+	for _, originalVideo := range randOrigianlVideoNameList {
+		s := util.RemoveSpecificPart(originalVideo)
+		originalVideoList = append(originalVideoList, s)
+	}
+	for _, artifactVideo := range randArtifactVideoNameList {
+		s := util.RemoveSpecificPart(artifactVideo)
+		artifactVideoList = append(artifactVideoList, s)
+	}
 	randVideoFPSList := util.ShuffleList(data.ID, videoFPSList)
 	c.JSON(http.StatusOK, gin.H{
 		// "currentPage":           videoIndex,
 		"videoList":             randIndexList,
-		"originalVideoNameList": randOrigianlVideoNameList,
-		"artifactVideoNameList": randArtifactVideoNameList,
+		"originalVideoNameList": originalVideoList,
+		"artifactVideoNameList": artifactVideoList,
 		"originalVideoFPSList":  randVideoFPSList,
 		"artifactVideoFPSList":  randVideoFPSList,
 		"userScore":             userScore,

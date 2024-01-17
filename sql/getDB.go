@@ -242,7 +242,10 @@ func GetUserCurrentImagePageAboutTestCode(userId string, testCode string) int {
 	if err == sql.ErrNoRows {
 		// 결과가 없을 때 1 반환
 		log.Println("GetUserCurrentPageAboutTestCode no rows in result set")
-		return 1
+		imageList, _ := GetImageListFromTestCode(testCode)
+		randImageList := util.ShuffleList(userId, imageList)
+		num, _ := strconv.Atoi(randImageList[0])
+		return num
 	} else {
 		// 다른 오류가 발생한 경우 로그를 출력
 		log.Println("GetUserCurrentPageAboutTestCode is error: ", err)

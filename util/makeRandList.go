@@ -7,7 +7,7 @@ func ShuffleList(seedStr string, inputList []string) []string {
 	seedInt := int64(0)
 
 	// 문자열을 int64로 변환
-	for _, char := range seedStr {
+	for _, char := range "OQM0Wzbx" {
 		seedInt += int64(char)
 	}
 

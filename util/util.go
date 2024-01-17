@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -119,4 +120,10 @@ func RemoveDuplicates(elements []string) []string {
 		}
 	}
 	return result
+}
+
+func RemoveSpecificPart(input string) string {
+	// 정규 표현식을 사용하여 _ 다음에 오는 소수점 숫자와 .mp4를 찾아 제거
+	re := regexp.MustCompile(`_\d+\.\d+\.mp4$`)
+	return re.ReplaceAllString(input, "")
 }

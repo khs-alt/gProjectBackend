@@ -27,8 +27,12 @@ func InitLogFile() {
 func main() {
 
 	InitLogFile()
+	//Set release mode
+	gin.SetMode(gin.ReleaseMode)
+
 	router := gin.Default()
 	router.Use(cors.Default())
 	app.Routes((router))
 	router.Run(":8000")
+
 }
