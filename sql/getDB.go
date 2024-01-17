@@ -224,13 +224,13 @@ func GetUserCurrentImagePageAboutTestCode(userId string, testCode string) int {
 				SELECT 
 					uti.last_page
 				FROM 
-					user_testcode_info uti
+					user_testcode_info AS uti
 				JOIN 
-					user u ON u.uuid = uti.user_uuid 
+					user AS u ON u.uuid = uti.user_uuid 
 				WHERE 
 					u.user_name = ? AND uti.test_code = ? AND uti.is_video = 0
 				ORDER BY 
-					time DESC 
+					uti.time DESC 
 				LIMIT 1
 	`
 	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&maxCurrentPage)
