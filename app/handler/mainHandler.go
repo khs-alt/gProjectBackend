@@ -3,6 +3,7 @@ package handler
 import (
 	"backend/sql"
 	"backend/util"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -28,6 +29,8 @@ func GetUserCurrentImagePage(c *gin.Context) {
 
 	currentPage := sql.GetUserCurrentImagePageAboutTestCode(id, testCode)
 	imageList, _ := sql.GetImageListFromTestCode(testCode) // you have to control error
+
+	fmt.Println("GetUserCurrentImagePage, currentPage", currentPage)
 
 	c.JSON(http.StatusOK, gin.H{
 		"current_page": currentPage,
