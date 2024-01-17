@@ -109,11 +109,11 @@ func GetImageNameListHandler(c *gin.Context) {
 	var imageOriginalList1 []string
 	var imageArtifactList1 []string
 	for _, image := range randImageOriginalList {
-		s := util.RemoveSpecificPart(image)
+		s := util.RemovePNGPart(image)
 		imageOriginalList1 = append(imageOriginalList1, s)
 	}
 	for _, image := range randImageArtifactList {
-		s := util.RemoveSpecificPart(image)
+		s := util.RemovePNGPart(image)
 		imageArtifactList1 = append(imageArtifactList1, s)
 	}
 

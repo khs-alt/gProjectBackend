@@ -128,3 +128,9 @@ func RemoveSpecificPart(input string) string {
 	re := regexp.MustCompile(`_\d+\.\d+\.mp4$`)
 	return re.ReplaceAllString(input, "")
 }
+
+func RemovePNGPart(input string) string {
+	// 정규 표현식을 사용하여 _ 다음에 오는 소수점 숫자와 .mp4를 찾아 제거
+	re := regexp.MustCompile(`_\d+\.\d+\.png$`)
+	return re.ReplaceAllString(input, "")
+}
