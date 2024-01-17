@@ -1,7 +1,7 @@
 package sql
 
 import (
-	"fmt"
+	"log"
 )
 
 func DeleteTagData(tag string) error {
@@ -10,10 +10,9 @@ func DeleteTagData(tag string) error {
 	insertQuery := "DELETE FROM video_tag WHERE video_tag = ?"
 	_, err := app.DB.Exec(insertQuery, tag)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
-	fmt.Println("Delet Success")
 	return nil
 
 }
@@ -24,10 +23,9 @@ func DeleteImageTagData(tag string) error {
 	insertQuery := "DELETE FROM image_tag WHERE image_tag = ?"
 	_, err := app.DB.Exec(insertQuery, tag)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
-	fmt.Println("Delet Success")
 	return nil
 
 }

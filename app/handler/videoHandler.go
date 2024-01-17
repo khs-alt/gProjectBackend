@@ -5,6 +5,7 @@ import (
 	"backend/sql"
 	"backend/util"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"sort"
@@ -102,16 +103,16 @@ func UploadVideoHandler(c *gin.Context) {
 		}
 		width, height, err := util.GetFileDimensions("./originalVideos/" + oriVideos[i] + originalVideosFileForm[i])
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		err = sql.InsertVideo(uuid, originalVideosName[i], artifactVideosName[i], diffVideosName[i], originaVideoFPS, width, height)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		for _, tag := range tags {
 			err = sql.InsertVideoTagLink(uuid, tag)
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 			}
 		}
 
@@ -128,11 +129,10 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	videoIndex := strconv.Itoa(data.VideoIndex)
 	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	videoCurrentTime := data.VideoCurrentTime
-	fmt.Println("videoCurrentTime: " + videoCurrentTime)
 	outputImage := fmt.Sprintf("./selectedFrame/selectedFrame%s_%s.png", videoIndex, videoCurrentTime)
 	err := util.ExtractFrame(videoFilePath, videoCurrentTime, outputImage)
 	if err != nil {
-		fmt.Println("error: ", err)
+		log.Println("error: ", err)
 		return
 	}
 

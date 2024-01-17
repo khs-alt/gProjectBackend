@@ -1,7 +1,7 @@
 package util
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/google/uuid"
 )
@@ -9,7 +9,7 @@ import (
 func MakeUUID() uuid.UUID {
 	uuid, err := uuid.NewUUID()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	return uuid
 }

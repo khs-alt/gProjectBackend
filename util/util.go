@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"regexp"
 	"sort"
@@ -33,7 +34,7 @@ func MakeNumber(s []string) []int {
 		num := strings.TrimLeft(video, "originalVideo")
 		n, err := strconv.Atoi(num)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		newArray = append(newArray, n)
 	}
@@ -51,7 +52,7 @@ func MakeCSVtoIntList(s string) []int {
 		// 문자열을 정수로 변환
 		num, err := strconv.Atoi(str)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		// 정수 슬라이스에 추가
 		intList = append(intList, num)

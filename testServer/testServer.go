@@ -30,5 +30,4 @@ func main() {
 
 	wg.Wait()
 	slices.Sort(result)
-	fmt.Println(result)
 }

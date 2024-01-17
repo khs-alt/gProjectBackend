@@ -101,14 +101,10 @@ func GetImageNameListHandler(c *gin.Context) {
 	// }
 
 	imageOriginalList, imageArtifactList := sql.GetImageNameListFromVideoList(imageList)
-	fmt.Println("imageOriginalList: ", imageOriginalList)
-	fmt.Println("imageArtifactList: ", imageArtifactList)
 
 	randImageList := util.ShuffleList(userID, imageList)
 	randImageOriginalList := util.ShuffleList(userID, imageOriginalList)
 	randImageArtifactList := util.ShuffleList(userID, imageArtifactList)
-
-	fmt.Println("randImageList: ", randImageList)
 
 	c.JSON(http.StatusOK, gin.H{
 		"image_list":    randImageList,

@@ -21,7 +21,7 @@ func UploadImage(c *gin.Context, images []*multipart.FileHeader, imageType strin
 		count, err := CountFile(ImagePath)
 		if err != nil {
 			fmt.Print("CountFile error : ")
-			fmt.Println(err)
+			log.Println(err)
 		}
 		ImageName := imageType + "Image" + fmt.Sprint(count+1)
 		Images = append(Images, ImageName)

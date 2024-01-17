@@ -21,7 +21,7 @@ func UploadVideo(c *gin.Context, videos []*multipart.FileHeader, videoType strin
 		count, err := CountFile(VideoPath)
 		if err != nil {
 			fmt.Print("CountFile error : ")
-			fmt.Println(err)
+			log.Println(err)
 		}
 		VideoName := videoType + "Video" + fmt.Sprint(count+1)
 		Videos = append(Videos, VideoName)

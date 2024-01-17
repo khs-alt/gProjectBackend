@@ -3,7 +3,6 @@ package handler
 import (
 	"backend/sql"
 	"backend/util"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -68,7 +67,7 @@ func GetUserCurrentPageInfo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println("data: ", data)
+
 	var originalVideoNameList []string
 	var artifactVideoNameList []string
 	var videoFPSList []string
@@ -80,8 +79,6 @@ func GetUserCurrentPageInfo(c *gin.Context) {
 
 	userScore := sql.GetUserScoreFromVideo(data.ID, data.CurrentPage, data.TestCode)
 
-	fmt.Println("userScore: ", userScore)
-	fmt.Println("videoList: ", indexList)
 	randIndexList := util.ShuffleList(data.ID, indexList)
 	randOrigianlVideoNameList := util.ShuffleList(data.ID, originalVideoNameList)
 	randArtifactVideoNameList := util.ShuffleList(data.ID, artifactVideoNameList)

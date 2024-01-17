@@ -17,7 +17,7 @@ func InsertVideoTestCode(uuid uuid.UUID, videoTag string, videoTestCode string, 
 	insertQuery := "INSERT INTO video_testcode (uuid, video_tag, video_testcode, description) VALUES (UUID_TO_BIN(?),?,?,?)"
 	_, err := app.DB.Exec(insertQuery, uuid, videoTag, videoTestCode, description)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -48,7 +48,7 @@ func InsertVideo(uuid uuid.UUID, originalVideoName string, artifactVideoName str
 		log.Println(err)
 		return err
 	}
-	fmt.Println("Video Id insert")
+
 	return nil
 }
 
@@ -59,10 +59,10 @@ func InsertImage(uuid uuid.UUID, originalImageName string, artifactImageName str
 	insertQuery := "INSERT INTO image (uuid, original_image_name, artifact_image_name, diff_image_name, width, height) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)"
 	_, err := app.DB.Exec(insertQuery, uuid, originalImageName, artifactImageName, diffImageName, width, height)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
-	fmt.Println("Image Id insert")
+
 	return nil
 }
 
@@ -78,7 +78,7 @@ func IsUserIdExist(id string, password string) bool {
 
 	query := "SELECT user_name, user_password FROM user WHERE user_name = ? AND user_password = ?"
 	err := app.DB.QueryRow(query, id, password).Scan(&resultID, &resultPassword)
-	fmt.Println(err)
+	log.Println(err)
 	if err == sql.ErrNoRows {
 		return false
 	} else if err != nil {
@@ -132,7 +132,6 @@ func InsertUserTestInfo(newUUID uuid.UUID, userId string, testCode string, lastP
 		return
 	}
 
-	fmt.Println("Insert user test info")
 }
 
 // done
@@ -222,9 +221,9 @@ func InsertVideoTag(uuid uuid.UUID, tag string) {
 	insertQuery := "INSERT INTO video_tag (uuid, tag) VALUES (UUID_TO_BIN(?),?)"
 	_, err := app.DB.Exec(insertQuery, uuid, tag)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	} else {
-		fmt.Println("INSERT tag SUCCESS")
+
 	}
 }
 
@@ -235,9 +234,9 @@ func InsertImageTag(uuid uuid.UUID, tag string) {
 	insertQuery := "INSERT INTO image_tag (uuid, tag) VALUES (UUID_TO_BIN(?),?)"
 	_, err := app.DB.Exec(insertQuery, uuid, tag)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	} else {
-		fmt.Println("INSERT tag SUCCESS")
+
 	}
 }
 
@@ -247,17 +246,17 @@ func InsertVideoTagLink(videoUUID uuid.UUID, tag string) error {
 	var tagUUID uuid.UUID
 	err := app.DB.QueryRow(insertQuery, tag).Scan(&tagUUID)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
 
 	insertQuery = "INSERT INTO video_tag_link (video_uuid, tag_uuid) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))"
 	_, err = app.DB.Exec(insertQuery, videoUUID, tagUUID)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	} else {
-		fmt.Println("INSERT video tag link SUCCESS")
+
 		return nil
 	}
 }
@@ -268,17 +267,17 @@ func InsertImageTagLink(imageUUID uuid.UUID, tag string) error {
 	var tagUUID uuid.UUID
 	err := app.DB.QueryRow(insertQuery, tag).Scan(&tagUUID)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
 
 	insertQuery = "INSERT INTO image_tag_link (image_uuid, tag_uuid) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))"
 	_, err = app.DB.Exec(insertQuery, imageUUID, tagUUID)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	} else {
-		fmt.Println("INSERT image tag link SUCCESS")
+
 		return nil
 	}
 }

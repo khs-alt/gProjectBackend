@@ -4,7 +4,6 @@ import (
 	"backend/app/models"
 	"backend/sql"
 	"backend/util"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -45,11 +44,10 @@ func GetUserScoringListHandler(c *gin.Context) {
 	currentUser := c.Query("userID")
 	testCode := c.Query("testcode")
 	_, _, _, videoIndex, _ := sql.GetVideoListFromTestCode(testCode)
-	fmt.Println("=======================================")
-	fmt.Println(videoIndex)
+
 	userScoreList := sql.GetCurrentUserScoreList(currentUser, videoIndex)
 	//TODO: videoIndex를 이용해서 userScoringList를 만들어서 보내주기
-	fmt.Println("videoIndex", userScoreList)
+
 	userStringList := make([]string, len(userScoreList))
 	for i, val := range userScoreList {
 		userStringList[i] = strconv.Itoa(val)
@@ -63,7 +61,7 @@ func GetUserScoringListHandler(c *gin.Context) {
 func GetImageScoreData(c *gin.Context) {
 	var data models.UserImageScoreData
 	if err := c.ShouldBindJSON(&data); err != nil {
-		fmt.Println("GetImageScoreData error ", err)
+		log.Println("GetImageScoreData error ", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

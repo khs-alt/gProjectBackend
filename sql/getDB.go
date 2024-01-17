@@ -33,7 +33,6 @@ func GetUserScoreFromVideo(userId string, videoIndex string, videoTestcode strin
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// 결과가 없을 때 -1 반환
-			fmt.Println("GetUserScoreFromVideo no rows in result set")
 			return -1
 		} else {
 			// 다른 오류가 발생한 경우 로그를 출력
@@ -70,7 +69,6 @@ func GetCurrentUserScore(userId string, videoTestCode string) (int, int) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// 결과가 없을 때 -1 반환
-			fmt.Println("GetCurrentUserScore: no rows in result set")
 			_, _, _, indexList, _ := GetVideoListFromTestCode(videoTestCode)
 			randIndexList := util.ShuffleList(userId, indexList)
 			num, _ := strconv.Atoi(randIndexList[0])
@@ -141,7 +139,6 @@ func GetCurrentUserScoreList(userId string, videoIndexList []string) []int {
 		if err != nil {
 			if err == sql.ErrNoRows {
 				// 결과가 없을 때 -1 반환
-				fmt.Println("no rows in result set")
 				scoreList = append(scoreList, -1)
 				continue
 			} else {
@@ -181,7 +178,7 @@ func GetCurrentUserImageScore(userId string, imageId int) string {
 			return "-1"
 		} else {
 			// 다른 오류가 발생한 경우 로그를 출력
-			fmt.Println("GetCurrentUserImageScore error: ", err)
+			log.Println("GetCurrentUserImageScore error: ", err)
 		}
 	}
 	return score
@@ -190,9 +187,7 @@ func GetCurrentUserImageScore(userId string, imageId int) string {
 func GetVideoAverageScore(video string) int {
 	app := SetDB()
 	n := len(video)
-	fmt.Println(video)
 	videoId := string(video[n-1])
-	fmt.Println(videoId)
 	insertQuery := "SELECT user_score FROM video_scoring WHERE video_id = ?"
 	rows, err := app.DB.Query(insertQuery, videoId)
 	if err != nil {
@@ -215,7 +210,7 @@ func GetVideoAverageScore(video string) int {
 	for _, score := range scoreList {
 		sum += score
 	}
-	fmt.Println("====================")
+
 	averageScore := sum / len(scoreList)
 	return averageScore
 }
@@ -261,7 +256,7 @@ func GetUserCurrentImagePageAboutTestCode(userId string, testCode string) int {
 // 	insertQuery := "SELECT current_page FROM user_testcode_info WHERE user_id = ? AND test_code = ? ORDER BY time DESC LIMIT 1"
 // 	err := app.DB.QueryRow(insertQuery, userId, testCode).Scan(&currentPage)
 // 	if err != nil {
-// 		fmt.Println(err)
+// 		log.Println(err)
 // 	}
 // 	return currentPage
 // }
@@ -274,7 +269,7 @@ func GetFPSFromVideo(videoId string) (float32, float32) {
 	var artifactVideoFPS float32
 	err := app.DB.QueryRow(query, videoId).Scan(&originalVideoFPS, &artifactVideoFPS)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	return originalVideoFPS, artifactVideoFPS
 }
@@ -393,7 +388,7 @@ func GetVideoNameListFromVideoList(videoList []string) ([]string, []string) {
 		var artifactVideoName string
 		err := app.DB.QueryRow(query, videoNum).Scan(&originalVideoName, &artifactVideoName)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		originalVideoNameList = append(originalVideoNameList, originalVideoName)
 		artifactVideoNameList = append(artifactVideoNameList, artifactVideoName)
@@ -412,7 +407,7 @@ func GetImageNameListFromVideoList(videoList []string) ([]string, []string) {
 		var artifactImageName string
 		err := app.DB.QueryRow(query, videoNum).Scan(&originalImageName, &artifactImageName)
 		if err != nil {
-			fmt.Println("GetImageNameListFromVideoList ", err)
+			log.Println("GetImageNameListFromVideoList ", err)
 		}
 		originalImageNameList = append(originalImageNameList, originalImageName)
 		artifactimageNameList = append(artifactimageNameList, artifactImageName)
@@ -678,7 +673,7 @@ func GetVideoListFromTag(tags []string) ([]string, error) {
 	app := SetDB()
 
 	new_tags := `"` + strings.Join(tags, `","`) + `"`
-	fmt.Println(new_tags)
+
 	// Query to fetch data from the table
 	query := fmt.Sprintf(`
 			SELECT DISTINCT
@@ -723,7 +718,7 @@ func GetImageListFromTag(tags []string) ([]string, error) {
 
 	// Query to fetch data from the table
 	new_tags := `"` + strings.Join(tags, `","`) + `"`
-	fmt.Println(new_tags)
+
 	// Query to fetch data from the table
 	query := fmt.Sprintf(`
 			SELECT DISTINCT

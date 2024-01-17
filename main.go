@@ -16,7 +16,8 @@ func InitLogFile() {
 		panic(err)
 	}
 
-	multiWriter := io.MultiWriter(logFile, os.Stdout)
+	//multiWriter := io.MultiWriter(logFile, os.Stdout)
+	multiWriter := io.MultiWriter(logFile)
 	log.SetOutput(multiWriter)
 
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
