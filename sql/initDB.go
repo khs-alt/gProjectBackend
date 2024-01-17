@@ -60,8 +60,7 @@ func DeleteImageDBTablbe() {
 		"image_tag",
 		"image_testcode",
 		"image",
-		"image_patch",
-		"user_image_testcode_info",
+		"image_tag_link",
 	}
 	for _, table := range tables {
 		dropTableSQL := "DROP TABLE IF EXISTS " + table
@@ -129,7 +128,6 @@ func CreateDBTable() {
         )`,
 		`CREATE TABLE image (
             uuid binary(16) UNIQUE NOT NULL,
-            image_name varchar(255),
             original_image_name varchar(255),
             artifact_image_name varchar(255),
 			diff_image_name varchar(255),
@@ -217,39 +215,37 @@ func CreateImageDBTalbe() {
 	app := SetDB()
 
 	createTables := []string{
-		`CREATE TABLE image_scoring (
-            uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
-            image_id INT NOT NULL,
-            patch_score VARCHAR(100) NOT NULL,
-            time DATETIME NOT NULL
-        )`,
 		`CREATE TABLE image_tag (
-            uuid BINARY(16) PRIMARY KEY,
-            tag VARCHAR(255) NOT NULL
-        )`,
-		`CREATE TABLE image_testcode (
-            uuid BINARY(16) PRIMARY KEY,
-            test_code VARCHAR(255) NOT NULL,
-			tags VARCHAR(1000) NOT NULL,
-            image_list VARCHAR(40000) NOT NULL
-        )`,
-		`CREATE TABLE user_image_testcode_info (
-            uuid BINARY(16) PRIMARY KEY,
-            user_id VARCHAR(10) NOT NULL,
-            test_code VARCHAR(255) NOT NULL,
-            current_page INT NOT NULL,
-			time DATETIME NOT NULL
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            tag varchar(255) NOT NULL
         )`,
 		`CREATE TABLE image (
-            uuid BINARY(16) PRIMARY KEY,
-            original_image_name VARCHAR(255) NOT NULL,
-			original_image VARCHAR(255) NOT NULL,
-            artifact_image_name VARCHAR(255) NOT NULL,
-			artifact_image VARCHAR(255) NOT NULL,
-			diff_image_name VARCHAR(255) NOT NULL,
-			diff_image VARCHAR(255) NOT NULL,
-            tag VARCHAR(255) NOT NULL
+            uuid binary(16) UNIQUE NOT NULL,
+            original_image_name varchar(255),
+            artifact_image_name varchar(255),
+			diff_image_name varchar(255),
+			image_index INT AUTO_INCREMENT PRIMARY KEY,
+            width int,
+            height int
+        )`,
+		`CREATE TABLE image_scoring (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            user_uuid binary(16),
+            image_uuid binary(16),
+            patch_score varchar(1000) NOT NULL,
+            image_testcode varchar(255) NOT NULL,
+            time datetime
+        )`,
+		`CREATE TABLE image_testcode (
+            uuid binary(16) PRIMARY KEY NOT NULL,
+            image_tag varchar(255) NOT NULL,
+            image_testcode varchar(255) NOT NULL,
+            description varchar(1000)
+        )`,
+		`CREATE TABLE image_tag_link (
+            image_uuid binary(16) NOT NULL,
+            tag_uuid binary(16) NOT NULL,
+            PRIMARY KEY (image_uuid, tag_uuid)
         )`,
 	}
 	for _, createTableSQL := range createTables {

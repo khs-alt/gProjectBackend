@@ -27,3 +27,11 @@ func TestGetUserScoreList(t *testing.T) {
 	fmt.Println(a)
 	fmt.Println(b)
 }
+
+func TestDeletImageDB(t *testing.T) {
+	sql.DeleteImageDBTablbe()
+	sql.CreateImageDBTalbe()
+	util.DeleteAllFilesInFolder("originalImages")
+	util.DeleteAllFilesInFolder("artifactImages")
+	util.DeleteAllFilesInFolder("diffImages")
+}
