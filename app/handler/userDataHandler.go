@@ -155,6 +155,35 @@ func RequestLoginHandler(c *gin.Context) {
 	})
 }
 
+func GetUserLabelingListHandler(c *gin.Context) {
+	var data models.UserLabelingListData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		return
+	}
+	imageList, err := sql.GetImageListFromTestCode(data.TestCode)
+	if err != nil {
+		log.Println("GetImageListFromTestCode error: ", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+	}
+
+	randImageList := util.ShuffleList(data.UserID, imageList)
+	var intRandImageList []int
+	for _, imageIndex := range randImageList {
+		intImageIndex, _ := strconv.Atoi(imageIndex)
+		intRandImageList = append(intRandImageList, intImageIndex)
+	}
+	userLabelingList := sql.GetUserLabelingList(data.UserID, intRandImageList)
+	userLabelingIntList, err := util.ConvertTo2DIntSlice(userLabelingList)
+	if err != nil {
+		log.Println("ConvertTo2DIntSlice error: ", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"userLabelingList": userLabelingIntList,
+	})
+}
+
 // func GetUserScoringListHandler(c *gin.Context) {
 // 	var data models.UserScoringListData
 // 	if err := c.ShouldBindJSON(&data); err != nil {

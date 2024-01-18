@@ -800,3 +800,52 @@ func GetUserScoringList(user string, testCode string) []int {
 	}
 	return userScoringList
 }
+
+func GetUserLabelingList(user string, imageList []int) []string {
+	app := SetDB()
+	var userUUID uuid.UUID
+	getUserUUIDquery := `
+			SELECT
+				BIN_TO_UUID(user.uuid)
+			FROM
+				user
+			WHERE 
+				user_name = ?
+	`
+	err := app.DB.QueryRow(getUserUUIDquery, user).Scan(&userUUID)
+	if err != nil {
+		log.Println(err)
+	}
+
+	query := `
+			SELECT
+				IFNULL(ims.patch_score, -1) AS patch_score
+			FROM
+				image_scoring AS ims
+			JOIN
+				image AS i ON i.uuid = ims.image_uuid
+			WHERE 
+				i.image_index = ? AND BIN_TO_UUID(ims.user_uuid) = ?
+			ORDER BY 
+				ims.time DESC
+			LIMIT 1
+	`
+
+	var userLabelingList []string
+	for _, image := range imageList {
+		var labeling string
+		err := app.DB.QueryRow(query, image, userUUID).Scan(&labeling)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				// 결과가 없을 때 -1 반환
+				userLabelingList = append(userLabelingList, "-1")
+				continue
+			} else {
+				log.Println(err)
+			}
+		}
+		userLabelingList = append(userLabelingList, labeling)
+	}
+
+	return userLabelingList
+}

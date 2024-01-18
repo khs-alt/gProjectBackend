@@ -61,6 +61,8 @@ func Routes(r *gin.Engine) {
 		api.GET("/getImageListFromTag", handler.GetImageListFromTagHandler)
 
 		api.GET("/getuserScoringList", handler.GetUserScoringListHandler)
+		api.POST("getUserLabelingList", handler.GetUserLabelingListHandler)
+
 		api.POST("/getUserImageScore", handler.GetImageScoreDataFromUser)
 
 		api.POST("/imageNameList", handler.GetImageNameListHandler)

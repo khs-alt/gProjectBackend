@@ -35,3 +35,9 @@ func TestDeletImageDB(t *testing.T) {
 	util.DeleteAllFilesInFolder("artifactImages")
 	util.DeleteAllFilesInFolder("diffImages")
 }
+
+func TestGetLabelingList(t *testing.T) {
+	labelingList := sql.GetUserLabelingList("kim", []int{1, 2, 3, 4, 5})
+	a, _ := util.ConvertTo2DIntSlice(labelingList)
+	fmt.Print(a)
+}

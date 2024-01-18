@@ -133,3 +133,27 @@ func RemovePNGPart(input string) string {
 	re := regexp.MustCompile(`_[0-9]+\.[0-9]+_[0-9]+\.png$`)
 	return re.ReplaceAllString(input, "")
 }
+
+func ConvertTo2DIntSlice(input []string) ([][]int, error) {
+	var result [][]int
+
+	for _, str := range input {
+		// 문자열을 쉼표로 분리
+		splitStr := strings.Split(str, ",")
+
+		var intSlice []int
+		for _, s := range splitStr {
+			// 각 문자열을 정수로 변환
+			num, err := strconv.Atoi(s)
+			if err != nil {
+				// 변환 중 오류 발생 시 에러 반환
+				return nil, err
+			}
+			intSlice = append(intSlice, num)
+		}
+
+		result = append(result, intSlice)
+	}
+
+	return result, nil
+}

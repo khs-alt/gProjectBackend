@@ -98,3 +98,8 @@ type UserScoringListData struct {
 	CurrentUser string `json:"userID"`
 	TestCode    string `json:"Testcode"`
 }
+
+type UserLabelingListData struct {
+	UserID   string `json:"user_id"`
+	TestCode string `json:"testcode"`
+}
