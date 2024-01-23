@@ -241,7 +241,8 @@ func GetUserCurrentImagePageAboutTestCode(userId string, testCode string) int {
 		randImageList := util.ShuffleList(userId, imageList)
 		num, _ := strconv.Atoi(randImageList[0])
 		return num
-	} else {
+	}
+	if err == sql.ErrNoRows && err != nil {
 		// 다른 오류가 발생한 경우 로그를 출력
 		log.Println("GetUserCurrentPageAboutTestCode is error: ", err)
 	}

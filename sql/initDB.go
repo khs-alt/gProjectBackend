@@ -158,7 +158,7 @@ func CreateDBTable() {
             uuid binary(16) PRIMARY KEY NOT NULL,
             user_uuid binary(16) NOT NULL,
             video_uuid binary(16) NOT NULL,
-            user_score VARCHAR(1000) NOT NULL,
+            user_score INT NOT NULL,
             video_testcode varchar(255) NOT NULL,
             time datetime
 			unique key user_video_testcode_unique(user_uuid, video_uuid, video_testcode)
@@ -167,7 +167,7 @@ func CreateDBTable() {
             uuid binary(16) PRIMARY KEY NOT NULL,
             user_uuid binary(16),
             image_uuid binary(16),
-            patch_score varchar(1000) NOT NULL,
+            patch_score varchar(2000) NOT NULL,
             image_testcode varchar(255) NOT NULL,
             time datetime
 			unique key user_image_testcode_unique(user_uuid, image_uuid, image_testcode)
