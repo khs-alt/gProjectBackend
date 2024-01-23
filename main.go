@@ -29,7 +29,7 @@ func main() {
 
 	InitLogFile()
 	//Set release mode
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 	router.Use(cors.Default())
