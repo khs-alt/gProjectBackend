@@ -41,3 +41,16 @@ func TestGetLabelingList(t *testing.T) {
 	a, _ := util.ConvertTo2DIntSlice(labelingList)
 	fmt.Print(a)
 }
+
+func TestInsertVideoScoring(t *testing.T) {
+	sql.InsertUserVideoScoringInfo("kim", 1, "KC0rtr1o", 1)
+	sql.InsertUserVideoScoringInfo("kim", 2, "KC0rtr1o", 4)
+	sql.InsertUserVideoScoringInfo("kim", 2, "KC0rtr1o", 3)
+	sql.InsertUserVideoScoringInfo("kim", 2, "KC0rtr1o", 5)
+}
+
+func TestInsertImageScoring(t *testing.T) {
+	sql.InsertUserImageScoringInfo("kim", 1, "KC0rtr1o", "0,0,0,0,0,0,0,0,0,0,1,0,1")
+	sql.InsertUserImageScoringInfo("kim", 2, "KC0rtr1o", "0,0,0,0,0,0,0,1,1,1,1,1,1")
+	sql.InsertUserImageScoringInfo("kim", 2, "KC0rtr1o", "0,0,0,0,0,0,0,2,2,2,2,2,2")
+}

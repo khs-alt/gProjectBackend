@@ -25,8 +25,8 @@ func GetAppInstance() *App {
 
 func (app *App) InitDB() {
 	app.once.Do(func() {
-		dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
-		//dsn := "root:1234@/google_project"
+		//dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
+		dsn := "root:1234@/google_project"
 		db, err := sql.Open("mysql", dsn)
 		if err != nil {
 			log.Println(err)
@@ -161,6 +161,7 @@ func CreateDBTable() {
             user_score VARCHAR(1000) NOT NULL,
             video_testcode varchar(255) NOT NULL,
             time datetime
+			unique key user_video_testcode_unique(user_uuid, video_uuid, video_testcode)
         )`,
 		`CREATE TABLE image_scoring (
             uuid binary(16) PRIMARY KEY NOT NULL,
@@ -169,6 +170,7 @@ func CreateDBTable() {
             patch_score varchar(1000) NOT NULL,
             image_testcode varchar(255) NOT NULL,
             time datetime
+			unique key user_image_testcode_unique(user_uuid, image_uuid, image_testcode)
         )`,
 		`CREATE TABLE image_testcode (
             uuid binary(16) PRIMARY KEY NOT NULL,

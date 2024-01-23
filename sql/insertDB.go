@@ -164,10 +164,12 @@ func InsertUserImageScoringInfo(userId string, imageID int, imageTestcode string
 	// image_scoring에 데이터를 삽입합니다.
 	insertQuery := `
     INSERT INTO image_scoring (uuid, user_uuid, image_uuid, patch_score, image_testcode, time)
-    VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, NOW())`
+    VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, NOW())
+	ON DUPLICATE KEY UPDATE
+	patch_score = ?`
 
 	scoringUUID := uuid.New() // 새로운 UUID 생성
-	_, err = app.DB.Exec(insertQuery, scoringUUID, userUUID, imageUUID, patchScore, imageTestcode)
+	_, err = app.DB.Exec(insertQuery, scoringUUID, userUUID, imageUUID, patchScore, imageTestcode, patchScore)
 	if err != nil {
 		log.Printf("Error inserting into image_scoring: %v\n", err)
 		return
@@ -203,10 +205,12 @@ func InsertUserVideoScoringInfo(userId string, videoID int, testCode string, sco
 	// video_scoring에 데이터를 삽입합니다.
 	insertQuery := `
     INSERT INTO video_scoring (uuid, user_uuid, video_uuid, user_score, video_testcode, time)
-    VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, NOW())`
+    VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, NOW())
+	ON DUPLICATE KEY UPDATE
+	user_score = ?`
 
 	scoringUUID := uuid.New() // 새로운 UUID 생성
-	_, err = app.DB.Exec(insertQuery, scoringUUID, userUUID, videoUUID, score, testCode)
+	_, err = app.DB.Exec(insertQuery, scoringUUID, userUUID, videoUUID, score, testCode, score)
 	if err != nil {
 		log.Printf("Error inserting into video_scoring: %v\n", err)
 		return
