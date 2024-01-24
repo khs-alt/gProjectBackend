@@ -4,7 +4,6 @@ import (
 	"backend/app/models"
 	"backend/sql"
 	"backend/util"
-	"log"
 	"net/http"
 	"sort"
 
@@ -103,14 +102,14 @@ func GetImageTestCodeHandler(c *gin.Context) {
 
 func GetVideoListFromTestCodeHandler(c *gin.Context) {
 	testCode := c.Query("testcode")
-	isVideoTestcodeExist, err := sql.GetVideoTestcodeExist(testCode)
-	if err != nil {
-		log.Println("GetVideoTestcodeExist error")
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-	}
-	if !isVideoTestcodeExist {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Wrong Testcode"})
-	}
+	// isVideoTestcodeExist, err := sql.GetVideoTestcodeExist(testCode)
+	// if err != nil {
+	// 	log.Println("GetVideoTestcodeExist error")
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+	// }
+	// if !isVideoTestcodeExist {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Wrong Testcode"})
+	// }
 	originalVideoNameList, arfectVideosNameList, videoFrameList, videoList, err := sql.GetVideoListFromTestCode(testCode)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
