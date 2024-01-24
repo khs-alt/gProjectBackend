@@ -105,11 +105,13 @@ func GetVideoListFromTestCodeHandler(c *gin.Context) {
 	testCode := c.Query("testcode")
 	isVideoTestcodeExist, err := sql.GetVideoTestcodeExist(testCode)
 	if err != nil {
-		log.Println("GetVideoTestcodeExist error")
+		log.Println("GetVideoTestcodeExist error : ", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
 	}
 	if !isVideoTestcodeExist {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Wrong Testcode"})
+		return
 	}
 	originalVideoNameList, arfectVideosNameList, videoFrameList, videoList, err := sql.GetVideoListFromTestCode(testCode)
 	if err != nil {
