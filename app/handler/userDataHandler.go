@@ -174,13 +174,13 @@ func GetUserLabelingListHandler(c *gin.Context) {
 		intRandImageList = append(intRandImageList, intImageIndex)
 	}
 	userLabelingList := sql.GetUserLabelingList(data.UserID, intRandImageList)
-	userLabelingIntList, err := util.ConvertTo2DIntSlice(userLabelingList)
+	//userLabelingIntList, err := util.ConvertTo2DIntSlice(userLabelingList)
 	if err != nil {
 		log.Println("ConvertTo2DIntSlice error: ", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"userLabelingList": userLabelingIntList,
+		"userLabelingList": userLabelingList,
 	})
 }
 

@@ -436,6 +436,7 @@ func GetVideoListInfoFromTestCode(testCode string) ([]string, []string, []string
 }
 
 // done
+// return original_video_name, artifact_video_name, video_frame, video_index
 func GetVideoListFromTestCode(testCode string) ([]string, []string, []string, []string, error) {
 	app := SetDB()
 
@@ -802,7 +803,7 @@ func GetUserScoringList(user string, testCode string) []int {
 	return userScoringList
 }
 
-func GetUserLabelingList(user string, imageList []int) []string {
+func GetUserLabelingList(user string, imageList []int) []bool {
 	app := SetDB()
 	var userUUID uuid.UUID
 	getUserUUIDquery := `
@@ -832,20 +833,20 @@ func GetUserLabelingList(user string, imageList []int) []string {
 			LIMIT 1
 	`
 
-	var userLabelingList []string
+	var userLabelingList []bool
 	for _, image := range imageList {
 		var labeling string
 		err := app.DB.QueryRow(query, image, userUUID).Scan(&labeling)
 		if err != nil {
 			if err == sql.ErrNoRows {
 				// 결과가 없을 때 -1 반환
-				userLabelingList = append(userLabelingList, "-1")
+				userLabelingList = append(userLabelingList, false)
 				continue
 			} else {
 				log.Println(err)
 			}
 		}
-		userLabelingList = append(userLabelingList, labeling)
+		userLabelingList = append(userLabelingList, true)
 	}
 
 	return userLabelingList

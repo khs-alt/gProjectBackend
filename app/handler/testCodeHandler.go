@@ -102,7 +102,7 @@ func GetImageTestCodeHandler(c *gin.Context) {
 
 func GetVideoListFromTestCodeHandler(c *gin.Context) {
 	testCode := c.Query("testcode")
-	videoList, originalVideoNameList, arfectVideosNameList, videoFrameList, err := sql.GetVideoListInfoFromTestCode(testCode)
+	originalVideoNameList, arfectVideosNameList, videoFrameList, videoList, err := sql.GetVideoListFromTestCode(testCode)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

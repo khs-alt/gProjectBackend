@@ -40,6 +40,7 @@ func Routes(r *gin.Engine) {
 		api.POST("/exportVideo", handler.ExportVideoDataHandler)
 		api.POST("/exportImage", handler.ExportImageDataHandler)
 
+		// select frame
 		api.POST("admin/postVideoFrameTime", handler.PostVideoFrameTimeHandler)
 
 		// GET routes

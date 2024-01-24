@@ -115,7 +115,6 @@ func UploadVideoHandler(c *gin.Context) {
 				log.Println(err)
 			}
 		}
-
 	}
 	c.String(http.StatusOK, "비디오가 성공적으로 업로드되었습니다.")
 }
@@ -127,6 +126,7 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 		return
 	}
 	videoIndex := strconv.Itoa(data.VideoIndex)
+	//videoIndex := fmt.Sprint(data.VideoIndex)
 	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	videoCurrentTime := data.VideoCurrentTime
 	outputImage := fmt.Sprintf("./selectedFrame/selectedFrame%s_%s.png", videoIndex, videoCurrentTime)

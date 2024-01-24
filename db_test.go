@@ -4,6 +4,7 @@ import (
 	"backend/sql"
 	"backend/util"
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -36,11 +37,11 @@ func TestDeletImageDB(t *testing.T) {
 	util.DeleteAllFilesInFolder("diffImages")
 }
 
-func TestGetLabelingList(t *testing.T) {
-	labelingList := sql.GetUserLabelingList("kim", []int{1, 2, 3, 4, 5})
-	a, _ := util.ConvertTo2DIntSlice(labelingList)
-	fmt.Print(a)
-}
+// func TestGetLabelingList(t *testing.T) {
+// 	labelingList := sql.GetUserLabelingList("kim", []int{1, 2, 3, 4, 5})
+// 	a, _ := util.ConvertTo2DIntSlice(labelingList)
+// 	fmt.Print(a)
+// }
 
 func TestInsertVideoScoring(t *testing.T) {
 	sql.InsertUserVideoScoringInfo("kim", 1, "KC0rtr1o", 1)
@@ -53,4 +54,21 @@ func TestInsertImageScoring(t *testing.T) {
 	sql.InsertUserImageScoringInfo("kim", 1, "KC0rtr1o", "0,0,0,0,0,0,0,0,0,0,1,0,1")
 	sql.InsertUserImageScoringInfo("kim", 2, "KC0rtr1o", "0,0,0,0,0,0,0,1,1,1,1,1,1")
 	sql.InsertUserImageScoringInfo("kim", 2, "KC0rtr1o", "0,0,0,0,0,0,0,2,2,2,2,2,2")
+}
+
+func TestSelectFram(t *testing.T) {
+	videoIndex := "1"
+	VideoCurrentTime := "02.05"
+	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
+	videoCurrentTime := VideoCurrentTime
+	outputImage := fmt.Sprintf("./selectedFrame/selectedFrame%s_%s.png", videoIndex, videoCurrentTime)
+	err := util.ExtractFrame(videoFilePath, videoCurrentTime, outputImage)
+	if err != nil {
+		log.Println("error: ", err)
+		return
+	}
+}
+
+func TestGetVideoListInfoFromTestCode(t *testing.T) {
+	sql.GetVideoListInfoFromTestCode("9jJ0A2mP")
 }
