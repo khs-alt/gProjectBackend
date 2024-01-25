@@ -58,7 +58,7 @@ func TestInsertImageScoring(t *testing.T) {
 
 func TestSelectFram(t *testing.T) {
 	videoIndex := "1"
-	VideoCurrentTime := "02.05"
+	VideoCurrentTime := 02.05
 	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	videoCurrentTime := VideoCurrentTime
 	outputImage := fmt.Sprintf("./selectedFrame/selectedFrame%s_%s.png", videoIndex, videoCurrentTime)

@@ -78,7 +78,6 @@ func IsUserIdExist(id string, password string) bool {
 
 	query := "SELECT user_name, user_password FROM user WHERE user_name = ? AND user_password = ?"
 	err := app.DB.QueryRow(query, id, password).Scan(&resultID, &resultPassword)
-	log.Println(err)
 	if err == sql.ErrNoRows {
 		return false
 	} else if err != nil {
