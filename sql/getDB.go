@@ -851,3 +851,14 @@ func GetUserLabelingList(user string, imageList []int) []bool {
 
 	return userLabelingList
 }
+
+func GetVideoNameForIndex(videoIndex int) string {
+	app := SetDB()
+	var videoName string
+	query := "SELECT artifact_video_name FROM video WHERE video_index = ?"
+	err := app.DB.QueryRow(query, videoIndex).Scan(&videoName)
+	if err != nil {
+		log.Println(err)
+	}
+	return videoName
+}

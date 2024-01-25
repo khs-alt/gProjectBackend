@@ -129,7 +129,8 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	//videoIndex := fmt.Sprint(data.VideoIndex)
 	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	videoCurrentTime := data.VideoCurrentTime
-	outputImage := fmt.Sprintf("./selectedFrame/selectedFrame%s_%s.png", videoIndex, videoCurrentTime)
+	videoArtifactName := sql.GetVideoNameForIndex(data.VideoIndex)
+	outputImage := fmt.Sprintf("./selectedFrame/%s_%s.png", videoArtifactName, videoCurrentTime)
 	err := util.ExtractFrame(videoFilePath, videoCurrentTime, outputImage)
 	if err != nil {
 		log.Println("error: ", err)
