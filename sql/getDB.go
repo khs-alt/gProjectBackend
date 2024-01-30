@@ -862,3 +862,34 @@ func GetVideoNameForIndex(videoIndex int) string {
 	}
 	return videoName
 }
+
+func GetSelectedFrameList(videoIndex string) []string {
+	app := SetDB()
+	var selectedFrameList []string
+	query := `
+			SELECT 
+				time 
+			FROM 
+				video_selected_time vst
+			JOIN 
+				video AS v ON vst.video_uuid = v.uuid
+			WHERE 
+				v.video_index = ?`
+	rows, err := app.DB.Query(query, videoIndex)
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		time := ""
+		if err := rows.Scan(&time); err != nil {
+			log.Println(err)
+		}
+		selectedFrameList = append(selectedFrameList, time)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+	}
+	return selectedFrameList
+}

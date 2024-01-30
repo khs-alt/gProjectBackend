@@ -90,8 +90,8 @@ var MimeTypes = map[string]string{
 }
 
 type VideoFrameTimeData struct {
-	VideoIndex       int    `json:"videoIndex"`
-	VideoCurrentTime string `json:"selectedVideoTime"`
+	VideoIndex           int      `json:"videoIndex"`
+	VideoCurrentTimeList []string `json:"selectedVideoTime"`
 }
 
 type UserScoringListData struct {

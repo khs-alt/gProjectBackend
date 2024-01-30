@@ -188,6 +188,10 @@ func CreateDBTable() {
             tag_uuid binary(16) NOT NULL,
             PRIMARY KEY (image_uuid, tag_uuid)
         )`,
+		`CREATE TABLE video_selected_time (
+			video_uuid binary(16) NOT NULL,
+			time varchar(255) NOT NULL
+		)`,
 		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
 		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES video_tag (uuid)`,
 		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,

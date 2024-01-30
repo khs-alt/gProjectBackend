@@ -119,6 +119,8 @@ func UploadVideoHandler(c *gin.Context) {
 	c.String(http.StatusOK, "비디오가 성공적으로 업로드되었습니다.")
 }
 
+// 비디오 아이디와 시간 리스트가 오면 그 시간에 해당하는 비디오 프레임의 잘라서 이미지로 생성함
+// TODO: 오리지널, 아티펙트, 차이 비디오를 받아서 각각의 비디오 프레임을 잘라서 이미지로 생성하고 DB에 넣어야 함
 func PostVideoFrameTimeHandler(c *gin.Context) {
 	var data models.VideoFrameTimeData
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -126,16 +128,29 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 		return
 	}
 	videoIndex := strconv.Itoa(data.VideoIndex)
-	//videoIndex := fmt.Sprint(data.VideoIndex)
 	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
-	videoCurrentTime := data.VideoCurrentTime
-	videoArtifactName := sql.GetVideoNameForIndex(data.VideoIndex)
-	outputImage := fmt.Sprintf("./selectedFrame/%s_%s.png", videoArtifactName, videoCurrentTime)
-	err := util.ExtractFrame(videoFilePath, videoCurrentTime, outputImage)
-	if err != nil {
-		log.Println("error: ", err)
-		return
+	for _, videoCurrentTime := range data.VideoCurrentTimeList {
+		err := sql.InsertVideoTime(data.VideoIndex, videoCurrentTime)
+		if err != nil {
+			log.Println("error: ", err)
+			return
+		}
+		videoArtifactName := sql.GetVideoNameForIndex(data.VideoIndex)
+		outputImage := fmt.Sprintf("./selectedFrame/%s_%s.png", videoArtifactName, videoCurrentTime)
+		err = util.ExtractFrame(videoFilePath, videoCurrentTime, outputImage)
+		if err != nil {
+			log.Println("error: ", err)
+			return
+		}
 	}
-
 	c.String(http.StatusOK, "Success insert frame time")
+}
+
+func GetSelectedFrameListHandler(c *gin.Context) {
+	videoIndex := c.Query("currentVideoIndex")
+
+	selectedFrameList := sql.GetSelectedFrameList(videoIndex)
+	c.JSON(http.StatusOK, gin.H{
+		"selected_video_frame_time_list": selectedFrameList,
+	})
 }

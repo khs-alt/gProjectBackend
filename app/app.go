@@ -69,6 +69,8 @@ func Routes(r *gin.Engine) {
 		api.POST("/imageNameList", handler.GetImageNameListHandler)
 
 		api.GET("/admin/getVideoIndex", handler.GetVideoListFromTestCodeHandler)
+
+		api.GET("/label/api/admin/getSelectedFrameList", handler.GetSelectedFrameListHandler)
 	}
 
 	// You can also add more route groups if needed for different URL prefixes
