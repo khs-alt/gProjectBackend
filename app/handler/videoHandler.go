@@ -129,8 +129,8 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	}
 	videoIndex := strconv.Itoa(data.VideoIndex)
 	videoFilePath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
-	for _, videoCurrentTime := range data.VideoCurrentTimeList {
-		err := sql.InsertVideoTime(data.VideoIndex, videoCurrentTime)
+	for i, videoCurrentTime := range data.VideoCurrentTimeList {
+		err := sql.InsertVideoTime(data.VideoIndex, data.VideoFrame[i], videoCurrentTime)
 		if err != nil {
 			log.Println("error: ", err)
 			return

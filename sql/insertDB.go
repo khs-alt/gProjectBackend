@@ -285,7 +285,7 @@ func InsertImageTagLink(imageUUID uuid.UUID, tag string) error {
 	}
 }
 
-func InsertVideoTime(videoIndex int, videoTime string) error {
+func InsertVideoTime(videoIndex int, videoFrame string, videoTime string) error {
 	app := SetDB()
 
 	insertQuery := "SELECT BIN_TO_UUID(uuid) FROM video WHERE video_index = ?"
@@ -296,8 +296,8 @@ func InsertVideoTime(videoIndex int, videoTime string) error {
 		return err
 	}
 
-	insertQuery = "INSERT INTO video_selected_time (video_uuid, time) VALUES (UUID_TO_BIN(?),?)"
-	_, err = app.DB.Exec(insertQuery, videoUUID, videoTime)
+	insertQuery = "INSERT INTO video_selected_time (video_uuid, video_frame, time) VALUES (UUID_TO_BIN(?),?,?)"
+	_, err = app.DB.Exec(insertQuery, videoUUID, videoFrame, videoTime)
 	if err != nil {
 		log.Println(err)
 		return err

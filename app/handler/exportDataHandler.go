@@ -42,3 +42,14 @@ func ExportVideoDataHandler(c *gin.Context) {
 	}
 	sqltocsv.Write(w, rows)
 }
+
+func ExportVideoFrameDataHandler(c *gin.Context) {
+	w := c.Writer
+
+	rows, err := sql.ExportVideoFrameData()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	sqltocsv.Write(w, rows)
+}

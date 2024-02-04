@@ -52,3 +52,22 @@ func ExportVideoData(testcode string) (*sql.Rows, error) {
 
 	return rows, err
 }
+
+func ExportVideoFrameData() (*sql.Rows, error) {
+	app := SetDB()
+	insertQuery := `
+				SELECT
+					v.original_video_name, v.artifact_video_name, v.diff_video_name, v.origina_video_fps, v.width, v.height, vst.video_frame, vst.time
+				FROM
+					video_selected_time AS vst
+				JOIN
+					video AS v ON v.uuid = vst.video_uuid
+				ORDER BY vst.time
+				`
+	rows, err := app.DB.Query(insertQuery)
+	if err != nil {
+		log.Println("ExportVideoFrameData error", err)
+		return nil, err
+	}
+	return rows, err
+}

@@ -81,9 +81,9 @@ func DeleteDBTable() {
 		"video_tag",
 		"image_tag",
 		"user_testcode_info",
-		"image_scoring",
-		"video_scoring",
-		"user",
+		// "image_scoring",
+		// "video_scoring",
+		// "user",
 		"video",
 		"image",
 		"video_testcode",
@@ -160,7 +160,7 @@ func CreateDBTable() {
             video_uuid binary(16) NOT NULL,
             user_score INT NOT NULL,
             video_testcode varchar(255) NOT NULL,
-            time datetime
+            time datetime,
 			unique key user_video_testcode_unique(user_uuid, video_uuid, video_testcode)
         )`,
 		`CREATE TABLE image_scoring (
@@ -169,7 +169,7 @@ func CreateDBTable() {
             image_uuid binary(16),
             patch_score varchar(2000) NOT NULL,
             image_testcode varchar(255) NOT NULL,
-            time datetime
+            time datetime,
 			unique key user_image_testcode_unique(user_uuid, image_uuid, image_testcode)
         )`,
 		`CREATE TABLE image_testcode (
@@ -190,6 +190,7 @@ func CreateDBTable() {
         )`,
 		`CREATE TABLE video_selected_time (
 			video_uuid binary(16) NOT NULL,
+			video_frame varchar(255) NOT NULL,
 			time varchar(255) NOT NULL
 		)`,
 		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
