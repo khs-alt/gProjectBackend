@@ -274,15 +274,18 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 func GetSelectedFrameListHandler(c *gin.Context) {
 	videoIndex := c.Query("video_index")
 	videoIntIndex, _ := strconv.Atoi(videoIndex)
-	selectedFrameList := sql.GetSelectedFrameList(videoIntIndex)
+	timeList, selectedFrameList := sql.GetSelectedFrameList(videoIntIndex)
 	if selectedFrameList == nil {
-		fmt.Println("selectedFrameList is nil")
 		selectedFrameList = []string{}
+	}
+	if timeList == nil {
+		timeList = []string{}
 	}
 	fmt.Println("========= GetSelectedFrameListHandler =========")
 	fmt.Println("selectedFrameList: ", selectedFrameList)
 	fmt.Println("video_index: ", videoIndex)
 	c.JSON(http.StatusOK, gin.H{
 		"selected_video_frame_time_list": selectedFrameList,
+		"selected_video_frame_list":      timeList,
 	})
 }

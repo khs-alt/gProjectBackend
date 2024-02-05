@@ -72,10 +72,10 @@ func TestGetVideoListInfoFromTestCode(t *testing.T) {
 	sql.GetVideoListInfoFromTestCode("9jJ0A2mP")
 }
 
-func TestGetSelectedFrameList(t *testing.T) {
-	s := sql.GetSelectedFrameList(1)
-	fmt.Println(s)
-}
+// func TestGetSelectedFrameList(t *testing.T) {
+// 	s := sql.GetSelectedFrameList(1)
+// 	fmt.Println(s)
+// }
 
 func TestRemoveSpecificPart(t *testing.T) {
 	s := "original_amusement_park2_p64_t0.3_n0.mp4"

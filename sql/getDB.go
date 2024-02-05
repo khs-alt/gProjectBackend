@@ -864,9 +864,10 @@ func GetVideoNameForIndex(videoIndex int) (string, string, string) {
 	return original, artifact, diff
 }
 
-func GetSelectedFrameList(videoIndex int) []string {
+func GetSelectedFrameList(videoIndex int) ([]string, []string) {
 	app := SetDB()
 	var selectedFrameList []string
+	var timeList []string
 	query := `
 			SELECT 
 				vst.video_frame, vst.time 
@@ -882,18 +883,20 @@ func GetSelectedFrameList(videoIndex int) []string {
 		log.Println(err)
 	}
 	defer rows.Close()
+	var frame string
 	var time string
 	for rows.Next() {
-		if err := rows.Scan(&time); err != nil {
+		if err := rows.Scan(&frame, &time); err != nil {
 			log.Println(err)
 		}
 
-		selectedFrameList = append(selectedFrameList, time)
+		selectedFrameList = append(selectedFrameList, frame)
+		timeList = append(timeList, time)
 	}
 	if err := rows.Err(); err != nil {
 		log.Println(err)
 	}
-	return selectedFrameList
+	return selectedFrameList, timeList
 }
 
 func GetScoreCnt(testcode string, userID string) [6]int {
