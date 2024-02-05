@@ -46,6 +46,7 @@ func Routes(r *gin.Engine) {
 		// GET routes
 		api.GET("/postvideo/original/:id", handler.ServeOriginalVideosHandler)
 		api.GET("/postvideo/artifact/:id", handler.ServeArtifactVideosHandler)
+		api.GET("/postvideo/diff/:id", handler.ServeDiffVideosHandler)
 		api.GET("/postimage/original/:id", handler.ServeOriginalImagesHandler)
 		api.GET("/postimage/artifact/:id", handler.ServeArtifactImagesHandler)
 		api.GET("/postimage/difference/:id", handler.ServeDiffImagesHandler)
@@ -70,8 +71,9 @@ func Routes(r *gin.Engine) {
 
 		api.GET("/admin/getVideoIndex", handler.GetVideoListFromTestCodeHandler)
 
-		api.GET("/label/api/admin/getSelectedFrameList", handler.GetSelectedFrameListHandler)
-	}
+		api.GET("/admin/getSelectedFrameList", handler.GetSelectedFrameListHandler)
 
+		api.POST("/getScoreCnt", handler.GetScoreCntHandler)
+	}
 	// You can also add more route groups if needed for different URL prefixes
 }

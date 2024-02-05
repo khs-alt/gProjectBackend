@@ -43,7 +43,7 @@ func GetImageScoreDataFromUser(c *gin.Context) {
 func GetUserScoringListHandler(c *gin.Context) {
 	currentUser := c.Query("userID")
 	testCode := c.Query("testcode")
-	_, _, _, videoIndex, _ := sql.GetVideoListFromTestCode(testCode)
+	_, _, _, _, videoIndex, _ := sql.GetVideoListFromTestCode(testCode)
 
 	userScoreList := sql.GetCurrentUserScoreList(currentUser, videoIndex)
 	//TODO: videoIndex를 이용해서 userScoringList를 만들어서 보내주기

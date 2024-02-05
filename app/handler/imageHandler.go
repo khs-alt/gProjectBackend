@@ -14,25 +14,25 @@ import (
 
 func ServeImage(c *gin.Context) {
 	videoFilePath := "./image/google_logo.png"
-	c.File(videoFilePath) // Serve file using Gin
+	c.File(videoFilePath)
 }
 
 func ServeOriginalImagesHandler(c *gin.Context) {
 	ImageID := c.Param("id")
 	imageFilePath := fmt.Sprintf("./originalImages/originalImage%s.png", ImageID)
-	c.File(imageFilePath) // Serve file using Gin
+	c.File(imageFilePath)
 }
 
 func ServeArtifactImagesHandler(c *gin.Context) {
 	ImageID := c.Param("id")
 	imageFilePath := fmt.Sprintf("./artifactImages/artifactImage%s.png", ImageID)
-	c.File(imageFilePath) // Serve file using Gin
+	c.File(imageFilePath)
 }
 
 func ServeDiffImagesHandler(c *gin.Context) {
 	ImageID := c.Param("id")
 	imageFilePath := fmt.Sprintf("./diffImages/diffImage%s.png", ImageID)
-	c.File(imageFilePath) // Serve file using Gin
+	c.File(imageFilePath)
 }
 
 func UploadImageHandler(c *gin.Context) {
@@ -68,7 +68,7 @@ func UploadImageHandler(c *gin.Context) {
 		if err != nil {
 			log.Println(err)
 		}
-		if err := sql.InsertImage(uuid, originalImagesName[i], artifactImagesName[i], diffImagesName[i], width, height); err != nil {
+		if err := sql.InsertImage(uuid, originalImagesName[i], artifactImagesName[i], diffImagesName[i], width, height, 0); err != nil {
 			log.Println(err)
 		}
 		for _, tag := range tags {
@@ -121,5 +121,19 @@ func GetImageNameListHandler(c *gin.Context) {
 		"image_list":    randImageList,
 		"original_list": imageOriginalList1,
 		"artifact_list": imageArtifactList1,
+	})
+}
+
+func GetScoreCntHandler(c *gin.Context) {
+	var data map[string]interface{}
+	if err := c.ShouldBind(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	testcode := data["testcode"].(string)
+	userID := data["user_id"].(string)
+	scoreCnt := sql.GetScoreCnt(testcode, userID)
+	c.JSON(http.StatusOK, gin.H{
+		"score_cnt": scoreCnt,
 	})
 }

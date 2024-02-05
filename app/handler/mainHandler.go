@@ -75,7 +75,7 @@ func GetUserCurrentPageInfo(c *gin.Context) {
 	var artifactVideoNameList []string
 	var videoFPSList []string
 	var indexList []string
-	originalVideoNameList, artifactVideoNameList, videoFPSList, indexList, err := sql.GetVideoListFromTestCode(data.TestCode)
+	originalVideoNameList, artifactVideoNameList, _, videoFPSList, indexList, err := sql.GetVideoListFromTestCode(data.TestCode)
 	if err != nil {
 		log.Println(err)
 	}

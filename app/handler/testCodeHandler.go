@@ -52,17 +52,14 @@ func GetVideoListFromTagHandler(c *gin.Context) {
 func GetImageListFromTagHandler(c *gin.Context) {
 	tags := c.QueryArray("tag[]")
 	sort.Strings(tags)
-
 	originalIamge, err := sql.GetImageListFromTag(tags)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"original_image_list": originalIamge,
 	})
-
 }
 
 // use join it can't
@@ -80,8 +77,8 @@ func GetVideoTestCodeHandler(c *gin.Context) {
 	for _, tag := range data.Tags {
 		uuid, _ := uuid.NewUUID()
 		sql.InsertVideoTestCode(uuid, tag, testcode, description)
-		c.String(http.StatusOK, "Success insert testcode")
 	}
+	c.String(http.StatusOK, "Success insert testcode")
 }
 
 // TODO: description is not used
@@ -97,8 +94,8 @@ func GetImageTestCodeHandler(c *gin.Context) {
 	for _, tag := range data.Tags {
 		uuid, _ := uuid.NewUUID()
 		sql.InsertImageTestCode(uuid, tag, testcode, description)
-		c.String(http.StatusOK, "Success insert testcode")
 	}
+	c.String(http.StatusOK, "Success insert testcode")
 }
 
 func GetVideoListFromTestCodeHandler(c *gin.Context) {
@@ -113,7 +110,7 @@ func GetVideoListFromTestCodeHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Wrong Testcode"})
 		return
 	}
-	originalVideoNameList, arfectVideosNameList, videoFrameList, videoList, err := sql.GetVideoListFromTestCode(testCode)
+	originalVideoNameList, arfectVideosNameList, diffVideosNameList, videoFrameList, videoList, err := sql.GetVideoListFromTestCode(testCode)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -122,6 +119,7 @@ func GetVideoListFromTestCodeHandler(c *gin.Context) {
 		"video_list":          videoList,
 		"original_video_list": originalVideoNameList,
 		"artifact_video_list": arfectVideosNameList,
+		"diff_video_list":     diffVideosNameList,
 		"video_frame_list":    videoFrameList,
 	})
 }

@@ -24,6 +24,10 @@ func DeleteVideotagHandler(c *gin.Context) {
 		if err != nil {
 			log.Println(err)
 		}
+		err = sql.DeleteImageTagData(tag)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	sort.Strings(tags)
 	c.String(http.StatusOK, "Success delete tag")
@@ -57,6 +61,8 @@ func ReceivedVideoTagHandler(c *gin.Context) {
 	tag := data["tag"].(string)
 	uuid := util.MakeUUID()
 	sql.InsertVideoTag(uuid, tag)
+	imageUUID := util.MakeUUID()
+	sql.InsertImageTag(imageUUID, tag)
 	c.String(http.StatusOK, "Success insert tag")
 }
 

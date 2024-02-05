@@ -11,7 +11,6 @@ import (
 )
 
 func CountFile(s string) (int, error) {
-	fmt.Print(s)
 	files, err := os.ReadDir(s)
 	if err != nil {
 		return 0, err
@@ -24,7 +23,6 @@ func CountFile(s string) (int, error) {
 			fileCount++
 		}
 	}
-	fmt.Println(fileCount)
 	return fileCount, nil
 }
 
@@ -125,7 +123,7 @@ func RemoveDuplicates(elements []string) []string {
 
 func RemoveSpecificPart(input string) string {
 	// 정규 표현식을 사용하여 _ 다음에 오는 소수점 숫자와 .mp4를 찾아 제거
-	re := regexp.MustCompile(`_\d+\.\d+\.mp4$`)
+	re := regexp.MustCompile(`_p\d+_t\d+\.\d+_n\d+\.mp4$`)
 	return re.ReplaceAllString(input, "")
 }
 

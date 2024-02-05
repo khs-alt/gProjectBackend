@@ -69,7 +69,7 @@ func GetCurrentUserScore(userId string, videoTestCode string) (int, int) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// 결과가 없을 때 -1 반환
-			_, _, _, indexList, _ := GetVideoListFromTestCode(videoTestCode)
+			_, _, _, _, indexList, _ := GetVideoListFromTestCode(videoTestCode)
 			randIndexList := util.ShuffleList(userId, indexList)
 			num, _ := strconv.Atoi(randIndexList[0])
 			return num, -1
@@ -437,12 +437,12 @@ func GetVideoListInfoFromTestCode(testCode string) ([]string, []string, []string
 
 // done
 // return original_video_name, artifact_video_name, video_frame, video_index
-func GetVideoListFromTestCode(testCode string) ([]string, []string, []string, []string, error) {
+func GetVideoListFromTestCode(testCode string) ([]string, []string, []string, []string, []string, error) {
 	app := SetDB()
 
 	query := `
 	SELECT DISTINCT
-		v.original_video_name, v.artifact_video_name, v.video_frame, v.video_index
+		v.original_video_name, v.artifact_video_name, v.diff_video_name, v.video_frame, v.video_index
 	FROM
     	video_testcode vt
 	JOIN
@@ -457,28 +457,29 @@ func GetVideoListFromTestCode(testCode string) ([]string, []string, []string, []
 	rows, err := app.DB.Query(query, testCode)
 	if err != nil {
 		log.Println(err)
-		return nil, nil, nil, nil, err
+		return nil, nil, nil, nil, nil, err
 	}
 	defer rows.Close()
 
-	var originalVideoNameList, arfectVideosNameList, videoFrameList, indexList []string
-	var originalVideoName, arfectVideosName, videoFrame, index string
+	var originalVideoNameList, arfectVideosNameList, diffVideosNameList, videoFrameList, indexList []string
+	var originalVideoName, arfectVideoName, diffVideoName, videoFrame, index string
 	for rows.Next() {
-		err := rows.Scan(&originalVideoName, &arfectVideosName, &videoFrame, &index)
+		err := rows.Scan(&originalVideoName, &arfectVideoName, &diffVideoName, &videoFrame, &index)
 		if err != nil {
 			log.Println(err)
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, nil, nil, err
 		}
 		originalVideoNameList = append(originalVideoNameList, originalVideoName)
-		arfectVideosNameList = append(arfectVideosNameList, arfectVideosName)
+		arfectVideosNameList = append(arfectVideosNameList, arfectVideoName)
+		diffVideosNameList = append(diffVideosNameList, diffVideoName)
 		videoFrameList = append(videoFrameList, videoFrame)
 		indexList = append(indexList, index)
 	}
 	if err := rows.Err(); err != nil {
 		log.Println(err)
-		return nil, nil, nil, nil, err
+		return nil, nil, nil, nil, nil, err
 	}
-	return originalVideoNameList, arfectVideosNameList, videoFrameList, indexList, nil
+	return originalVideoNameList, arfectVideosNameList, diffVideosNameList, videoFrameList, indexList, nil
 }
 
 func GetImageListFromTestCode(testCode string) ([]string, error) {
@@ -852,29 +853,107 @@ func GetUserLabelingList(user string, imageList []int) []bool {
 	return userLabelingList
 }
 
-func GetVideoNameForIndex(videoIndex int) string {
+func GetVideoNameForIndex(videoIndex int) (string, string, string) {
 	app := SetDB()
-	var videoName string
-	query := "SELECT artifact_video_name FROM video WHERE video_index = ?"
-	err := app.DB.QueryRow(query, videoIndex).Scan(&videoName)
+	var original, artifact, diff string
+	query := "SELECT original_video_name, artifact_video_name, diff_video_name FROM video WHERE video_index = ?"
+	err := app.DB.QueryRow(query, videoIndex).Scan(&original, &artifact, &diff)
 	if err != nil {
 		log.Println(err)
 	}
-	return videoName
+	return original, artifact, diff
 }
 
-func GetSelectedFrameList(videoIndex string) []string {
+func GetSelectedFrameList(videoIndex int) []string {
 	app := SetDB()
 	var selectedFrameList []string
 	query := `
 			SELECT 
-				time 
+				vst.video_frame, vst.time 
 			FROM 
 				video_selected_time vst
 			JOIN 
 				video AS v ON vst.video_uuid = v.uuid
 			WHERE 
-				v.video_index = ?`
+				v.video_index = ?
+			`
+	rows, err := app.DB.Query(query, videoIndex)
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+	var time string
+	for rows.Next() {
+		if err := rows.Scan(&time); err != nil {
+			log.Println(err)
+		}
+
+		selectedFrameList = append(selectedFrameList, time)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+	}
+	return selectedFrameList
+}
+
+func GetScoreCnt(testcode string, userID string) [6]int {
+	app := SetDB()
+	query := `
+			SELECT
+				patch_score
+			FROM
+				image_scoring AS ims
+			JOIN
+				user AS u ON u.uuid = ims.user_uuid
+			WHERE
+				u.user_name = ? AND ims.image_testcode = ?
+			`
+	rows, err := app.DB.Query(query, userID, testcode)
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+
+	var patchList []string
+	for rows.Next() {
+		patch := ""
+		if err := rows.Scan(&patch); err != nil {
+			log.Println(err)
+		}
+		patchList = append(patchList, patch)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+	}
+	var scoreCntList [6]int
+	for _, patch := range patchList {
+		p := util.MakeCSVToStringList(patch)
+		for _, score := range p {
+			score, _ := strconv.Atoi(score)
+			if score >= 0 {
+				scoreCntList[score]++
+			}
+		}
+
+	}
+	return scoreCntList
+}
+
+func GetVideoTagList(videoIndex int) []string {
+	app := SetDB()
+	var tagList []string
+	query := `
+			SELECT 
+				vt.tag
+			FROM 
+				video_tag vt
+			JOIN 
+				video_tag_link vtl ON vt.uuid = vtl.tag_uuid
+			JOIN 
+				video v ON vtl.video_uuid = v.uuid
+			WHERE 
+				v.video_index = ?
+			`
 	rows, err := app.DB.Query(query, videoIndex)
 	if err != nil {
 		log.Println(err)
@@ -882,14 +961,14 @@ func GetSelectedFrameList(videoIndex string) []string {
 	defer rows.Close()
 
 	for rows.Next() {
-		time := ""
-		if err := rows.Scan(&time); err != nil {
+		tag := ""
+		if err := rows.Scan(&tag); err != nil {
 			log.Println(err)
 		}
-		selectedFrameList = append(selectedFrameList, time)
+		tagList = append(tagList, tag)
 	}
 	if err := rows.Err(); err != nil {
 		log.Println(err)
 	}
-	return selectedFrameList
+	return tagList
 }

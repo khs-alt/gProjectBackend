@@ -53,16 +53,24 @@ func InsertVideo(uuid uuid.UUID, originalVideoName string, artifactVideoName str
 }
 
 // done
-func InsertImage(uuid uuid.UUID, originalImageName string, artifactImageName string, diffImageName string, width int, height int) error {
+func InsertImage(uuid uuid.UUID, originalImageName string, artifactImageName string, diffImageName string, width int, height int, videoIndex int) error {
 	app := SetDB()
-
-	insertQuery := "INSERT INTO image (uuid, original_image_name, artifact_image_name, diff_image_name, width, height) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)"
-	_, err := app.DB.Exec(insertQuery, uuid, originalImageName, artifactImageName, diffImageName, width, height)
-	if err != nil {
-		log.Println(err)
-		return err
+	if videoIndex == 0 {
+		insertQuery := "INSERT INTO image (uuid, original_image_name, artifact_image_name, diff_image_name, width, height) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)"
+		_, err := app.DB.Exec(insertQuery, uuid, originalImageName, artifactImageName, diffImageName, width, height)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+	} else {
+		insertQuery := "INSERT INTO image (uuid, original_image_name, artifact_image_name, diff_image_name, width, height, video_index) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?)"
+		_, err := app.DB.Exec(insertQuery, uuid, originalImageName, artifactImageName, diffImageName, width, height, videoIndex)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		return nil
 	}
-
 	return nil
 }
 
@@ -104,7 +112,8 @@ func InsertUserIdAndPassword(uuid uuid.UUID, id string, ps string) string {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 			return "Id is exist"
 		} else {
-			panic(err) // 다른 유형의 에러 처리
+			fmt.Println(err) // 다른 유형의 에러 처리
+			return "Error"
 		}
 	}
 
@@ -146,7 +155,7 @@ func InsertUserImageScoringInfo(userId string, imageID int, imageTestcode string
 		return
 	}
 
-	// imageTestcode에 해당하는 image_uuid를 찾습니다.
+	// imageID에 해당하는 image_uuid를 찾습니다.
 	var imageUUID uuid.UUID
 	imageUUIDQuery := `
     SELECT BIN_TO_UUID(i.uuid)
@@ -231,6 +240,7 @@ func InsertVideoTag(uuid uuid.UUID, tag string) {
 }
 
 // done
+// 이미지 테그 및 uuid 생성
 func InsertImageTag(uuid uuid.UUID, tag string) {
 	app := SetDB()
 
@@ -287,7 +297,6 @@ func InsertImageTagLink(imageUUID uuid.UUID, tag string) error {
 
 func InsertVideoTime(videoIndex int, videoFrame string, videoTime string) error {
 	app := SetDB()
-
 	insertQuery := "SELECT BIN_TO_UUID(uuid) FROM video WHERE video_index = ?"
 	var videoUUID uuid.UUID
 	err := app.DB.QueryRow(insertQuery, videoIndex).Scan(&videoUUID)
@@ -296,8 +305,9 @@ func InsertVideoTime(videoIndex int, videoFrame string, videoTime string) error 
 		return err
 	}
 
-	insertQuery = "INSERT INTO video_selected_time (video_uuid, video_frame, time) VALUES (UUID_TO_BIN(?),?,?)"
-	_, err = app.DB.Exec(insertQuery, videoUUID, videoFrame, videoTime)
+	uuid := uuid.New()
+	insertQuery = "INSERT INTO video_selected_time (uuid, video_uuid, video_frame, time) VALUES (UUID_TO_BIN(?),UUID_TO_BIN(?),?,?)"
+	_, err = app.DB.Exec(insertQuery, uuid, videoUUID, videoFrame, videoTime)
 	if err != nil {
 		log.Println(err)
 		return err

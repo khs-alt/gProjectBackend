@@ -83,13 +83,14 @@ func DeleteDBTable() {
 		"user_testcode_info",
 		// "image_scoring",
 		// "video_scoring",
-		// "user",
+		//"user",
 		"video",
 		"image",
 		"video_testcode",
 		"image_testcode",
 		"video_tag_link",
 		"image_tag_link",
+		"video_selected_time",
 	}
 	for _, table := range tables {
 		app.DB.Exec("SET FOREIGN_KEY_CHECKS = 0")
@@ -120,18 +121,19 @@ func CreateDBTable() {
         )`,
 		`CREATE TABLE video_tag (
             uuid binary(16) PRIMARY KEY NOT NULL,
-            tag varchar(255) NOT NULL
+            tag varchar(255) UNIQUE NOT NULL
         )`,
 		`CREATE TABLE image_tag (
             uuid binary(16) PRIMARY KEY NOT NULL,
-            tag varchar(255) NOT NULL
+            tag varchar(255) UNIQUE NOT NULL
         )`,
 		`CREATE TABLE image (
             uuid binary(16) UNIQUE NOT NULL,
             original_image_name varchar(255),
             artifact_image_name varchar(255),
 			diff_image_name varchar(255),
-			image_index INT AUTO_INCREMENT PRIMARY KEY,
+			image_index int AUTO_INCREMENT PRIMARY KEY,
+			video_index int,
             width int,
             height int
         )`,
@@ -189,6 +191,7 @@ func CreateDBTable() {
             PRIMARY KEY (image_uuid, tag_uuid)
         )`,
 		`CREATE TABLE video_selected_time (
+			uuid binary(16) PRIMARY KEY NOT NULL,
 			video_uuid binary(16) NOT NULL,
 			video_frame varchar(255) NOT NULL,
 			time varchar(255) NOT NULL
