@@ -161,8 +161,6 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	artifactVideoPath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	diffVideoPath := fmt.Sprintf("./diffVideos/diffVideo%s.mp4", videoIndex)
 
-	// 왜 삭제가 이상하게 동작할까?
-
 	sql.DeleteVideoTime(data.VideoIndex)
 	sort.Strings(data.VideoCurrentTimeList)
 	sort.Strings(data.VideoFrame)
@@ -170,6 +168,8 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	fmt.Println("index: " + videoIndex)
 	fmt.Println("data.VideoCurrentTimeList: ", data.VideoCurrentTimeList)
 	fmt.Println("data.VideoFrame: ", data.VideoFrame)
+	// 같은 비디오 인덱스를 가진 이미지를 삭제
+	sql.DeleteImage(data.VideoIndex)
 	for i, videoCurrentTime := range data.VideoCurrentTimeList {
 		//저장할 비디오의 프레임 시간을 DB에 저장
 		err := sql.InsertVideoTime(data.VideoIndex, data.VideoFrame[i], videoCurrentTime)
@@ -178,8 +178,6 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"InsertVideoTime error": err.Error()})
 			return
 		}
-		// 같은 비디오 인덱스를 가진 이미지를 삭제
-		sql.DeleteImage(data.VideoIndex)
 	}
 	for _, videoCurrentTime := range data.VideoCurrentTimeList {
 
