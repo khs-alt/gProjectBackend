@@ -32,7 +32,7 @@ func DeleteImageTagData(tag string) error {
 
 }
 
-func DeleteImage(videoIndex int) {
+func DeleteImage(videoIndex int) error {
 	app := SetDB()
 
 	deleteQuery := `
@@ -48,21 +48,26 @@ func DeleteImage(videoIndex int) {
 	_, err := app.DB.Exec(deleteQuery, videoIndex)
 	if err != nil {
 		log.Println(err)
+		return err
 	}
+	return nil
 }
 
-func DeleteVideoTime(videoIndex int) {
+func DeleteVideoTime(videoIndex int) error {
 	app := SetDB()
 	insertQuery := "SELECT BIN_TO_UUID(uuid) FROM video WHERE video_index = ?"
 	var videoUUID uuid.UUID
 	err := app.DB.QueryRow(insertQuery, videoIndex).Scan(&videoUUID)
 	if err != nil {
 		log.Println(err)
+		return err
 	}
 
 	deleteQuery := "DELETE FROM video_selected_time WHERE BIN_TO_UUID(video_uuid) = ?"
 	_, err = app.DB.Exec(deleteQuery, videoUUID)
 	if err != nil {
 		log.Println(err)
+		return err
 	}
+	return nil
 }

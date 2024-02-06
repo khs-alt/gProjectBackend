@@ -161,7 +161,12 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	artifactVideoPath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	diffVideoPath := fmt.Sprintf("./diffVideos/diffVideo%s.mp4", videoIndex)
 
-	sql.DeleteVideoTime(data.VideoIndex)
+	err := sql.DeleteVideoTime(data.VideoIndex)
+	if err != nil {
+		log.Println("DeleteVideoTime error: ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"DeleteVideoTime error": err.Error()})
+		return
+	}
 	sort.Strings(data.VideoCurrentTimeList)
 	sort.Strings(data.VideoFrame)
 
@@ -169,7 +174,12 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	fmt.Println("data.VideoCurrentTimeList: ", data.VideoCurrentTimeList)
 	fmt.Println("data.VideoFrame: ", data.VideoFrame)
 	// 같은 비디오 인덱스를 가진 이미지를 삭제
-	sql.DeleteImage(data.VideoIndex)
+	err = sql.DeleteImage(data.VideoIndex)
+	if err != nil {
+		log.Println("DeleteImage error: ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"DeleteImage error": err.Error()})
+		return
+	}
 	for i, videoCurrentTime := range data.VideoCurrentTimeList {
 		//저장할 비디오의 프레임 시간을 DB에 저장
 		err := sql.InsertVideoTime(data.VideoIndex, data.VideoFrame[i], videoCurrentTime)
