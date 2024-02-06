@@ -196,19 +196,6 @@ func CreateDBTable() {
 			video_frame varchar(255) NOT NULL,
 			time varchar(255) NOT NULL
 		)`,
-		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
-		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES video_tag (uuid)`,
-		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,
-		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES image_tag (uuid)`,
-		// `ALTER TABLE user_testcode_info ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
-		// `ALTER TABLE video_scoring ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
-		// `ALTER TABLE video_scoring ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
-		// `ALTER TABLE video_scoring ADD FOREIGN KEY (video_testcode) REFERENCES video_testcode (video_testcode)`,
-		// `ALTER TABLE image_scoring ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
-		// `ALTER TABLE image_scoring ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,
-		// `ALTER TABLE image_scoring ADD FOREIGN KEY (image_testcode) REFERENCES image_testcode (image_testcode)`,
-		// `ALTER TABLE video_testcode ADD FOREIGN KEY (video_tag) REFERENCES video_tag (tag)`,
-		// `ALTER TABLE image_testcode ADD FOREIGN KEY (image_tag) REFERENCES image_tag (tag)`,
 	}
 
 	for _, createTableSQL := range createTables {

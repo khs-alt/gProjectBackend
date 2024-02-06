@@ -12,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Not used now
+
 func ServeImage(c *gin.Context) {
 	videoFilePath := "./image/google_logo.png"
 	c.File(videoFilePath)
@@ -35,6 +37,9 @@ func ServeDiffImagesHandler(c *gin.Context) {
 	c.File(imageFilePath)
 }
 
+// UploadImageHandler is a function that handles the image upload
+// Parses the form and uploads the images to the server
+// Inserts the image information to the database
 func UploadImageHandler(c *gin.Context) {
 
 	err := c.Request.ParseMultipartForm(5000 << 20) // 5000MB
@@ -59,7 +64,7 @@ func UploadImageHandler(c *gin.Context) {
 	diffImages := form.File["diff"]
 	diffImagesName, diffImgs, _ := util.UploadImage(c, diffImages, "diff")
 
-	// 모든 이미지 처리 후
+	// after processing the images, insert the image information to the database
 	tags = strings.Split(tags[0], ",")
 	sort.Strings(tags)
 	for i := 0; i < len(oriImages) && i < len(artiImages) && i < len(diffImgs); i++ {
@@ -80,9 +85,10 @@ func UploadImageHandler(c *gin.Context) {
 		}
 	}
 
-	c.String(http.StatusOK, "이미지가 성공적으로 업로드되었습니다.")
+	c.String(http.StatusOK, "Success upload image")
 }
 
+// GetImageListFromTagHandler is a function that handles the request to get the image list from the tag
 func GetImageNameListHandler(c *gin.Context) {
 	var data map[string]interface{}
 	if err := c.ShouldBind(&data); err != nil {
@@ -92,13 +98,6 @@ func GetImageNameListHandler(c *gin.Context) {
 	testcode := data["testcode"].(string)
 	userID := data["user_id"].(string)
 	imageList, _ := sql.GetImageListFromTestCode(testcode)
-
-	// var indexList []int
-	// for _, image := range imageList {
-	// 	id := strings.TrimLeft(image, "originalImage")
-	// 	num, _ := strconv.Atoi(id)
-	// 	indexList = append(indexList, num)
-	// }
 
 	imageOriginalList, imageArtifactList := sql.GetImageNameListFromVideoList(imageList)
 

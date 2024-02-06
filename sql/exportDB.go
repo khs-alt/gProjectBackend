@@ -57,7 +57,7 @@ func ExportVideoFrameData() (*sql.Rows, error) {
 	app := SetDB()
 	insertQuery := `
 				SELECT
-					v.original_video_name, v.artifact_video_name, v.diff_video_name, v.origina_video_fps, v.width, v.height, vst.video_frame, vst.time
+					v.original_video_name, v.artifact_video_name, v.diff_video_name, vst.video_frame, vst.time
 				FROM
 					video_selected_time AS vst
 				JOIN
