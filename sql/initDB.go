@@ -221,7 +221,8 @@ func CreateImageDBTalbe() {
             original_image_name varchar(255),
             artifact_image_name varchar(255),
 			diff_image_name varchar(255),
-			image_index INT AUTO_INCREMENT PRIMARY KEY,
+			image_index int AUTO_INCREMENT PRIMARY KEY,
+			video_index int,
             width int,
             height int
         )`,
@@ -229,9 +230,10 @@ func CreateImageDBTalbe() {
             uuid binary(16) PRIMARY KEY NOT NULL,
             user_uuid binary(16),
             image_uuid binary(16),
-            patch_score varchar(1000) NOT NULL,
+            patch_score varchar(2000) NOT NULL,
             image_testcode varchar(255) NOT NULL,
-            time datetime
+            time datetime,
+			unique key user_image_testcode_unique(user_uuid, image_uuid, image_testcode)
         )`,
 		`CREATE TABLE image_testcode (
             uuid binary(16) PRIMARY KEY NOT NULL,
