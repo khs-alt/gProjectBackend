@@ -847,7 +847,7 @@ func GetUserLabelingList(user string, imageList []int) []bool {
 				log.Println(err)
 			}
 		}
-		if !util.CheckAllLabeingScore(labeling) {
+		if util.CheckAllLabeingScore(labeling) {
 			userLabelingList = append(userLabelingList, false)
 			continue
 		}
