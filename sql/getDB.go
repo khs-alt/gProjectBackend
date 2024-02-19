@@ -843,6 +843,9 @@ func GetUserLabelingList(user string, imageList []int) []bool {
 				// 결과가 없을 때 -1 반환
 				userLabelingList = append(userLabelingList, false)
 				continue
+			} else if !util.CheckAllLabeingScore(labeling) {
+				userLabelingList = append(userLabelingList, false)
+				continue
 			} else {
 				log.Println(err)
 			}

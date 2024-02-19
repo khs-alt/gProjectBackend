@@ -78,7 +78,7 @@ func TestGetVideoListInfoFromTestCode(t *testing.T) {
 // }
 
 func TestRemoveSpecificPart(t *testing.T) {
-	s := "original_amusement_park2_p64_t0.3_n0.mp4"
-	s1 := util.RemoveSpecificPart(s)
+	s := "original_birds3_p64_t1.0_n20_021.png"
+	s1 := util.RemovePNGPart(s)
 	fmt.Println(s1)
 }

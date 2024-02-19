@@ -128,7 +128,7 @@ func RemoveSpecificPart(input string) string {
 }
 
 func RemovePNGPart(input string) string {
-	re := regexp.MustCompile(`_[0-9]+\.[0-9]+_[0-9]+\.png$`)
+	re := regexp.MustCompile(`_p\d+_t[0-9]+\.[0-9]+_n[0-9]+_[0-9]+\.png$`)
 	return re.ReplaceAllString(input, "")
 }
 
