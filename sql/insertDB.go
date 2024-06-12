@@ -97,7 +97,6 @@ func IsUserIdExist(id string, password string) bool {
 }
 
 // Insert user id and password
-// done
 func InsertUserIdAndPassword(uuid uuid.UUID, id string, ps string) string {
 	app := SetDB()
 
@@ -112,7 +111,7 @@ func InsertUserIdAndPassword(uuid uuid.UUID, id string, ps string) string {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 			return "Id is exist"
 		} else {
-			fmt.Println(err) // 다른 유형의 에러 처리
+			log.Println(err) // 다른 유형의 에러 처리
 			return "Error"
 		}
 	}
@@ -234,13 +233,11 @@ func InsertVideoTag(uuid uuid.UUID, tag string) {
 	_, err := app.DB.Exec(insertQuery, uuid, tag)
 	if err != nil {
 		log.Println(err)
-	} else {
-
 	}
 }
 
 // done
-// 이미지 테그 및 uuid 생성
+// 이미지 태그 및 uuid 생성
 func InsertImageTag(uuid uuid.UUID, tag string) {
 	app := SetDB()
 
@@ -248,8 +245,6 @@ func InsertImageTag(uuid uuid.UUID, tag string) {
 	_, err := app.DB.Exec(insertQuery, uuid, tag)
 	if err != nil {
 		log.Println(err)
-	} else {
-
 	}
 }
 

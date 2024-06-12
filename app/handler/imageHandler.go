@@ -92,14 +92,6 @@ func GetImageNameListHandler(c *gin.Context) {
 	testcode := data["testcode"].(string)
 	userID := data["user_id"].(string)
 	imageList, _ := sql.GetImageListFromTestCode(testcode)
-
-	// var indexList []int
-	// for _, image := range imageList {
-	// 	id := strings.TrimLeft(image, "originalImage")
-	// 	num, _ := strconv.Atoi(id)
-	// 	indexList = append(indexList, num)
-	// }
-
 	imageOriginalList, imageArtifactList := sql.GetImageNameListFromVideoList(imageList)
 
 	randImageList := util.ShuffleList(userID, imageList)

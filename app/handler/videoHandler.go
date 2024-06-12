@@ -38,7 +38,7 @@ func ServeOriginalVideosHandler(c *gin.Context) {
 		return
 	}
 	c.Header("Content-Type", mimeType)
-	c.File(videoFilePath) // Serve file using Gin
+	c.File(videoFilePath)
 
 }
 
@@ -92,7 +92,7 @@ func ServeDiffVideosHandler(c *gin.Context) {
 		return
 	}
 	c.Header("Content-Type", mimeType)
-	c.File(videoFilePath) // Serve file using Gin
+	c.File(videoFilePath)
 
 }
 
@@ -161,8 +161,7 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	artifactVideoPath := fmt.Sprintf("./artifactVideos/artifactVideo%s.mp4", videoIndex)
 	diffVideoPath := fmt.Sprintf("./diffVideos/diffVideo%s.mp4", videoIndex)
 
-	// 왜 삭제가 이상하게 동작할까?
-
+	// 리스트를 받아서 한 번 Sorting
 	sql.DeleteVideoTime(data.VideoIndex)
 	sort.Strings(data.VideoCurrentTimeList)
 	sort.Strings(data.VideoFrame)
@@ -183,8 +182,6 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 	}
 	for _, videoCurrentTime := range data.VideoCurrentTimeList {
 
-		// 구지 할 필요 없음 논리적 삭제를 하겠음
-		//DeleteRealImage(videoIndex)
 		originalVideoName, artifactVideoName, diffVideoName := sql.GetVideoNameForIndex(data.VideoIndex)
 		originalVideoName = originalVideoName + "_frame" + videoCurrentTime
 		artifactVideoName = artifactVideoName + "_frame" + videoCurrentTime
@@ -198,7 +195,7 @@ func PostVideoFrameTimeHandler(c *gin.Context) {
 		}
 		videoIntIndex, _ := strconv.Atoi(videoIndex)
 
-		// 이미지 저장하기 이미지 데이터와 테그 데이터가 필요함
+		// 이미지 저장하기 이미지 데이터와 태그 데이터가 필요함
 		// 하단은 이를 가져오는 함수들
 		// fmt.Print("uuid: ", imageUUID, "originalVideoName : ", originalVideoName, " artifactVideoName : ", artifactVideoName, " diffVideoName : ", diffVideoName, " width : ", width, " heigth : ", heigth, " videoIntIndex : ", videoIntIndex, "\n")
 		// 왜 한 개 밖에 저장이 안될까?

@@ -15,25 +15,20 @@ func InitLogFile() {
 	if err != nil {
 		panic(err)
 	}
-
-	//multiWriter := io.MultiWriter(logFile, os.Stdout)
-	multiWriter := io.MultiWriter(logFile)
+	multiWriter := io.MultiWriter(logFile, os.Stdout)
 	log.SetOutput(multiWriter)
-
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	log.SetPrefix("INFO: ")
 	log.Println("Logging")
 }
 
 func main() {
-
 	InitLogFile()
 	//Set release mode
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 	router.Use(cors.Default())
-	app.Routes((router))
+	app.Routes(router)
 	router.Run(":8000")
-
 }

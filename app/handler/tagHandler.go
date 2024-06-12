@@ -79,7 +79,7 @@ func ReceivedImageTagHandler(c *gin.Context) {
 	c.String(http.StatusOK, "Success insert image tag")
 }
 
-// TODO:테그를 삭제할 경우 response로 보내주는 값이 없는 것으로 예상됨.
+// TODO:태그를 삭제할 경우 response로 보내주는 값이 없는 것으로 예상됨.
 // db에서 tag 데이터를 가져와서 json으로 변환 후 리스트 형태로 반환
 // d
 func GetVideoTagHandler(c *gin.Context) {

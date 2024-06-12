@@ -38,24 +38,6 @@ func GetUserCurrentImagePage(c *gin.Context) {
 	})
 }
 
-// 유저 ID와 Testcode를 받아서
-// 유저가 테스트를 진행해야하는 Page를 알려줌
-// 상단 함수와 중복됨
-// func GetUserCurrentPage(c *gin.Context) {
-// 	var data map[string]interface{}
-// 	if err := c.ShouldBindJSON(&data); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	id := data["userID"].(string)
-// 	testCode := data["testcode"].(string)
-
-// 	currentPage := fmt.Sprint(sql.GetUserCurrentPageAboutTestCode(id, testCode))
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"current_page": currentPage,
-// 	})
-// }
-
 type UserInfo struct {
 	ID          string `json:"userID"`
 	TestCode    string `json:"testcode"`
@@ -63,7 +45,6 @@ type UserInfo struct {
 }
 
 // it too long we have to make short
-// TODO:use join
 func GetUserCurrentPageInfo(c *gin.Context) {
 	var data UserInfo
 	if err := c.ShouldBindJSON(&data); err != nil {

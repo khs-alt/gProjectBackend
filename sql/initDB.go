@@ -25,8 +25,8 @@ func GetAppInstance() *App {
 
 func (app *App) InitDB() {
 	app.once.Do(func() {
-		dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
-		//dsn := "root:1234@/google_project"
+		//dsn := "admin:QwR2]lPhV~4x^bx>E@/google_project"
+		dsn := "root:1234@/google_project"
 		db, err := sql.Open("mysql", dsn)
 		if err != nil {
 			log.Println(err)
@@ -51,10 +51,9 @@ func SetDB() *App {
 	return app
 }
 
+// 테이블 삭제
 func DeleteImageDBTablbe() {
 	app := SetDB()
-
-	// 테이블 삭제
 	tables := []string{
 		"image_scoring",
 		"image_tag",
@@ -73,17 +72,13 @@ func DeleteImageDBTablbe() {
 
 }
 
+// 테이블 삭제
 func DeleteDBTable() {
 	app := SetDB()
-
-	// 테이블 삭제
 	tables := []string{
 		"video_tag",
 		"image_tag",
 		"user_testcode_info",
-		// "image_scoring",
-		// "video_scoring",
-		//"user",
 		"video",
 		"image",
 		"video_testcode",
@@ -196,19 +191,6 @@ func CreateDBTable() {
 			video_frame varchar(255) NOT NULL,
 			time varchar(255) NOT NULL
 		)`,
-		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
-		// `ALTER TABLE video_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES video_tag (uuid)`,
-		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,
-		// `ALTER TABLE image_tag_link ADD FOREIGN KEY (tag_uuid) REFERENCES image_tag (uuid)`,
-		// `ALTER TABLE user_testcode_info ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
-		// `ALTER TABLE video_scoring ADD FOREIGN KEY (video_uuid) REFERENCES video (uuid)`,
-		// `ALTER TABLE video_scoring ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
-		// `ALTER TABLE video_scoring ADD FOREIGN KEY (video_testcode) REFERENCES video_testcode (video_testcode)`,
-		// `ALTER TABLE image_scoring ADD FOREIGN KEY (user_uuid) REFERENCES user (uuid)`,
-		// `ALTER TABLE image_scoring ADD FOREIGN KEY (image_uuid) REFERENCES image (uuid)`,
-		// `ALTER TABLE image_scoring ADD FOREIGN KEY (image_testcode) REFERENCES image_testcode (image_testcode)`,
-		// `ALTER TABLE video_testcode ADD FOREIGN KEY (video_tag) REFERENCES video_tag (tag)`,
-		// `ALTER TABLE image_testcode ADD FOREIGN KEY (image_tag) REFERENCES image_tag (tag)`,
 	}
 
 	for _, createTableSQL := range createTables {

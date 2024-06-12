@@ -12,7 +12,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// done
 func GetTestCodeListHandler(c *gin.Context) {
 	testCodeList, tagList := sql.GetTestCodeInfo()
 	newTestCodeList, newtagList := util.MakeNewTestCodeTagList(testCodeList, tagList)
@@ -22,7 +21,6 @@ func GetTestCodeListHandler(c *gin.Context) {
 	})
 }
 
-// done
 func GetImageTestCodeListHandler(c *gin.Context) {
 	testCodeList, tagList := sql.GetImageTestCodeInfo()
 	newTestCodeList, newtagList := util.MakeNewTestCodeTagList(testCodeList, tagList)

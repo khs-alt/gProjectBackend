@@ -13,7 +13,7 @@ import (
 )
 
 // login handler
-// done
+
 func SignupHandler(c *gin.Context) {
 	var data models.UserNewIdAndPassword
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -183,17 +183,3 @@ func GetUserLabelingListHandler(c *gin.Context) {
 		"userLabelingList": userLabelingList,
 	})
 }
-
-// func GetUserScoringListHandler(c *gin.Context) {
-// 	var data models.UserScoringListData
-// 	if err := c.ShouldBindJSON(&data); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	userScoringList := sql.GetUserScoringList(data.CurrentUser, data.TestCode)
-
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"userScoringList": userScoringList,
-// 	})
-// }

@@ -303,28 +303,6 @@ func GetImageTestcodeExist(testCode string) (bool, error) {
 	return exist, nil
 }
 
-// func GetTestCodeCount() (int, error) {
-// 	app := SetDB()
-
-// 	var count int
-// 	err := app.DB.QueryRow("SELECT COUNT(*) FROM testcode").Scan(&count)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return count, nil
-// }
-
-// func GetImageTestCodeCount() (int, error) {
-// 	app := SetDB()
-
-// 	var count int
-// 	err := app.DB.QueryRow("SELECT COUNT(*) FROM image_testcode").Scan(&count)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return count, nil
-// }
-
 func GetTestCodeInfo() ([]string, []string) {
 	app := SetDB()
 
